@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="description" content="Marketspace: sellers list products, affiliates promote them and earn commission.">
+<title>Marketspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#0A0A0A; --surface:#141414; --surface2:#1E1E1E; --line:#2E2E2E; --fg:#F5F5F0; --muted:#A9A9A0;
+  --y:#FFD400; --on-y:#0A0A0A; --danger:#FF7A70;
+  --font-d:'Space Grotesk',system-ui,sans-serif; --font-b:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--font-d);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,7vw,52px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:22px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0}
+a{color:inherit}
+.wrap{max-width:1000px;margin:0 auto}
+.note{font-size:13px;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:16px;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--font-d);font-weight:700;font-size:22px;text-decoration:none;display:flex;align-items:center;gap:8px}
+.brand i{width:24px;height:24px;background:var(--y);border-radius:6px;display:inline-block;position:relative}
+.brand i::after{content:"";position:absolute;left:6px;top:6px;width:12px;height:12px;border:3px solid var(--on-y);border-radius:50%}
+nav{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0}
+nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:500}
+nav a[aria-current="page"]{background:var(--surface2);color:var(--y)}
+.acct{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--y);background:var(--y);color:var(--on-y);
+  font:600 14px var(--font-b);padding:10px 16px;border-radius:8px;cursor:pointer;text-decoration:none;min-height:40px}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--y);color:var(--y)}
+.btn.small{padding:6px 12px;min-height:34px;font-size:13px}
+.btn.danger{color:var(--danger)}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.between{justify-content:space-between}
+
+.hero{padding-block:36px 24px;display:grid;gap:16px}
+.eyebrow{color:var(--y);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.lead{max-width:56ch;color:var(--muted);font-size:17px}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-block:8px 32px}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.head2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card,.panel,.item,.stat,.sub{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.card{display:flex;flex-direction:column;gap:10px}
+.card .btn{margin-top:auto;align-self:flex-start}
+.price{font-family:var(--font-d);font-size:22px;font-weight:700}
+.earn b{color:var(--y)}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--muted);text-decoration:none}
+.chip.y{background:var(--y);color:var(--on-y);border-color:var(--y)}
+.chip.bad{color:var(--danger);border-color:var(--danger)}
+a.chip:hover{border-color:var(--y);color:var(--y)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--muted);display:grid;gap:12px;justify-items:center}
+
+input,select,textarea{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:42px;width:100%}
+textarea{min-height:84px;resize:vertical}
+input[type=search]{max-width:300px}
+label{display:grid;gap:6px;font-weight:500;font-size:14px}
+.form{display:grid;gap:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.panel{display:grid;gap:14px}
+.panel.narrow{max-width:600px;margin-inline:auto}
+.err{color:var(--danger);font-size:14px}
+.code{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.code strong{font-family:var(--font-d);font-size:20px;letter-spacing:.04em;color:var(--y)}
+.pg{padding-block:28px}
+.pg>h2{margin-bottom:6px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-block:16px}
+.stat small{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.stat strong{font-family:var(--font-d);font-size:26px;display:block;margin-top:2px}
+.stat.y{background:var(--y);color:var(--on-y);border-color:var(--y)}
+.stat.y small{color:var(--on-y)}
+.sub{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.sub.active{border-color:var(--y)}
+.sub.expired,.sub.unpaid{border-color:var(--danger)}
+.list{display:grid;gap:12px;margin-top:12px}
+.item{display:grid;gap:12px}
+.linkrow{display:flex;gap:8px;align-items:center;min-width:0}
+.linkrow code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.inline{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:12px}
+.locked{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;background:var(--surface2);border:1px solid var(--y);border-radius:12px;padding:16px;position:relative}
+.locked small{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.locked strong{font-family:var(--font-d);font-size:22px;display:block}
+.locked .big{color:var(--y);font-size:28px;letter-spacing:.03em}
+ol.steps{margin:0;padding-left:20px;display:grid;gap:6px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:16px;z-index:20;overflow-y:auto}
+.modal{background:var(--surface);border:1px solid var(--y);border-radius:14px;padding:22px;max-width:460px;width:100%;display:grid;gap:14px}
+.choice{display:grid;gap:4px;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg)}
+.choice:hover{border-color:var(--y)}
+.choice b{font-family:var(--font-d);font-size:18px;color:var(--y)}
+.choice span{color:var(--muted);font-size:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--y);color:var(--on-y);font-weight:600;padding:10px 16px;border-radius:8px;max-width:calc(100% - 32px);z-index:30}
+[hidden]{display:none!important}
+footer.foot{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;display:grid;gap:6px;text-align:center}
+.wa{color:var(--y);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#market"><i></i>Marketspace</a>
+    <nav id="nav" aria-label="Main"></nav>
+    <div class="acct" id="acct"></div>
+  </header>
+  <main id="app"></main>
+  <footer class="foot" id="foot"></footer>
+</div>
+<div id="toast" class="toast" hidden role="status"></div>
+<noscript>Marketspace needs JavaScript turned on.</noscript>
+
+<script>
+(function(){
+'use strict';
+
+/* ============ SETTINGS (edit here, then deploy again) ============ */
+var CONFIG=Object.freeze({
+  siteName:'Marketspace',
+  momoNumber:'0257218681',          /* the only number members can pay to */
+  momoName:'Eric Annor Gyau',       /* mobile money account name */
+  fee:5,                            /* monthly fee in GH cedis */
+  currency:'GH₵',
+  periodDays:30,                    /* one paid month */
+  whatsappDisplay:'0257218681',
+  whatsappIntl:'233257218681',      /* number in international format, no plus sign */
+  minAge:18,
+  adminPin:'change-this-pin',       /* CHANGE THIS before deploying */
+  googleClientId:''                 /* paste your Google OAuth Web Client ID to switch on "Continue with Google" */
+});
+
+/* ============ HELPERS ============ */
+var DAY=864e5;
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function money(n){return CONFIG.currency+' '+Number(n).toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function fmt(t){return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+function plural(n,w){return n+' '+w+(n===1?'':'s')}
+function span(from){
+  var a=new Date(from),b=new Date();
+  var y=b.getFullYear()-a.getFullYear(),m=b.getMonth()-a.getMonth(),d=b.getDate()-a.getDate();
+  if(d<0){m--;d+=new Date(b.getFullYear(),b.getMonth(),0).getDate()}
+  if(m<0){y--;m+=12}
+  return {y:Math.max(0,y),m:Math.max(0,m),d:Math.max(0,d)};
+}
+function since(from){var s=span(from);return plural(s.y,'year')+', '+plural(s.m,'month')+', '+plural(s.d,'day')}
+var AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function rnd(n){
+  var a=new Uint32Array(n),i,s='';
+  if(window.crypto&&window.crypto.getRandomValues){window.crypto.getRandomValues(a)}else{for(i=0;i<n;i++)a[i]=Math.floor(Math.random()*4294967296)}
+  for(i=0;i<n;i++)s+=AL.charAt(a[i]%AL.length);
+  return s;
+}
+function hash(s){
+  s='ms:'+s;var h1=0xdeadbeef,h2=0x41c6ce57,i,ch;
+  for(i=0;i<s.length;i++){ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+  h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);
+}
+function toast(m){var t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true},2800)}
+
+/* ============ STORAGE ============ */
+/* Data is kept in this browser (localStorage). A live multi-user site needs a shared database; every read and write goes through load() and save(). */
+var KEY='marketspace_db_v1',SKEY='marketspace_session_v1';
+function blank(){return {users:{},products:{},picks:{},sales:[],seq:1}}
+function load(){try{var r=localStorage.getItem(KEY);if(r){return Object.assign(blank(),JSON.parse(r))}}catch(e){}return blank()}
+var db=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
+var meCode=null;try{meCode=localStorage.getItem(SKEY)}catch(e){}
+function me(){return meCode&&db.users[meCode]||null}
+function setMe(c){meCode=c;try{if(c)localStorage.setItem(SKEY,c);else localStorage.removeItem(SKEY)}catch(e){}}
+function newCode(role){var p=role==='seller'?'SEL-':'AF-',c;do{c=p+rnd(6)}while(db.users[c]);return c}
+function allProducts(){return Object.keys(db.products).map(function(k){return db.products[k]})}
+function pending(u){return (u.payments||[]).some(function(p){return p.status==='pending'})}
+function status(u){if(!u)return 'none';if(u.paidUntil>Date.now())return 'active';if(pending(u))return 'pending';return u.paidUntil>0?'expired':'unpaid'}
+function isActive(u){return status(u)==='active'}
+function daysLeft(u){return Math.max(0,Math.ceil((u.paidUntil-Date.now())/DAY))}
+function perSale(p){return p.price*p.rate/100}
+function listed(){return allProducts().filter(function(p){var s=db.users[p.seller];return s&&isActive(s)})}
+function promoLink(pid,code){return location.href.split('#')[0]+'#product/'+pid+'/'+code}
+function ui0(){return {edit:null,del:null,sale:null,reg:{},google:null,admin:false,q:'',confirmReset:false}}
+var ui=ui0();
+
+/* ============ SMALL VIEWS ============ */
+function chip(t,c){return '<span class="chip '+(c||'')+'">'+esc(t)+'</span>'}
+function notice(t,body,btn){return '<div class="pg"><div class="panel narrow"><h2>'+esc(t)+'</h2><p class="note">'+body+'</p>'+(btn||'')+'</div></div>'}
+function copyBtn(t,label){return '<button class="btn small" type="button" data-act="copy" data-t="'+esc(t)+'">'+(label||'Copy')+'</button>'}
+function subCard(u){
+  var s=status(u),lbl={active:'Active',pending:'Payment pending',expired:'Expired',unpaid:'Not paid yet'}[s],line;
+  if(s==='active')line=daysLeft(u)+' day'+(daysLeft(u)===1?'':'s')+' left. Paid until '+fmt(u.paidUntil)+'.';
+  else if(s==='pending')line='Your payment is being checked. Your account opens as soon as it is confirmed.';
+  else if(s==='expired')line='Your monthly fee ran out on '+fmt(u.paidUntil)+'. You cannot '+(u.role==='seller'?'list products':'promote products')+' until you pay again.';
+  else line='Pay '+money(CONFIG.fee)+' to start '+(u.role==='seller'?'listing products':'promoting products')+'.';
+  return '<div class="sub '+s+'"><div><div class="row"><h3>Membership</h3>'+chip(lbl,s==='active'?'y':(s==='pending'?'':'bad'))+'</div><p class="note" style="margin-top:6px">'+esc(line)+'</p></div>'+
+    '<a class="btn small" href="#pay">'+(s==='active'?'Renew early':(s==='pending'?'View payment':'Pay '+money(CONFIG.fee)))+'</a></div>';
+}
+function card(p){
+  var s=db.users[p.seller];
+  return '<article class="card"><div>'+chip(p.rate+'% commission','y')+'</div><h3><a href="#product/'+p.id+'" style="text-decoration:none">'+esc(p.name)+'</a></h3>'+
+    '<p class="note">by <a href="#u/'+esc(p.seller)+'">'+esc(s?s.name:p.seller)+'</a></p><div class="price num">'+money(p.price)+'</div>'+
+    '<p class="note earn">Affiliates earn <b class="num">'+money(perSale(p))+'</b> per sale</p><a class="btn small" href="#product/'+p.id+'">View product</a></article>';
+}
+function gridHtml(q){
+  q=(q||'').toLowerCase().trim();
+  var l=listed().filter(function(p){return !q||(p.name+' '+(p.desc||'')).toLowerCase().indexOf(q)>-1}).sort(function(a,b){return b.createdAt-a.createdAt});
+  if(!l.length)return '<div class="empty"><p>'+(q?'No products match your search.':'No products yet. Products from sellers who have paid their monthly fee appear here.')+'</p>'+(q||me()?'':'<a class="btn" href="#register/seller">Become a seller</a>')+'</div>';
+  return l.map(card).join('');
+}
+
+/* ============ VIEWS ============ */
+function vMarket(){
+  var m=me();
+  var cta=m?'<a class="btn" href="#dashboard">Open my dashboard</a>':'<a class="btn" href="#register">Sign up</a><a class="btn ghost" href="#login">Log in</a>';
+  return '<section class="hero"><p class="eyebrow">Sellers and affiliates, one marketplace</p><h1>Sell it. Promote it. Get paid.</h1>'+
+    '<p class="lead">Sellers list products and set the commission. Affiliates pick products, share their own link and earn on every sale.</p><div class="row">'+cta+'</div></section>'+
+    '<section class="how"><div class="card"><h3>Sellers</h3><p class="note">Register, pay '+money(CONFIG.fee)+' a month, publish your products and see which affiliates are visiting them.</p></div>'+
+    '<div class="card"><h3>Affiliates</h3><p class="note">Register, pay '+money(CONFIG.fee)+' a month, choose products to market and track the sales you bring in.</p></div>'+
+    '<div class="card"><h3>Monthly membership</h3><p class="note">Members who have not paid '+money(CONFIG.fee)+' for the month cannot list or promote products.</p></div></section>'+
+    '<section><div class="head"><h2>Products to promote</h2><input id="q" type="search" placeholder="Search products" aria-label="Search products" value="'+esc(ui.q)+'"></div><div class="grid" id="grid">'+gridHtml(ui.q)+'</div></section>';
+}
+
+function vProduct(id,ref,visit){
+  var p=db.products[id];
+  if(!p)return notice('Product not found','This product was removed or the link is wrong.','<a class="btn" href="#market">Back to marketplace</a>');
+  var s=db.users[p.seller],m=me();
+  var owner=m&&m.code===p.seller;
+  if(!owner&&!(s&&isActive(s)))return notice('Product not available','The seller is not active right now.','<a class="btn" href="#market">Back to marketplace</a>');
+  if(visit){
+    var who=null;
+    if(m&&m.role==='affiliate'&&isActive(m))who=m.code;
+    else if(ref&&db.users[ref]&&db.users[ref].role==='affiliate'&&isActive(db.users[ref]))who=ref;
+    if(who){p.visitors=p.visitors||{};p.visitors[who]=(p.visitors[who]||0)+1;save()}
+  }
+  var act;
+  if(!m)act='<p class="note">Join as an affiliate to promote this product and earn '+money(perSale(p))+' on each sale.</p><div class="row"><a class="btn" href="#register/affiliate">Join as affiliate</a><a class="btn ghost" href="#login">Log in</a></div>';
+  else if(owner)act='<p class="note">This is your product.</p><a class="btn" href="#dashboard">Manage in dashboard</a>';
+  else if(m.role==='seller')act='<p class="note">Sellers cannot promote products. Log in with an affiliate account to promote.</p>';
+  else if(!isActive(m))act='<p class="note">Your membership is not active, so you cannot promote products.</p><a class="btn" href="#pay">Pay '+money(CONFIG.fee)+'</a>';
+  else if((db.picks[m.code]||[]).indexOf(p.id)>-1)act='<p class="note">You are promoting this product. Your personal link:</p><div class="linkrow"><code>'+esc(promoLink(p.id,m.code))+'</code>'+copyBtn(promoLink(p.id,m.code))+'</div>';
+  else act='<button class="btn" data-act="promote" data-id="'+p.id+'">Promote this product</button>';
+  return '<div class="pg"><a class="note" href="#market">&larr; All products</a><div class="panel" style="margin-top:12px">'+
+    '<div class="row">'+chip(p.rate+'% commission','y')+'</div><h1 style="font-size:clamp(26px,5vw,38px)">'+esc(p.name)+'</h1>'+
+    '<div class="price num">'+money(p.price)+' <span class="note">&middot; affiliates earn '+money(perSale(p))+' per sale</span></div>'+
+    '<p style="white-space:pre-wrap">'+esc(p.desc||'')+'</p>'+
+    '<p class="note">Sold by <a href="#u/'+esc(p.seller)+'"><b>'+esc(s?s.name:p.seller)+'</b> ('+esc(p.seller)+')</a></p>'+
+    '<div class="row"><a class="btn ghost" href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">Open sales page</a></div>'+
+    '<div class="inline">'+act+'</div></div></div>';
+}
+
+function roleModal(){
+  return '<div class="overlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="rt"><h2 id="rt">How will you use Marketspace?</h2>'+
+    '<p class="note">Choose one. You can only hold one type of account.</p>'+
+    '<a class="choice" href="#register/seller"><b>I am a seller</b><span>List my products and let affiliates promote them.</span></a>'+
+    '<a class="choice" href="#register/affiliate"><b>I am an affiliate marketer</b><span>Promote other people\'s products and earn commission.</span></a>'+
+    '<a class="note" href="#market" style="text-align:center">Cancel</a></div></div>';
+}
+function googleBlock(){return CONFIG.googleClientId?'<div id="gbtn"></div><p class="note">or fill in the form below</p>':''}
+
+function vRegister(role){
+  if(role!=='seller'&&role!=='affiliate')return vMarket()+roleModal();
+  var m=me();
+  if(m)return notice('You already have an account','You are signed in as '+esc(m.name)+' ('+esc(m.code)+').','<a class="btn" href="#dashboard">Go to dashboard</a>');
+  if(!ui.reg[role])ui.reg[role]=newCode(role);
+  var g=ui.google||{},seller=role==='seller';
+  var d=new Date();d.setFullYear(d.getFullYear()-CONFIG.minAge);
+  var maxDob=d.toISOString().slice(0,10);
+  var ex=['No experience yet','Less than 1 year','1 to 3 years','More than 3 years'].map(function(x){return '<option>'+x+'</option>'}).join('');
+  return '<div class="pg"><div class="panel narrow"><div class="row between"><h2>Create your '+(seller?'seller':'affiliate')+' account</h2><a class="note" href="#register">Switch</a></div>'+
+    '<p class="note">After signing up you pay '+money(CONFIG.fee)+' to activate your account. The fee is '+money(CONFIG.fee)+' every month.</p>'+googleBlock()+
+    (g.email?'<p class="chip y" style="justify-self:start">Signed in with Google: '+esc(g.email)+'</p>':'')+
+    '<form class="form" id="reg" data-role="'+role+'" novalidate>'+
+    '<div><small class="note">Your '+(seller?'seller':'affiliate')+' code (username)</small><div class="code"><strong>'+esc(ui.reg[role])+'</strong><span class="note">Created for you</span></div></div>'+
+    '<label for="rn">Full name<input id="rn" autocomplete="name" required value="'+esc(g.name||'')+'"></label>'+
+    '<div class="two"><label for="rd">Date of birth<input id="rd" type="date" max="'+maxDob+'" required></label>'+
+    '<label for="rp">Phone number<input id="rp" type="tel" inputmode="tel" autocomplete="tel" placeholder="0240000000" required></label></div>'+
+    '<label for="rnat">Nationality<input id="rnat" list="nats" placeholder="e.g. Ghanaian" required><datalist id="nats"><option>Ghanaian</option><option>Nigerian</option><option>Ivorian</option><option>Togolese</option><option>Burkinabe</option><option>Beninese</option></datalist></label>'+
+    '<label for="rexp">'+(seller?'Experience in selling':'Experience in affiliate marketing')+'<select id="rexp">'+ex+'</select></label>'+
+    '<label for="rab">'+(seller?'What do you sell? (optional)':'Which products or niches do you market? (optional)')+'<textarea id="rab" maxlength="300"></textarea></label>'+
+    (g.email?'':'<div class="two"><label for="rpw">Password<input id="rpw" type="password" autocomplete="new-password" minlength="6"></label><label for="rpw2">Confirm password<input id="rpw2" type="password" autocomplete="new-password"></label></div>')+
+    '<p class="err" id="err" hidden></p><button class="btn" type="submit">Create account</button></form></div></div>';
+}
+
+function vLogin(){
+  if(me())return notice('You are signed in','Signed in as '+esc(me().name)+'.','<a class="btn" href="#dashboard">Go to dashboard</a>');
+  return '<div class="pg"><div class="panel narrow"><h2>Log in</h2>'+googleBlock()+
+    '<form class="form" id="login" novalidate><label for="lc">Your code or phone number<input id="lc" autocomplete="username" placeholder="AF-XXXXXX or SEL-XXXXXX" required></label>'+
+    '<label for="lp">Password<input id="lp" type="password" autocomplete="current-password" required></label><p class="err" id="err" hidden></p>'+
+    '<button class="btn" type="submit">Log in</button></form><p class="note">New here? <a href="#register">Create an account</a></p></div></div>';
+}
+
+function vPay(){
+  var m=me();
+  if(!m)return notice('Log in to pay','Log in or create an account first.','<a class="btn" href="#login">Log in</a>');
+  var s=status(m),waText='Hello, I am '+m.name+' ('+m.code+'). I paid '+money(CONFIG.fee)+' to Marketspace.';
+  var hist=(m.payments||[]).slice().reverse().map(function(p){
+    return '<tr><td>'+fmt(p.at)+'</td><td>'+esc(p.network)+'</td><td>'+esc(p.txn)+'</td><td>'+chip(p.status,p.status==='approved'?'y':(p.status==='rejected'?'bad':''))+'</td></tr>';
+  }).join('');
+  var form=pending(m)?'<div class="inline"><h3>Payment received for checking</h3><p class="note">We will activate your account once the payment is confirmed. To speed things up, send your transaction ID on WhatsApp.</p><a class="btn" href="https://wa.me/'+CONFIG.whatsappIntl+'?text='+encodeURIComponent(waText)+'" target="_blank" rel="noopener">Message on WhatsApp</a></div>':
+    '<form class="form inline" id="pay" novalidate><h3>After you have paid</h3><p class="note">Enter the details from your mobile money confirmation message.</p>'+
+    '<div class="two"><label for="pnet">Network you paid from<select id="pnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option><option>Other</option></select></label>'+
+    '<label for="pfrom">Number you paid from<input id="pfrom" type="tel" inputmode="tel" value="'+esc(m.phone)+'" required></label></div>'+
+    '<label for="ptx">Transaction ID<input id="ptx" autocomplete="off" required placeholder="From your confirmation SMS"></label><p class="err" id="err" hidden></p>'+
+    '<button class="btn" type="submit">I have paid '+money(CONFIG.fee)+'</button></form>';
+  return '<div class="pg"><div class="panel narrow"><h2>Monthly membership</h2>'+subCard(m)+
+    '<div class="locked" aria-label="Payment details, fixed"><div><small>Send to this mobile money number</small><strong class="big num">'+esc(CONFIG.momoNumber)+'</strong></div>'+
+    '<div><small>Account name</small><strong>'+esc(CONFIG.momoName)+'</strong></div><div><small>Amount</small><strong class="num">'+money(CONFIG.fee)+' / month</strong></div>'+
+    '<div>'+copyBtn(CONFIG.momoNumber,'Copy number')+'</div></div>'+
+    '<ol class="steps"><li>Open your mobile money menu on any network (MTN, Telecel or AirtelTigo).</li><li>Choose the option to send money to a mobile money user.</li>'+
+    '<li>Enter <b>'+esc(CONFIG.momoNumber)+'</b> and the amount <b>'+CONFIG.fee+'</b>. If the name shows, check it is <b>'+esc(CONFIG.momoName)+'</b>.</li>'+
+    '<li>Confirm with your PIN, then enter the transaction ID below.</li></ol>'+
+    '<p class="note">Send exactly '+money(CONFIG.fee)+'. Any network charge is paid by you on top of the fee.</p>'+form+
+    (hist?'<div class="inline"><h3>Payment history</h3><div class="tablewrap"><table><thead><tr><th>Date</th><th>Network</th><th>Transaction ID</th><th>Status</th></tr></thead><tbody>'+hist+'</tbody></table></div></div>':'')+
+    '</div></div>';
+}
+
+function vDash(){
+  var m=me();
+  if(!m)return notice('Your dashboard','Log in to see your dashboard.','<a class="btn" href="#login">Log in</a>');
+  return m.role==='seller'?vSellerDash(m):vAffDash(m);
+}
+
+function addForm(){
+  return '<form class="panel form" id="addp" novalidate><h3>Publish a new product</h3>'+
+    '<label for="an">Product name<input id="an" required maxlength="80"></label>'+
+    '<label for="ad">Description<textarea id="ad" maxlength="500"></textarea></label>'+
+    '<div class="two"><label for="ap">Price ('+CONFIG.currency+')<input id="ap" type="number" min="1" step="0.01" required></label>'+
+    '<label for="ar">Affiliate commission (%)<input id="ar" type="number" min="1" max="90" step="1" required></label></div>'+
+    '<label for="al">Link where customers buy<input id="al" type="url" placeholder="https://" required></label><p class="err" id="err" hidden></p>'+
+    '<button class="btn" type="submit">Publish product</button></form>';
+}
+function editForm(p){
+  return '<form class="inline form" id="editp" data-id="'+p.id+'" novalidate><label for="en">Product name<input id="en" required maxlength="80" value="'+esc(p.name)+'"></label>'+
+    '<label for="ed">Description<textarea id="ed" maxlength="500">'+esc(p.desc||'')+'</textarea></label>'+
+    '<div class="two"><label for="ep">Price<input id="ep" type="number" min="1" step="0.01" value="'+p.price+'"></label><label for="er">Commission (%)<input id="er" type="number" min="1" max="90" value="'+p.rate+'"></label></div>'+
+    '<label for="el">Sales page link<input id="el" type="url" value="'+esc(p.link)+'"></label><p class="err" id="err" hidden></p>'+
+    '<div class="row"><button class="btn small" type="submit">Save changes</button><button class="btn ghost small" type="button" data-act="cancel">Cancel</button></div></form>';
+}
+function sellerItem(p){
+  var v=p.visitors||{},codes=Object.keys(v);
+  var aff=Object.keys(db.picks).filter(function(c){return db.picks[c].indexOf(p.id)>-1});
+  var extra='';
+  if(ui.edit===p.id)extra=editForm(p);
+  else if(ui.del===p.id)extra='<div class="inline"><p>Delete <b>'+esc(p.name)+'</b> from the site? This cannot be undone.</p><div class="row"><button class="btn small danger" data-act="delyes" data-id="'+p.id+'">Yes, delete</button><button class="btn ghost small" data-act="cancel">Keep it</button></div></div>';
+  else if(ui.sale===p.id)extra=aff.length?'<form class="inline form" id="sale" data-id="'+p.id+'"><label for="sa">Which affiliate made the sale?<select id="sa">'+aff.map(function(c){return '<option value="'+esc(c)+'">'+esc(c+' - '+(db.users[c]?db.users[c].name:''))+'</option>'}).join('')+'</select></label><div class="row"><button class="btn small" type="submit">Record sale</button><button class="btn ghost small" type="button" data-act="cancel">Cancel</button></div></form>':'<div class="inline"><p class="note">No affiliate is promoting this product yet.</p><button class="btn ghost small" data-act="cancel">Close</button></div>';
+  return '<div class="item"><div class="head2"><div><h3><a href="#product/'+p.id+'">'+esc(p.name)+'</a></h3><p class="note num">'+money(p.price)+' &middot; '+p.rate+'% commission &middot; '+money(perSale(p))+' per sale</p></div>'+
+    '<div class="row"><button class="btn ghost small" data-act="edit" data-id="'+p.id+'">Edit</button><button class="btn ghost small danger" data-act="del" data-id="'+p.id+'">Delete</button></div></div>'+
+    '<p><b class="num">'+codes.length+'</b> affiliate'+(codes.length===1?'':'s')+' visited this product</p>'+
+    (codes.length?'<div class="chips">'+codes.map(function(c){return '<a class="chip" href="#u/'+esc(c)+'">'+esc(c)+' &middot; '+v[c]+' visit'+(v[c]===1?'':'s')+'</a>'}).join('')+'</div>':'')+
+    '<div class="row"><button class="btn small" data-act="salebtn" data-id="'+p.id+'">Record a sale</button><span class="note">'+plural(aff.length,'affiliate')+' promoting</span></div>'+extra+'</div>';
+}
+function vSellerDash(m){
+  var mine=allProducts().filter(function(p){return p.seller===m.code}).sort(function(a,b){return b.createdAt-a.createdAt});
+  var uniq={};mine.forEach(function(p){Object.keys(p.visitors||{}).forEach(function(c){uniq[c]=1})});
+  var sales=db.sales.filter(function(s){return s.seller===m.code}).length;
+  return '<div class="pg"><div class="head2"><div><h2>Seller dashboard</h2><p class="note">Welcome, '+esc(m.name)+'</p></div><div class="row">'+chip(m.code,'y')+'<a class="btn ghost small" href="#u/'+esc(m.code)+'">My public profile</a></div></div>'+
+    '<div style="margin-top:14px">'+subCard(m)+'</div>'+
+    '<div class="stats"><div class="stat y"><small>Products published</small><strong class="num">'+mine.length+'</strong></div><div class="stat"><small>Affiliates who visited</small><strong class="num">'+Object.keys(uniq).length+'</strong></div><div class="stat"><small>Sales recorded</small><strong class="num">'+sales+'</strong></div></div>'+
+    (isActive(m)?addForm():'<div class="panel"><h3>Publishing is locked</h3><p class="note">Pay your '+money(CONFIG.fee)+' monthly fee to publish products. Your existing products stay hidden from the marketplace until then.</p><a class="btn" style="justify-self:start" href="#pay">Pay '+money(CONFIG.fee)+'</a></div>')+
+    '<div class="head" style="margin-top:28px"><h2>My products</h2></div><div class="list">'+
+    (mine.length?mine.map(sellerItem).join(''):'<div class="empty"><p>You have not published any product yet.</p></div>')+'</div></div>';
+}
+
+function vAffDash(m){
+  var ids=(db.picks[m.code]||[]).filter(function(id){return db.products[id]});
+  var mySales=db.sales.filter(function(s){return s.affiliate===m.code});
+  var earned=mySales.reduce(function(a,s){return a+s.commission},0),act=isActive(m);
+  var rows=ids.map(function(id){
+    var p=db.products[id],s=db.users[p.seller],n=mySales.filter(function(x){return x.productId===id}).length;
+    return '<div class="item"><div class="head2"><div><h3><a href="#product/'+p.id+'">'+esc(p.name)+'</a></h3><p class="note num">by <a href="#u/'+esc(p.seller)+'">'+esc(s?s.name:p.seller)+'</a> &middot; '+money(p.price)+' &middot; you earn '+money(perSale(p))+' per sale</p></div>'+
+      '<button class="btn ghost small danger" data-act="unpromote" data-id="'+p.id+'">Stop promoting</button></div>'+
+      (act?'<div class="linkrow"><code>'+esc(promoLink(p.id,m.code))+'</code>'+copyBtn(promoLink(p.id,m.code))+'</div>':'<p class="note">Paused until you renew your membership.</p>')+
+      '<p class="note num">'+((p.visitors||{})[m.code]||0)+' visits &middot; '+plural(n,'sale')+' &middot; '+money(n*perSale(p))+' earned</p></div>';
+  }).join('');
+  return '<div class="pg"><div class="head2"><div><h2>Affiliate dashboard</h2><p class="note">Welcome, '+esc(m.name)+'</p></div><div class="row">'+chip(m.code,'y')+'<a class="btn ghost small" href="#u/'+esc(m.code)+'">My public profile</a></div></div>'+
+    '<div style="margin-top:14px">'+subCard(m)+'</div>'+
+    '<div class="stats"><div class="stat y"><small>Commission earned</small><strong class="num">'+money(earned)+'</strong></div><div class="stat"><small>Products I market</small><strong class="num">'+ids.length+'</strong></div><div class="stat"><small>Successful sales</small><strong class="num">'+mySales.length+'</strong></div></div>'+
+    '<div class="head"><h2>Products I am marketing</h2><a class="btn small" href="#market">Find products</a></div><div class="list">'+
+    (rows||'<div class="empty"><p>You are not marketing any product yet.</p><a class="btn" href="#market">Browse the marketplace</a></div>')+'</div></div>';
+}
+
+function vProfile(code){
+  var u=db.users[code];
+  if(!u)return notice('Profile not found','No member has this code.','<a class="btn" href="#market">Back to marketplace</a>');
+  var s=status(u),seller=u.role==='seller',head;
+  head='<div class="head2"><div><p class="eyebrow">'+(seller?'Seller profile':'Affiliate profile')+'</p><h1 style="font-size:clamp(26px,5vw,38px)">'+esc(u.name)+'</h1></div><div class="row">'+chip(u.code,'y')+chip(s==='active'?'Active member':'Membership lapsed',s==='active'?'':'bad')+'</div></div>';
+  var body;
+  if(seller){
+    var ps=allProducts().filter(function(p){return p.seller===u.code}).sort(function(a,b){return b.createdAt-a.createdAt});
+    var shown=s==='active'||(me()&&me().code===u.code)?ps:[];
+    body='<div class="stats"><div class="stat y"><small>Products listed</small><strong class="num">'+shown.length+'</strong></div><div class="stat"><small>Time on Marketspace</small><strong style="font-size:17px">'+since(u.createdAt)+'</strong></div><div class="stat"><small>Selling experience</small><strong style="font-size:17px">'+esc(u.experience)+'</strong></div></div>'+
+      (u.about?'<p class="note">'+esc(u.about)+'</p>':'')+'<div class="head" style="margin-top:20px"><h2>Products by '+esc(u.name.split(' ')[0])+'</h2></div><div class="grid">'+
+      (shown.length?shown.map(card).join(''):'<div class="empty"><p>No products listed right now.</p></div>')+'</div>';
+  }else{
+    var sales=db.sales.filter(function(x){return x.affiliate===u.code}),dist={};
+    sales.forEach(function(x){dist[x.productId]=1});
+    var picks=(db.picks[u.code]||[]).filter(function(id){return db.products[id]});
+    body='<div class="stats"><div class="stat y"><small>Products marketed successfully</small><strong class="num">'+Object.keys(dist).length+'</strong></div><div class="stat"><small>Total sales</small><strong class="num">'+sales.length+'</strong></div>'+
+      '<div class="stat"><small>Time on Marketspace</small><strong style="font-size:17px">'+since(u.createdAt)+'</strong></div><div class="stat"><small>Marketing experience</small><strong style="font-size:17px">'+esc(u.experience)+'</strong></div></div>'+
+      (u.about?'<p class="note">'+esc(u.about)+'</p>':'')+'<div class="head" style="margin-top:20px"><h2>Currently marketing</h2></div><div class="chips">'+
+      (picks.length?picks.map(function(id){return '<a class="chip" href="#product/'+id+'">'+esc(db.products[id].name)+'</a>'}).join(''):'<span class="note">Nothing right now.</span>')+'</div>';
+  }
+  return '<div class="pg">'+head+'<p class="note" style="margin-top:6px">Member since '+fmt(u.createdAt)+'</p>'+body+'</div>';
+}
+
+function vAdmin(){
+  if(!ui.admin)return '<div class="pg"><form class="panel narrow form" id="adminpin"><h2>Admin</h2><label for="pin">Admin PIN<input id="pin" type="password" autocomplete="off" required></label><p class="err" id="err" hidden></p><button class="btn" type="submit">Open admin</button></form></div>';
+  var users=Object.keys(db.users).map(function(k){return db.users[k]}),pend=[];
+  users.forEach(function(u){(u.payments||[]).forEach(function(p){if(p.status==='pending')pend.push({u:u,p:p})})});
+  var prow=pend.map(function(x){
+    return '<tr><td>'+esc(x.u.code)+'</td><td>'+esc(x.u.name)+'</td><td>'+esc(x.p.network)+'</td><td>'+esc(x.p.txn)+'</td><td>'+esc(x.p.from)+'</td><td>'+fmt(x.p.at)+'</td><td><button class="btn small" data-act="approve" data-u="'+esc(x.u.code)+'" data-p="'+x.p.id+'">Approve</button> <button class="btn ghost small danger" data-act="reject" data-u="'+esc(x.u.code)+'" data-p="'+x.p.id+'">Reject</button></td></tr>';
+  }).join('');
+  var urow=users.map(function(u){return '<tr><td><a href="#u/'+esc(u.code)+'">'+esc(u.code)+'</a></td><td>'+esc(u.name)+'</td><td>'+esc(u.phone)+'</td><td>'+esc(u.nationality)+'</td><td>'+status(u)+'</td><td>'+(u.paidUntil?fmt(u.paidUntil):'-')+'</td></tr>'}).join('');
+  return '<div class="pg"><h2>Admin</h2><p class="note">Check each payment against your mobile money statement before approving. Approving gives 30 days of access.</p>'+
+    '<div class="head" style="margin-top:18px"><h3>Payments waiting ('+pend.length+')</h3></div><div class="panel tablewrap"><table><thead><tr><th>Code</th><th>Name</th><th>Network</th><th>Transaction ID</th><th>Paid from</th><th>Date</th><th></th></tr></thead><tbody>'+(prow||'<tr><td colspan="7" class="note">Nothing waiting.</td></tr>')+'</tbody></table></div>'+
+    '<div class="head" style="margin-top:22px"><h3>Members ('+users.length+')</h3></div><div class="panel tablewrap"><table><thead><tr><th>Code</th><th>Name</th><th>Phone</th><th>Nationality</th><th>Status</th><th>Paid until</th></tr></thead><tbody>'+(urow||'<tr><td colspan="6" class="note">No members yet.</td></tr>')+'</tbody></table></div>'+
+    '<div class="row" style="margin-top:20px"><button class="btn ghost small" data-act="demo">Load demo data</button>'+(ui.confirmReset?'<button class="btn small danger" data-act="resetyes">Yes, erase all data in this browser</button><button class="btn ghost small" data-act="cancel">Cancel</button>':'<button class="btn ghost small danger" data-act="reset">Erase all data</button>')+'<button class="btn ghost small" data-act="adminout">Close admin</button></div></div>';
+}
+
+/* ============ SHELL ============ */
+function renderHead(){
+  var r=parts()[0]||'market',m=me();
+  var items=[['market','Marketplace','#market']];
+  if(m){items.push(['dashboard','Dashboard','#dashboard']);items.push(['pay','Membership','#pay'])}
+  $('#nav').innerHTML=items.map(function(i){return '<a href="'+i[2]+'"'+(r===i[0]?' aria-current="page"':'')+'>'+i[1]+'</a>'}).join('');
+  $('#acct').innerHTML=m?'<span class="note">'+esc(m.code)+'</span><button class="btn ghost small" data-act="logout">Log out</button>':'<a class="btn ghost small" href="#login">Log in</a><a class="btn small" href="#register">Sign up</a>';
+}
+function renderFoot(){
+  $('#foot').innerHTML='<p>Questions about selling, promoting or payment? WhatsApp <a class="wa" href="https://wa.me/'+CONFIG.whatsappIntl+'" target="_blank" rel="noopener">'+esc(CONFIG.whatsappDisplay)+'</a></p><p class="note">&copy; '+new Date().getFullYear()+' '+esc(CONFIG.siteName)+' &middot; <a href="#admin">Admin</a></p>';
+}
+function parts(){
+  var h=(location.hash||'#market').slice(1);
+  return h.split('/').map(function(x){try{return decodeURIComponent(x)}catch(e){return x}});
+}
+function draw(visit){
+  var p=parts(),r=p[0]||'market',h;
+  if(r==='market')h=vMarket();
+  else if(r==='product')h=vProduct(Number(p[1]),p[2],visit);
+  else if(r==='register')h=vRegister(p[1]);
+  else if(r==='login')h=vLogin();
+  else if(r==='pay')h=vPay();
+  else if(r==='dashboard')h=vDash();
+  else if(r==='u')h=vProfile(p[1]);
+  else if(r==='admin')h=vAdmin();
+  else h=vMarket();
+  $('#app').innerHTML=h;
+  renderHead();
+  setupGoogle();
+}
+function go(){ui.edit=ui.del=ui.sale=null;draw(true);window.scrollTo(0,0)}
+function refresh(){draw(false)}
+
+/* ============ GOOGLE SIGN-IN ============ */
+var gLoaded=false;
+function setupGoogle(){
+  if(!CONFIG.googleClientId||!$('#gbtn'))return;
+  var init=function(){
+    try{
+      window.google.accounts.id.initialize({client_id:CONFIG.googleClientId,callback:onGoogle});
+      window.google.accounts.id.renderButton($('#gbtn'),{theme:'filled_black',size:'large',text:'continue_with',shape:'rectangular'});
+    }catch(e){}
+  };
+  if(window.google&&window.google.accounts){init();return}
+  if(gLoaded)return;
+  gLoaded=true;
+  var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=init;document.head.appendChild(s);
+}
+function onGoogle(resp){
+  var pl;
+  try{
+    var b=resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    pl=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(b),function(c){return c.charCodeAt(0)})));
+  }catch(e){toast('Google sign-in failed. Try again.');return}
+  var r=parts()[0];
+  if(r==='login'){
+    var u=Object.keys(db.users).map(function(k){return db.users[k]}).filter(function(x){return x.email&&x.email===pl.email})[0];
+    if(!u){toast('No account uses this Google email. Sign up first.');return}
+    setMe(u.code);location.hash='#dashboard';refresh();
+  }else{ui.google={email:pl.email,name:pl.name||''};refresh()}
+}
+
+/* ============ ACTIONS ============ */
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');if(!b)return;
+  var a=b.getAttribute('data-act'),id=Number(b.getAttribute('data-id')),m=me();
+  if(a==='copy'){
+    var t=b.getAttribute('data-t');
+    try{navigator.clipboard.writeText(t).then(function(){toast('Copied')},function(){toast('Press and hold to copy')})}catch(err){toast('Press and hold to copy')}
+  }
+  else if(a==='logout'){setMe(null);ui=ui0();location.hash='#market';refresh()}
+  else if(a==='promote'){
+    if(!m||m.role!=='affiliate'||!isActive(m)){toast('Activate your membership first');return}
+    db.picks[m.code]=db.picks[m.code]||[];
+    if(db.picks[m.code].indexOf(id)<0)db.picks[m.code].push(id);
+    save();toast('Added to your dashboard');refresh();
+  }
+  else if(a==='unpromote'){db.picks[m.code]=(db.picks[m.code]||[]).filter(function(x){return x!==id});save();refresh()}
+  else if(a==='edit'){ui.edit=id;ui.del=ui.sale=null;refresh()}
+  else if(a==='del'){ui.del=id;ui.edit=ui.sale=null;refresh()}
+  else if(a==='salebtn'){ui.sale=id;ui.edit=ui.del=null;refresh()}
+  else if(a==='cancel'){ui.edit=ui.del=ui.sale=null;ui.confirmReset=false;refresh()}
+  else if(a==='delyes'){
+    var p=db.products[id];
+    if(p&&m&&p.seller===m.code){delete db.products[id];Object.keys(db.picks).forEach(function(c){db.picks[c]=db.picks[c].filter(function(x){return x!==id})});save();ui.del=null;toast('Product deleted');refresh()}
+  }
+  else if(a==='approve'||a==='reject'){
+    var u=db.users[b.getAttribute('data-u')],pid=Number(b.getAttribute('data-p'));
+    var pay=u&&(u.payments||[]).filter(function(x){return x.id===pid})[0];
+    if(!pay)return;
+    if(a==='approve'){pay.status='approved';u.paidUntil=Math.max(Date.now(),u.paidUntil||0)+CONFIG.periodDays*DAY}else pay.status='rejected';
+    save();refresh();
+  }
+  else if(a==='demo'){loadDemo();refresh();toast('Demo data added')}
+  else if(a==='reset'){ui.confirmReset=true;refresh()}
+  else if(a==='resetyes'){db=blank();save();setMe(null);ui=ui0();ui.admin=true;refresh();toast('All data erased')}
+  else if(a==='adminout'){ui.admin=false;location.hash='#market'}
+});
+
+document.addEventListener('input',function(e){
+  if(e.target.id==='q'){ui.q=e.target.value;$('#grid').innerHTML=gridHtml(ui.q)}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&$('.overlay'))location.hash='#market';
+});
+
+function showErr(msg){var el=$('#err');if(el){el.textContent=msg;el.hidden=false}}
+function val(id){var el=$('#'+id);return el?el.value.trim():''}
+function usersArr(){return Object.keys(db.users).map(function(k){return db.users[k]})}
+
+document.addEventListener('submit',function(e){
+  e.preventDefault();
+  var f=e.target,id=f.id,m=me();
+  if(id==='reg'){
+    var role=f.getAttribute('data-role'),g=ui.google||{};
+    var name=val('rn'),dob=val('rd'),phone=val('rp').replace(/[\s-]/g,''),nat=val('rnat'),pw=val('rpw'),pw2=val('rpw2');
+    if(name.length<3)return showErr('Enter your full name.');
+    if(!dob)return showErr('Enter your date of birth.');
+    var max=new Date();max.setFullYear(max.getFullYear()-CONFIG.minAge);
+    if(new Date(dob)>max)return showErr('You must be at least '+CONFIG.minAge+' years old to join.');
+    if(!/^\+?\d{9,15}$/.test(phone))return showErr('Enter a valid phone number.');
+    if(!nat)return showErr('Enter your nationality.');
+    if(!g.email){if(pw.length<6)return showErr('Choose a password of at least 6 characters.');if(pw!==pw2)return showErr('The two passwords do not match.')}
+    if(usersArr().some(function(u){return u.phone===phone}))return showErr('This phone number is already registered. Log in instead.');
+    if(g.email&&usersArr().some(function(u){return u.email===g.email}))return showErr('This Google account is already registered. Log in instead.');
+    var code=ui.reg[role];if(db.users[code])code=newCode(role);
+    db.users[code]={code:code,role:role,name:name,dob:dob,phone:phone,nationality:nat,experience:val('rexp'),about:val('rab'),email:g.email||'',pass:g.email?'':hash(pw),createdAt:Date.now(),paidUntil:0,payments:[]};
+    if(role==='affiliate')db.picks[code]=[];
+    save();setMe(code);delete ui.reg[role];ui.google=null;toast('Account created. Pay '+money(CONFIG.fee)+' to activate it.');location.hash='#pay';
+  }
+  else if(id==='login'){
+    var c=val('lc').toUpperCase(),pass=$('#lp').value,u=db.users[c]||usersArr().filter(function(x){return x.phone===val('lc').replace(/[\s-]/g,'')})[0];
+    if(!u||!u.pass||u.pass!==hash(pass))return showErr('Code, phone number or password is wrong.');
+    setMe(u.code);location.hash='#dashboard';refresh();
+  }
+  else if(id==='pay'){
+    var tx=val('ptx').toUpperCase(),from=val('pfrom').replace(/[\s-]/g,'');
+    if(tx.length<6)return showErr('Enter the transaction ID from your confirmation message.');
+    if(!/^\+?\d{9,15}$/.test(from))return showErr('Enter the number you paid from.');
+    if(usersArr().some(function(u){return (u.payments||[]).some(function(p){return p.txn===tx})}))return showErr('This transaction ID has already been submitted.');
+    m.payments=m.payments||[];m.payments.push({id:db.seq++,txn:tx,network:val('pnet'),from:from,at:Date.now(),status:'pending'});
+    save();toast('Payment sent for checking');refresh();
+  }
+  else if(id==='addp'||id==='editp'){
+    var pre=id==='addp'?'a':'e',nm=val(pre+'n'),ds=val(pre+'d'),pr=parseFloat(val(pre+'p')),rt=parseFloat(val(pre+'r')),lk=val(pre+'l');
+    if(!m||m.role!=='seller')return;
+    if(id==='addp'&&!isActive(m))return showErr('Pay your monthly fee before publishing.');
+    if(nm.length<3)return showErr('Enter a product name.');
+    if(!(pr>0))return showErr('Enter a price above zero.');
+    if(!(rt>=1&&rt<=90))return showErr('Commission must be between 1% and 90%.');
+    if(!/^https?:\/\/\S+\.\S+/.test(lk))return showErr('Enter the full link, starting with https://');
+    if(id==='addp'){var nid=db.seq++;db.products[nid]={id:nid,seller:m.code,name:nm,desc:ds,price:pr,rate:rt,link:lk,createdAt:Date.now(),visitors:{}};toast('Product published')}
+    else{var p=db.products[Number(f.getAttribute('data-id'))];if(!p||p.seller!==m.code)return;p.name=nm;p.desc=ds;p.price=pr;p.rate=rt;p.link=lk;ui.edit=null;toast('Changes saved')}
+    save();refresh();
+  }
+  else if(id==='sale'){
+    var pp=db.products[Number(f.getAttribute('data-id'))],aff=$('#sa').value;
+    if(!pp||!m||pp.seller!==m.code)return;
+    db.sales.push({id:db.seq++,productId:pp.id,productName:pp.name,affiliate:aff,seller:m.code,commission:perSale(pp),at:Date.now()});
+    ui.sale=null;save();toast('Sale recorded for '+aff);refresh();
+  }
+  else if(id==='adminpin'){
+    if($('#pin').value===CONFIG.adminPin){ui.admin=true;refresh()}else showErr('Wrong PIN.');
+  }
+});
+
+/* ============ DEMO DATA (admin only) ============ */
+function loadDemo(){
+  var now=Date.now();
+  function user(code,role,name,days,nat,exp,phone){
+    if(db.users[code])return;
+    db.users[code]={code:code,role:role,name:name,dob:'1994-05-12',phone:phone,nationality:nat,experience:exp,about:'',email:'',pass:hash('demo123'),createdAt:now-days*DAY,paidUntil:now+25*DAY,payments:[]};
+    if(role==='affiliate')db.picks[code]=[];
+  }
+  user('SEL-DEMO01','seller','Kwame Boateng',410,'Ghanaian','More than 3 years','0240000001');
+  user('SEL-DEMO02','seller','Ama Serwaa',95,'Ghanaian','1 to 3 years','0240000002');
+  user('AF-DEMO01','affiliate','Yaw Mensah',230,'Ghanaian','1 to 3 years','0240000003');
+  user('AF-DEMO02','affiliate','Efua Quaye',40,'Ghanaian','Less than 1 year','0240000004');
+  var list=[['SEL-DEMO01','Cocoa Farming Starter Guide','Step by step guide to starting a small cocoa farm.',80,40],['SEL-DEMO01','Mobile Money Agent Toolkit','Everything to set up and run a MoMo agent business.',45,50],
+    ['SEL-DEMO02','Excel for Small Business Owners','Video lessons on bookkeeping and stock tracking in Excel.',150,30],['SEL-DEMO02','WASSCE Core Maths Revision','Past questions with worked solutions.',60,35]];
+  var ids=[];
+  list.forEach(function(x){var i=db.seq++;ids.push(i);db.products[i]={id:i,seller:x[0],name:x[1],desc:x[2],price:x[3],rate:x[4],link:'https://example.com/buy/'+i,createdAt:now-i*DAY,visitors:{}}});
+  db.picks['AF-DEMO01']=[ids[0],ids[2]];db.picks['AF-DEMO02']=[ids[0]];
+  db.products[ids[0]].visitors={'AF-DEMO01':12,'AF-DEMO02':3};db.products[ids[2]].visitors={'AF-DEMO01':7};
+  db.sales.push({id:db.seq++,productId:ids[0],productName:list[0][1],affiliate:'AF-DEMO01',seller:'SEL-DEMO01',commission:32,at:now-9*DAY});
+  db.sales.push({id:db.seq++,productId:ids[2],productName:list[2][1],affiliate:'AF-DEMO01',seller:'SEL-DEMO02',commission:45,at:now-3*DAY});
+  save();
+}
+
+window.addEventListener('hashchange',go);
+renderFoot();
+go();
+})();
+</script>
+</body>
+</html>
