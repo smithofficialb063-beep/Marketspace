@@ -3,958 +3,399 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A0A0A">
-<meta name="description" content="Marketspace: sellers list products, affiliates promote them and earn commission.">
 <title>Marketspace</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
-:root{
-  --bg:#0A0A0A; --surface:#141414; --surface2:#1E1E1E; --line:#2E2E2E; --fg:#F5F5F0; --muted:#A9A9A0;
-  --y:#FFD400; --on-y:#0A0A0A; --danger:#FF7A70;
-  --font-d:'Space Grotesk',system-ui,sans-serif; --font-b:'Inter',system-ui,sans-serif;
-}
-*{box-sizing:border-box}
-html{color-scheme:dark}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:15px;line-height:1.5;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
-h1,h2,h3{font-family:var(--font-d);line-height:1.15;margin:0;text-wrap:balance}
-h1{font-size:clamp(30px,7vw,52px);font-weight:700;letter-spacing:-.02em}
-h2{font-size:22px;font-weight:700}
-h3{font-size:17px;font-weight:700}
-p{margin:0}
-a{color:inherit}
-.wrap{max-width:1000px;margin:0 auto}
-.note{font-size:13px;color:var(--muted)}
-.num{font-variant-numeric:tabular-nums}
+:root{--bg:#0A0A0A;--s:#141414;--s2:#1E1E1E;--line:#2E2E2E;--fg:#F5F5F0;--mu:#A9A9A0;--y:#FFD400;--on:#0A0A0A;--bad:#FF7A70;--fd:'Space Grotesk',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--fb);padding:env(safe-area-inset-top,0) max(16px,env(safe-area-inset-right,0)) calc(32px + env(safe-area-inset-bottom,0)) max(16px,env(safe-area-inset-left,0))}
+h1,h2,h3{font-family:var(--fd);line-height:1.15;margin:0}h1{font-size:clamp(28px,7vw,46px)}h2{font-size:22px}h3{font-size:17px}p{margin:0}a{color:inherit}
+.wrap{max-width:960px;margin:0 auto}.note{font-size:13px;color:var(--mu)}.num{font-variant-numeric:tabular-nums}
 :focus-visible{outline:3px solid var(--y);outline-offset:2px}
-
-header.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:16px;border-bottom:1px solid var(--line)}
-.brand{font-family:var(--font-d);font-weight:700;font-size:22px;text-decoration:none;display:flex;align-items:center;gap:8px}
-.brand i{width:24px;height:24px;background:var(--y);border-radius:6px;display:inline-block;position:relative}
-.brand i::after{content:"";position:absolute;left:6px;top:6px;width:12px;height:12px;border:3px solid var(--on-y);border-radius:50%}
-nav{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0}
-nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:500}
-nav a[aria-current="page"]{background:var(--surface2);color:var(--y)}
-.badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--y);color:var(--on-y);font-size:12px;font-weight:700;text-align:center;line-height:20px}
-.acct{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
-@media (max-width:700px){nav{order:3;flex:1 1 100%}}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--y);background:var(--y);color:var(--on-y);
-  font:600 14px var(--font-b);padding:10px 16px;border-radius:8px;cursor:pointer;text-decoration:none;min-height:40px}
-.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
-.btn.ghost:hover{border-color:var(--y);color:var(--y)}
-.btn.small{padding:6px 12px;min-height:34px;font-size:13px}
-.btn.danger{color:var(--danger)}
-.btn[disabled]{opacity:.5;cursor:default}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.between{justify-content:space-between}
-
-.hero{padding-block:36px 24px;display:grid;gap:16px}
-.eyebrow{color:var(--y);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
-.lead{max-width:56ch;color:var(--muted);font-size:17px}
-.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-block:8px 32px}
-.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
-.head2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-.card,.panel,.item,.stat,.sub,.nitem{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
-.card{display:flex;flex-direction:column;gap:10px}
-.card .btn{margin-top:auto;align-self:flex-start}
-.price{font-family:var(--font-d);font-size:22px;font-weight:700}
-.earn b{color:var(--y)}
-.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--muted);text-decoration:none}
-.chip.y{background:var(--y);color:var(--on-y);border-color:var(--y)}
-.chip.bad{color:var(--danger);border-color:var(--danger)}
-a.chip:hover{border-color:var(--y);color:var(--y)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--muted);display:grid;gap:12px;justify-items:center}
-
-.thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--surface2);display:block}
-.ph{display:grid;place-items:center;font-family:var(--font-d);font-size:44px;color:var(--y)}
-.gal{display:grid;gap:10px}
-.gal .main{aspect-ratio:4/3;width:100%;object-fit:contain;background:var(--bg);border:1px solid var(--line);border-radius:10px}
-.strip{display:flex;flex-wrap:wrap;gap:8px}
-.strip button{padding:0;border:2px solid var(--line);border-radius:8px;background:none;cursor:pointer;width:64px;height:64px;overflow:hidden}
-.strip button:hover{border-color:var(--y)}
-.strip img{width:100%;height:100%;object-fit:cover;display:block}
-.pics{display:flex;flex-wrap:wrap;gap:10px}
-.pic{position:relative;width:84px;height:84px}
-.pic img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
-.pic .x{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;border:0;background:var(--y);color:var(--on-y);font-weight:700;cursor:pointer;line-height:1}
-.mini{width:64px;height:64px;object-fit:cover;border-radius:8px;flex:none}
-.mini.ph{font-size:24px}
-
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-block:16px;border-bottom:1px solid var(--line)}
+.brand{font:700 22px var(--fd);text-decoration:none}nav{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--mu);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--y);background:var(--y);color:var(--on);font:600 14px var(--fb);padding:10px 16px;border-radius:8px;cursor:pointer;text-decoration:none;min-height:40px}
+.btn.g{background:none;color:var(--fg);border-color:var(--line)}.btn.d{color:var(--bad)}.btn.sm{padding:6px 12px;min-height:34px;font-size:13px}.btn[disabled]{opacity:.5}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.bt{justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card,.panel{background:var(--s);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.card{display:flex;flex-direction:column;gap:10px}.card .btn{margin-top:auto;align-self:flex-start}
+.panel{display:grid;gap:14px}.narrow{max-width:600px;margin-inline:auto}
+.price{font:700 22px var(--fd)}.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--mu)}.chip.y{background:var(--y);color:var(--on);border-color:var(--y)}
+.empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--mu)}
+.thumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--s2);display:grid;place-items:center;color:var(--y);font:44px var(--fd)}
+.main{width:100%;aspect-ratio:4/3;object-fit:contain;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.strip,.pics{display:flex;flex-wrap:wrap;gap:8px}.strip img{width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--line)}
+.pic{position:relative;width:84px;height:84px}.pic img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.pic button{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;border:0;background:var(--y);font-weight:700;cursor:pointer}
 input,select,textarea{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:42px;width:100%}
-textarea{min-height:84px;resize:vertical}
-input[type=search]{max-width:300px}
-input[type=file]{padding:8px}
-label{display:grid;gap:6px;font-weight:500;font-size:14px}
-.form{display:grid;gap:14px}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.panel{display:grid;gap:14px}
-.panel.narrow{max-width:600px;margin-inline:auto}
-.err{color:var(--danger);font-size:14px}
-.code{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
-.code strong{font-family:var(--font-d);font-size:20px;letter-spacing:.04em;color:var(--y)}
-.pg{padding-block:28px}
-.pg>h2{margin-bottom:6px}
-
-.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-block:16px;border-bottom:1px solid var(--line);padding-bottom:10px}
-.tabs a{padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:600;border:1px solid var(--line)}
-.tabs a[aria-current="page"]{background:var(--y);color:var(--on-y);border-color:var(--y)}
-.tabs a[aria-current="page"] .badge{background:var(--on-y);color:var(--y)}
-
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-block:16px}
-.stat small{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
-.stat strong{font-family:var(--font-d);font-size:24px;display:block;margin-top:2px}
-.stat.y{background:var(--y);color:var(--on-y);border-color:var(--y)}
-.stat.y small{color:var(--on-y)}
-.sub{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
-.sub.active{border-color:var(--y)}
-.sub.expired,.sub.unpaid{border-color:var(--danger)}
-.list{display:grid;gap:12px;margin-top:12px}
-.item{display:grid;gap:12px}
-.itemtop{display:flex;gap:12px;align-items:flex-start;min-width:0}
-.itemtop>div{min-width:0;flex:1}
-.linkrow{display:flex;gap:8px;align-items:center;min-width:0}
-.linkrow code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
-.inline{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:12px}
-.locked{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;background:var(--surface2);border:1px solid var(--y);border-radius:12px;padding:16px}
-.locked small{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
-.locked strong{font-family:var(--font-d);font-size:22px;display:block}
-.locked .big{color:var(--y);font-size:28px;letter-spacing:.03em}
-.contact{display:grid;gap:10px;border:1px solid var(--y);border-radius:12px;padding:14px;background:var(--surface2)}
-.contact strong{font-family:var(--font-d);font-size:20px;color:var(--y)}
-ol.steps{margin:0;padding-left:20px;display:grid;gap:6px}
-.tablewrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
-th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
-.nitem{display:grid;gap:10px}
-.nitem.unread{border-color:var(--y)}
-.nitem .head2 p{flex:1;min-width:200px}
-
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:16px;z-index:20;overflow-y:auto}
-.modal{background:var(--surface);border:1px solid var(--y);border-radius:14px;padding:22px;max-width:460px;width:100%;display:grid;gap:14px}
-.choice{display:grid;gap:4px;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg)}
-.choice:hover{border-color:var(--y)}
-.choice b{font-family:var(--font-d);font-size:18px;color:var(--y)}
-.choice span{color:var(--muted);font-size:14px}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--y);color:var(--on-y);font-weight:600;padding:10px 16px;border-radius:8px;max-width:calc(100% - 32px);z-index:30}
-[hidden]{display:none!important}
-footer.foot{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;display:grid;gap:6px;text-align:center}
-.wa{color:var(--y);font-weight:600}
+textarea{min-height:84px}label{display:grid;gap:6px;font-weight:500;font-size:14px}form{display:grid;gap:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.err{color:var(--bad);font-size:14px}
+.code{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:700 20px var(--fd);color:var(--y)}
+.pg{padding-block:26px;display:grid;gap:16px}.contact{border:1px solid var(--y);border-radius:12px;padding:14px;background:var(--s2);display:grid;gap:10px}
+.item{display:grid;gap:10px;background:var(--s);border:1px solid var(--line);border-radius:12px;padding:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0));background:var(--y);color:var(--on);font-weight:600;padding:10px 16px;border-radius:8px;z-index:30}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.badge{background:var(--y);color:var(--on);border-radius:99px;padding:0 6px;font-size:12px;font-weight:700}.lk{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mu);font-weight:500;font-size:12px}
+[hidden]{display:none!important}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;text-align:center}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
-    <a class="brand" href="#market"><i></i>Marketspace</a>
-    <nav id="nav" aria-label="Main"></nav>
-    <div class="acct" id="acct"></div>
-  </header>
-  <main id="app"></main>
-  <footer class="foot" id="foot"></footer>
+<header><a class="brand" href="#market">Marketspace</a><nav id="nav"></nav><div class="row" id="acct"></div></header>
+<main id="app"><p class="note" style="padding:30px">Loading…</p></main>
+<footer class="note">&copy; Marketspace &middot; Questions? WhatsApp <a href="https://wa.me/233257218681">0257218681</a></footer>
 </div>
 <div id="toast" class="toast" hidden role="status"></div>
-<noscript>Marketspace needs JavaScript turned on.</noscript>
 
-<script>
-(function(){
-'use strict';
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,addDoc,updateDoc,deleteDoc,collection,getDocs,query,orderBy,writeBatch,where,arrayUnion,arrayRemove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ============ SETTINGS (edit here, then deploy again) ============ */
-var CONFIG=Object.freeze({
-  siteName:'Marketspace',
-  momoNumber:'0257218681',          /* members pay the monthly fee to this number */
-  momoName:'Eric Annor Gyau',
-  fee:5,                            /* monthly fee in GH cedis */
-  commissionMomoNumber:'0257411489',/* sellers pay affiliate commission to this number */
-  commissionMomoName:'Eric Annor Gyau',
-  currency:'GH₵',
-  periodDays:30,                    /* one paid month */
-  whatsappDisplay:'0257218681',
-  whatsappIntl:'233257218681',      /* number in international format, no plus sign */
-  minAge:18,
-  minPictures:2,
-  maxPictures:5,
-  adminPin:'change-this-pin',       /* CHANGE THIS before deploying */
-  googleClientId:''                 /* paste your Google OAuth Web Client ID to switch on "Continue with Google" */
+const app=initializeApp({apiKey:"AIzaSyBKUWZP1-LgvmlDVJRhK1FWMZP94I02mt0",authDomain:"marketspace-24299.firebaseapp.com",projectId:"marketspace-24299",storageBucket:"marketspace-24299.firebasestorage.app",messagingSenderId:"420321552467",appId:"1:420321552467:web:cb87aa9c91c4c5822cfea6"});
+const auth=getAuth(app),db=getFirestore(app);
+const CFG={fee:5,minAge:18,minPics:2,maxPics:5,period:30*864e5,momo:['0257218681','Eric Annor Gyau'],cmomo:['0257411489','Eric Annor Gyau'],admin:'smithofficialb063@gmail.com'};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'GH₵ '+Number(n).toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const rnd=n=>[...crypto.getRandomValues(new Uint32Array(n))].map(x=>AL[x%AL.length]).join('');
+const cp=s=>String(s).replace(/[\s-]/g,'');
+const PHONE=/^\+?\d{9,15}$/;
+const intl=n=>{const d=String(n).replace(/\D/g,'');return d[0]==='0'?'233'+d.slice(1):d};
+const val=id=>($('#'+id)?.value||'').trim();
+const err=m=>{const e=$('#err');if(e){e.textContent=m;e.hidden=false}};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,3200)};
+const note=(t,b,btn='')=>`<div class="pg"><div class="panel narrow"><h2>${esc(t)}</h2><p class="note">${esc(b)}</p>${btn}</div></div>`;
+
+let me=null,P=[],ready=false,busy=false;
+const ui={imgs:[],edit:null,q:'',codes:{},pay:null,badge:0};
+const r2=n=>Math.round(n*100)/100;
+const fmt=t=>new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const active=u=>!!u&&u.paidUntil>Date.now();
+const isAdmin=()=>auth.currentUser?.email===CFG.admin;
+const vid=()=>{try{let v=localStorage.getItem('ms_vid');if(!v){v=rnd(14);localStorage.setItem('ms_vid',v)}return v}catch(e){return rnd(14)}};
+const col=(n,...c)=>getDocs(query(collection(db,n),...c)).then(s=>s.docs.map(d=>({id:d.id,...d.data()})));
+async function refreshMe(){const u=auth.currentUser;if(!u)return;const s=await getDoc(doc(db,'users',u.uid));if(s.exists())me={...s.data(),uid:u.uid}}
+let PR={};
+const live=p=>PR[p.sellerCode]?.paidUntil>Date.now();
+const NET=['MTN MoMo','Telecel Cash','AirtelTigo Money','Other'].map(x=>`<option>${x}</option>`).join('');
+const LBL={reached:'Waiting for your confirmation',declined:'No sale',owed:'Waiting for you to pay',submitted:'Payment being confirmed',paid:'Paid and confirmed'};
+const ALBL={reached:'Waiting for seller to confirm',declined:'No sale',owed:'Waiting for seller to pay',submitted:'Seller payment being confirmed',paid:'Confirmed'};
+const counted=l=>['owed','submitted','paid'].includes(l.status);
+const bal=(L,W)=>{let e=0,pe=0,cf=0,o=0,dn=0;L.forEach(l=>{if(counted(l)){e+=l.commission;l.status==='paid'?cf+=l.commission:pe+=l.commission}});W.forEach(w=>{o+=w.amount;if(w.status==='done')dn+=w.amount});return{earned:r2(e),pending:r2(pe),available:r2(cf-o),paidOut:r2(dn)}};
+const linkRow=t=>`<div class="row"><code class="lk">${esc(t)}</code><button class="btn sm" data-act="copy" data-t="${esc(t)}">Copy</button></div>`;
+const momoBox=(m,amt)=>`<div class="contact"><p class="note">Send ${amt} to this mobile money number</p><strong class="num" style="font-size:26px;color:var(--y)">${m[0]}</strong><p>Account name: <b>${esc(m[1])}</b></p><div><button type="button" class="btn sm" data-act="copy" data-t="${m[0]}">Copy number</button></div></div>`;
+const T=(t,cols,rows,empty)=>`<h3 style="margin-top:12px">${t}</h3><div class="panel tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${cols.length}" class="note">${empty}</td></tr>`}</tbody></table></div>`;
+function subCard(u){const on=active(u),d=Math.ceil((u.paidUntil-Date.now())/864e5);return `<div class="item row bt"><div><div class="row"><h3>Membership</h3><span class="chip ${on?'y':''}">${on?'Active':'Not active'}</span></div><p class="note">${on?`${d} day${d===1?'':'s'} left. Paid until ${fmt(u.paidUntil)}.`:`Pay ${money(CFG.fee)} to ${u.role==='seller'?'list':'promote'} products.`}</p></div><a class="btn sm" href="#pay">${on?'Renew early':'Pay '+money(CFG.fee)}</a></div>`}
+
+onAuthStateChanged(auth,async u=>{
+  if(busy)return;
+  me=null;
+  if(u){try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists())me={...s.data(),uid:u.uid}}catch(e){}}
+  ready=true;route();
 });
 
-/* ============ HELPERS ============ */
-var DAY=864e5;
-function $(s){return document.querySelector(s)}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-function money(n){return CONFIG.currency+' '+Number(n).toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function fmt(t){return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
-function fmtT(t){return new Date(t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
-function plural(n,w){return n+' '+w+(n===1?'':'s')}
-function r2(n){return Math.round(n*100)/100}
-function span(from){
-  var a=new Date(from),b=new Date();
-  var y=b.getFullYear()-a.getFullYear(),m=b.getMonth()-a.getMonth(),d=b.getDate()-a.getDate();
-  if(d<0){m--;d+=new Date(b.getFullYear(),b.getMonth(),0).getDate()}
-  if(m<0){y--;m+=12}
-  return {y:Math.max(0,y),m:Math.max(0,m),d:Math.max(0,d)};
+async function loadP(){
+  P=await col('products',orderBy('createdAt','desc'));PR={};
+  (await col('profiles')).forEach(x=>PR[x.code]=x);
 }
-function since(from){var s=span(from);return plural(s.y,'year')+', '+plural(s.m,'month')+', '+plural(s.d,'day')}
-var AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-function rnd(n){
-  var a=new Uint32Array(n),i,s='';
-  if(window.crypto&&window.crypto.getRandomValues){window.crypto.getRandomValues(a)}else{for(i=0;i<n;i++)a[i]=Math.floor(Math.random()*4294967296)}
-  for(i=0;i<n;i++)s+=AL.charAt(a[i]%AL.length);
-  return s;
-}
-function hash(s){
-  s='ms:'+s;var h1=0xdeadbeef,h2=0x41c6ce57,i,ch;
-  for(i=0;i<s.length;i++){ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}
-  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
-  h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
-  return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);
-}
-function toIntl(n){var d=String(n).replace(/\D/g,'');return d.charAt(0)==='0'?'233'+d.slice(1):d}
-function toast(m){var t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true},3200)}
+const perSale=p=>Math.round(p.price*p.rate)/100;
+const thumb=p=>p.images?.[0]?`<img class="thumb" src="${p.images[0]}" alt="${esc(p.name)}">`:`<div class="thumb">${esc((p.name||'?')[0].toUpperCase())}</div>`;
+const card=p=>`<article class="card"><a href="#product/${p.id}">${thumb(p)}</a><div><span class="chip y">${p.rate}% commission</span></div><h3>${esc(p.name)}</h3><p class="note">by ${esc(p.sellerName)}</p><div class="price num">${money(p.price)}</div><p class="note">Affiliates earn <b class="num">${money(perSale(p))}</b> per sale</p><a class="btn sm" href="#product/${p.id}">View product</a></article>`;
+const gridHtml=()=>{const q=ui.q.toLowerCase().trim(),l=P.filter(p=>live(p)&&(!q||(p.name+' '+(p.desc||'')).toLowerCase().includes(q)));return l.length?l.map(card).join(''):`<div class="empty">${q?'No products match your search.':'No products yet.'}</div>`};
 
-/* ============ STORAGE ============ */
-/* Data is kept in this browser (localStorage). A live site used by many people needs a shared database; every read and write goes through load() and save(). */
-var KEY='marketspace_db_v1',SKEY='marketspace_session_v1',VKEY='marketspace_visitor_v1';
-function blank(){return {users:{},products:{},picks:{},leads:[],notes:[],withdrawals:[],leadKeys:{},seq:1}}
-function load(){try{var r=localStorage.getItem(KEY);if(r){return Object.assign(blank(),JSON.parse(r))}}catch(e){}return blank()}
-var db=load();
-function save(){
-  try{localStorage.setItem(KEY,JSON.stringify(db));return true}
-  catch(e){toast('Could not save. Storage is full. Remove a product or use smaller pictures.');return false}
-}
-var meCode=null;try{meCode=localStorage.getItem(SKEY)}catch(e){}
-function me(){return meCode&&db.users[meCode]||null}
-function setMe(c){meCode=c;try{if(c)localStorage.setItem(SKEY,c);else localStorage.removeItem(SKEY)}catch(e){}}
-var vidMem=null;
-function vid(){
-  try{var v=localStorage.getItem(VKEY);if(!v){v=rnd(14);localStorage.setItem(VKEY,v)}return v}catch(e){}
-  if(!vidMem)vidMem=rnd(14);return vidMem;
-}
-function newCode(role){var p=role==='seller'?'SEL-':'AF-',c;do{c=p+rnd(6)}while(db.users[c]);return c}
-function allProducts(){return Object.keys(db.products).map(function(k){return db.products[k]})}
-function usersArr(){return Object.keys(db.users).map(function(k){return db.users[k]})}
-function pending(u){return (u.payments||[]).some(function(p){return p.status==='pending'})}
-function status(u){if(!u)return 'none';if(u.paidUntil>Date.now())return 'active';if(pending(u))return 'pending';return u.paidUntil>0?'expired':'unpaid'}
-function isActive(u){return status(u)==='active'}
-function daysLeft(u){return Math.max(0,Math.ceil((u.paidUntil-Date.now())/DAY))}
-function perSale(p){return r2(p.price*p.rate/100)}
-function listed(){return allProducts().filter(function(p){var s=db.users[p.seller];return s&&isActive(s)})}
-function promoLink(pid,code){return location.href.split('#')[0]+'#product/'+pid+'/'+code}
-function leadById(id){return db.leads.filter(function(l){return l.id===id})[0]}
-function txnUsed(tx){
-  return usersArr().some(function(u){return (u.payments||[]).some(function(p){return p.txn===tx})})||db.leads.some(function(l){return l.payment&&l.payment.txn===tx});
-}
-function counted(l){return l.status==='owed'||l.status==='submitted'||l.status==='paid'}
-function bal(code){
-  var earned=0,pend=0,conf=0,out=0,done=0;
-  db.leads.forEach(function(l){
-    if(l.affiliate!==code)return;
-    if(!counted(l))return;
-    earned+=l.commission;
-    if(l.status==='paid')conf+=l.commission;else pend+=l.commission;
-  });
-  db.withdrawals.forEach(function(w){
-    if(w.affiliate!==code)return;
-    out+=w.amount;if(w.status==='done')done+=w.amount;
-  });
-  return {earned:r2(earned),pending:r2(pend),available:r2(conf-out),paidOut:r2(done)};
-}
-function notify(to,type,text,extra){
-  db.notes.push(Object.assign({id:db.seq++,to:to,type:type,text:text,at:Date.now(),read:false},extra||{}));
-}
-function unread(who){return db.notes.filter(function(n){return n.to===who&&!n.read}).length}
-function ui0(){return {edit:null,del:null,payLead:null,reg:{},google:null,admin:false,q:'',confirmReset:false,imgs:[],eimgs:[]}}
-var ui=ui0();
-
-/* ============ SMALL VIEWS ============ */
-function chip(t,c){return '<span class="chip '+(c||'')+'">'+esc(t)+'</span>'}
-function badge(n){return n?'<span class="badge">'+n+'</span>':''}
-function notice(t,body,btn){return '<div class="pg"><div class="panel narrow"><h2>'+esc(t)+'</h2><p class="note">'+body+'</p>'+(btn||'')+'</div></div>'}
-function copyBtn(t,label){return '<button class="btn small" type="button" data-act="copy" data-t="'+esc(t)+'">'+(label||'Copy')+'</button>'}
-function tabsHtml(list,cur,base){
-  return '<div class="tabs">'+list.map(function(t,i){
-    return '<a href="#'+base+(i===0?'':'/'+t[0])+'"'+(cur===t[0]?' aria-current="page"':'')+'>'+t[1]+'</a>';
-  }).join('')+'</div>';
-}
-function thumbHtml(p,cls){
-  var src=p.images&&p.images[0];
-  return src?'<img class="'+(cls||'thumb')+'" src="'+src+'" alt="'+esc(p.name)+'">':'<div class="'+(cls||'thumb')+' ph">'+esc((p.name||'?').charAt(0).toUpperCase())+'</div>';
-}
-function subCard(u){
-  var s=status(u),lbl={active:'Active',pending:'Payment pending',expired:'Expired',unpaid:'Not paid yet'}[s],line;
-  if(s==='active')line=daysLeft(u)+' day'+(daysLeft(u)===1?'':'s')+' left. Paid until '+fmt(u.paidUntil)+'.';
-  else if(s==='pending')line='Your payment is being checked. Your account opens as soon as it is confirmed.';
-  else if(s==='expired')line='Your monthly fee ran out on '+fmt(u.paidUntil)+'. You cannot '+(u.role==='seller'?'list products':'promote products')+' until you pay again.';
-  else line='Pay '+money(CONFIG.fee)+' to start '+(u.role==='seller'?'listing products':'promoting products')+'.';
-  return '<div class="sub '+s+'"><div><div class="row"><h3>Membership</h3>'+chip(lbl,s==='active'?'y':(s==='pending'?'':'bad'))+'</div><p class="note" style="margin-top:6px">'+esc(line)+'</p></div>'+
-    '<a class="btn small" href="#pay">'+(s==='active'?'Renew early':(s==='pending'?'View payment':'Pay '+money(CONFIG.fee)))+'</a></div>';
-}
-function card(p){
-  var s=db.users[p.seller];
-  return '<article class="card"><a href="#product/'+p.id+'">'+thumbHtml(p)+'</a><div>'+chip(p.rate+'% commission','y')+'</div><h3><a href="#product/'+p.id+'" style="text-decoration:none">'+esc(p.name)+'</a></h3>'+
-    '<p class="note">by <a href="#u/'+esc(p.seller)+'">'+esc(s?s.name:p.seller)+'</a></p><div class="price num">'+money(p.price)+'</div>'+
-    '<p class="note earn">Affiliates earn <b class="num">'+money(perSale(p))+'</b> per sale</p><a class="btn small" href="#product/'+p.id+'">View product</a></article>';
-}
-function gridHtml(q){
-  q=(q||'').toLowerCase().trim();
-  var l=listed().filter(function(p){return !q||(p.name+' '+(p.desc||'')).toLowerCase().indexOf(q)>-1}).sort(function(a,b){return b.createdAt-a.createdAt});
-  if(!l.length)return '<div class="empty"><p>'+(q?'No products match your search.':'No products yet. Products from sellers who have paid their monthly fee appear here.')+'</p>'+(q||me()?'':'<a class="btn" href="#register/seller">Become a seller</a>')+'</div>';
-  return l.map(card).join('');
+/* ---------- views ---------- */
+async function vMarket(){
+  await loadP();
+  return `<section class="pg"><h1>Sell it. Promote it. Get paid.</h1><p class="note" style="max-width:56ch">Sellers list products and set the commission. Affiliates share their own link and earn on every sale they bring.</p>
+  <div class="row">${me?'<a class="btn" href="#dashboard">Open my dashboard</a>':'<a class="btn" href="#register">Sign up</a><a class="btn g" href="#login">Log in</a>'}</div></section>
+  <div class="row bt" style="margin-bottom:14px"><h2>Products to promote</h2><input id="q" type="search" style="max-width:280px" placeholder="Search products" value="${esc(ui.q)}"></div><div class="grid" id="grid">${gridHtml()}</div>`;
 }
 
-/* ============ PICTURES ============ */
-function thumbsHtml(list,k){
-  return '<div class="pics">'+list.map(function(s,i){
-    return '<div class="pic"><img src="'+s+'" alt="Picture '+(i+1)+'"><button type="button" class="x" data-act="rmimg" data-k="'+k+'" data-i="'+i+'" aria-label="Remove picture '+(i+1)+'">&times;</button></div>';
-  }).join('')+'</div><p class="note">'+list.length+' of '+CONFIG.maxPictures+' pictures added. At least '+CONFIG.minPictures+' are needed.</p>';
-}
-function drawThumbs(k){var el=$('#thumbs-'+k);if(el)el.innerHTML=thumbsHtml(k==='a'?ui.imgs:ui.eimgs,k)}
-function readImages(files,list,done){
-  var arr=Array.prototype.slice.call(files).filter(function(f){return /^image\//.test(f.type)}),room=CONFIG.maxPictures-list.length;
-  if(arr.length>room){toast('You can add up to '+CONFIG.maxPictures+' pictures.')}
-  arr=arr.slice(0,Math.max(0,room));
-  var left=arr.length;
-  if(!left){done();return}
-  function fin(){left--;if(left===0)done()}
-  arr.forEach(function(f){
-    var fr=new FileReader();
-    fr.onload=function(){
-      var img=new Image();
-      img.onload=function(){
-        var sc=Math.min(1,800/Math.max(img.width,img.height)),c=document.createElement('canvas');
-        c.width=Math.max(1,Math.round(img.width*sc));c.height=Math.max(1,Math.round(img.height*sc));
-        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-        list.push(c.toDataURL('image/jpeg',0.72));fin();
-      };
-      img.onerror=fin;img.src=fr.result;
-    };
-    fr.onerror=fin;fr.readAsDataURL(f);
-  });
+async function vProduct(id,ref){
+  const s=await getDoc(doc(db,'products',id));
+  if(!s.exists())return note('Product not found','This product was removed or the link is wrong.','<a class="btn" href="#market">Back to marketplace</a>');
+  const p={id,...s.data()},im=p.images||[],t=p.contactType||'whatsapp',own=me?.uid===p.sellerUid;
+  const sp=(await getDoc(doc(db,'profiles',p.sellerCode))).data();
+  if(!own&&!isAdmin()&&!(sp?.paidUntil>Date.now()))return note('Product not available','The seller is not active right now.','<a class="btn" href="#market">Back to marketplace</a>');
+  if(!me&&ref){try{const ap=(await getDoc(doc(db,'profiles',ref))).data();if(ap?.role==='affiliate'&&ap.paidUntil>Date.now())await setDoc(doc(db,'leads',`${vid()}_${id}_${ref}`),{productId:id,productName:p.name,sellerUid:p.sellerUid,sellerCode:p.sellerCode,affUid:ap.uid,affCode:ref,commission:perSale(p),at:Date.now(),status:'reached'})}catch(e){}}
+  const msg=`Hello, I saw "${p.name}" on Marketspace and I am interested.${ref?` (Referred by ${ref})`:''}`;
+  const see=!me||own||isAdmin();
+  const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact the seller</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
+  let act='';
+  if(me?.role==='affiliate'){
+    const lk=location.href.split('#')[0]+'#product/'+id+'/'+me.code;
+    act=!active(me)?`<p class="note">Your membership is not active, so you cannot promote products.</p><a class="btn" style="justify-self:start" href="#pay">Pay ${money(CFG.fee)}</a>`:(me.picks||[]).includes(id)?`<p class="note">You are promoting this product. Your personal link:</p>${linkRow(lk)}`:`<button class="btn" style="justify-self:start" data-act="promote" data-id="${id}">Promote this product</button>`;
+  }else if(!me&&!ref)act=`<p class="note">Want to earn ${money(perSale(p))} for every sale you bring?</p><a class="btn" style="justify-self:start" href="#register/affiliate">Join as affiliate</a>`;
+  else if(own)act='<a class="btn" style="justify-self:start" href="#dashboard">Manage in dashboard</a>';
+  return `<div class="pg"><a class="note" href="#market">&larr; All products</a><div class="panel">
+  ${im.length?`<img class="main" id="mainpic" src="${im[0]}" alt="${esc(p.name)}">${im.length>1?`<div class="strip">${im.map(x=>`<img src="${x}" data-act="pic" alt="">`).join('')}</div>`:''}`:''}
+  <div><span class="chip y">${p.rate}% commission</span></div><h1>${esc(p.name)}</h1><div class="price num">${money(p.price)}</div>
+  <p style="white-space:pre-wrap">${esc(p.desc||'')}</p><p class="note">Sold by <b>${esc(p.sellerName)}</b> (${esc(p.sellerCode)})</p>${contact}${act}</div></div>`;
 }
 
-/* ============ MARKETPLACE + PRODUCT ============ */
-function vMarket(){
-  var m=me();
-  var cta=m?'<a class="btn" href="#dashboard">Open my dashboard</a>':'<a class="btn" href="#register">Sign up</a><a class="btn ghost" href="#login">Log in</a>';
-  return '<section class="hero"><p class="eyebrow">Sellers and affiliates, one marketplace</p><h1>Sell it. Promote it. Get paid.</h1>'+
-    '<p class="lead">Sellers list products and set the commission. Affiliates pick products, share their own link and earn on every sale they bring.</p><div class="row">'+cta+'</div></section>'+
-    '<section class="how"><div class="card"><h3>Sellers</h3><p class="note">Register, pay '+money(CONFIG.fee)+' a month, publish your products with pictures and your contact, and see which affiliates bring you buyers.</p></div>'+
-    '<div class="card"><h3>Affiliates</h3><p class="note">Register, pay '+money(CONFIG.fee)+' a month, choose products to market and watch your commission grow.</p></div>'+
-    '<div class="card"><h3>Monthly membership</h3><p class="note">Members who have not paid '+money(CONFIG.fee)+' for the month cannot list or promote products.</p></div></section>'+
-    '<section><div class="head"><h2>Products to promote</h2><input id="q" type="search" placeholder="Search products" aria-label="Search products" value="'+esc(ui.q)+'"></div><div class="grid" id="grid">'+gridHtml(ui.q)+'</div></section>';
+const roleChoice=()=>`<div class="pg"><div class="panel narrow"><h2>How will you use Marketspace?</h2><p class="note">Choose one. You can only hold one type of account.</p>
+<a class="btn" href="#register/seller">I am a seller</a><a class="btn g" href="#register/affiliate">I am an affiliate marketer</a></div></div>`;
+
+function vReg(role){
+  if(role!=='seller'&&role!=='affiliate')return roleChoice();
+  if(me)return note('You already have an account',`Signed in as ${me.name} (${me.code}).`,'<a class="btn" href="#dashboard">Go to dashboard</a>');
+  const seller=role==='seller';
+  ui.codes[role]=ui.codes[role]||(seller?'SEL-':'AF-')+rnd(6);
+  const d=new Date();d.setFullYear(d.getFullYear()-CFG.minAge);
+  return `<div class="pg"><div class="panel narrow"><div class="row bt"><h2>Create your ${role} account</h2><a class="note" href="#register">Switch</a></div>
+  <p class="note">After signing up you pay ${money(CFG.fee)} a month to activate your account.</p>
+  <form id="reg" data-role="${role}" novalidate><div><small class="note">Your ${role} code (username)</small><div class="code">${ui.codes[role]}</div></div>
+  <label>Full name<input id="rn" autocomplete="name"></label>
+  <div class="two"><label>Date of birth<input id="rd" type="date" max="${d.toISOString().slice(0,10)}"></label><label>Phone number<input id="rp" type="tel" placeholder="0240000000"></label></div>
+  <label>Email<input id="re" type="email" autocomplete="email"></label>
+  <div class="two"><label>Nationality<input id="rnat" placeholder="e.g. Ghanaian"></label><label>Experience<select id="rexp"><option>No experience yet</option><option>Less than 1 year</option><option>1 to 3 years</option><option>More than 3 years</option></select></label></div>
+  <div class="two"><label>Password<input id="rpw" type="password" autocomplete="new-password"></label><label>Confirm password<input id="rpw2" type="password" autocomplete="new-password"></label></div>
+  <p class="err" id="err" hidden></p><button class="btn">Create account</button></form></div></div>`;
 }
 
-function trackVisit(p,ref){
-  var m=me();
-  if(ui.admin)return;
-  if(m){
-    if(m.role==='affiliate'&&isActive(m)){p.visitors=p.visitors||{};p.visitors[m.code]=(p.visitors[m.code]||0)+1;save()}
-    return;
+const vLogin=()=>me?note('You are signed in',`Signed in as ${me.name}.`,'<a class="btn" href="#dashboard">Go to dashboard</a>'):
+`<div class="pg"><div class="panel narrow"><h2>Log in</h2><form id="login" novalidate><label>Your code, phone number or email<input id="lc" autocomplete="username" placeholder="AF-XXXXXX or SEL-XXXXXX"></label>
+<label>Password<input id="lp" type="password" autocomplete="current-password"></label><p class="err" id="err" hidden></p><button class="btn">Log in</button></form><p class="note">New here? <a href="#register">Create an account</a></p></div></div>`;
+
+const thumbsHtml=()=>`<div class="pics">${ui.imgs.map((s,i)=>`<div class="pic"><img src="${s}" alt="Picture ${i+1}"><button type="button" data-act="rmimg" data-i="${i}" aria-label="Remove picture ${i+1}">&times;</button></div>`).join('')}</div><p class="note">${ui.imgs.length} of ${CFG.maxPics} pictures. At least ${CFG.minPics} needed.</p>`;
+
+function pform(p){
+  const t=p?.contactType||'whatsapp';
+  return `<form class="panel" id="pf" data-id="${p?.id||''}" novalidate><h3>${p?'Edit product':'Publish a new product'}</h3>
+  <label>Product name<input id="pn" maxlength="80" value="${esc(p?.name)}"></label><label>Description<textarea id="pd" maxlength="500">${esc(p?.desc)}</textarea></label>
+  <div class="two"><label>Price (GH₵)<input id="pp" type="number" min="1" step="0.01" value="${p?.price??''}"></label><label>Affiliate commission (%)<input id="pr" type="number" min="1" max="90" value="${p?.rate??''}"></label></div>
+  <div class="two"><label>How buyers reach you<select id="pt"><option value="whatsapp"${t==='whatsapp'?' selected':''}>WhatsApp</option><option value="call"${t==='call'?' selected':''}>Phone call</option><option value="both"${t==='both'?' selected':''}>WhatsApp and phone call</option></select></label><label>Contact number<input id="pc" type="tel" value="${esc(p?.contact)}"></label></div>
+  <label>Product pictures<input id="pimg" type="file" accept="image/*" multiple></label><div id="thumbs">${thumbsHtml()}</div>
+  <p class="err" id="err" hidden></p><div class="row"><button class="btn">${p?'Save changes':'Publish product'}</button>${p?'<button type="button" class="btn g" data-act="cancel">Cancel</button>':''}</div></form>`;
+}
+
+async function vDash(){
+  if(!me)return note('Your dashboard','Log in to see your dashboard.','<a class="btn" href="#login">Log in</a>');
+  await refreshMe();
+  const hd=`<div class="row bt"><div><h2>${me.role==='seller'?'Seller':'Affiliate'} dashboard</h2><p class="note">Welcome, ${esc(me.name)}</p></div><span class="chip y">${esc(me.code)}</span></div>${subCard(me)}`;
+  return me.role==='seller'?vSeller(hd):vAff(hd);
+}
+const payForm=l=>`<form class="panel" id="lpay" data-id="${l.id}" novalidate><h3>Pay affiliate ${esc(l.affCode)}</h3>${momoBox(CFG.cmomo,money(l.commission))}<div class="two"><label>Network<select id="lnet">${NET}</select></label><label>Number you paid from<input id="lfrom" type="tel" value="${esc(me.phone)}"></label></div><label>Transaction ID<input id="ltx" autocomplete="off"></label><p class="err" id="err" hidden></p><div class="row"><button class="btn sm">Submit payment</button><button type="button" class="btn g sm" data-act="cancel">Cancel</button></div></form>`;
+const sellerAct=l=>l.status==='reached'?`<div class="row"><button class="btn sm" data-act="sale" data-id="${l.id}">Confirm sale</button><button class="btn g sm" data-act="nosale" data-id="${l.id}">No sale</button></div>`:l.status==='owed'?`<div class="row"><button class="btn sm" data-act="payl" data-id="${l.id}">Pay affiliate</button>${l.rejected?'<span class="chip">Last payment not confirmed. Check the transaction ID.</span>':''}</div>${ui.pay===l.id?payForm(l):''}`:`<span class="chip ${l.status==='paid'?'y':''}">${LBL[l.status]}</span>`;
+
+async function vSeller(hd){
+  await loadP();
+  const L=(await col('leads',where('sellerUid','==',me.uid))).sort((a,b)=>b.at-a.at);
+  ui.badge=L.filter(l=>l.status==='reached').length;
+  const mine=P.filter(p=>p.sellerUid===me.uid),ep=mine.find(p=>p.id===ui.edit);
+  const owe=r2(L.filter(l=>l.status==='owed').reduce((a,l)=>a+l.commission,0));
+  const locked=`<div class="panel"><h3>Publishing is locked</h3><p class="note">Pay your ${money(CFG.fee)} monthly fee to publish products. Your products stay hidden until then.</p><a class="btn" style="justify-self:start" href="#pay">Pay ${money(CFG.fee)}</a></div>`;
+  return `<div class="pg">${hd}<div class="stats"><div class="item"><small class="note">Products</small><strong class="num">${mine.length}</strong></div><div class="item"><small class="note">Buyers reached</small><strong class="num">${L.length}</strong></div><div class="item"><small class="note">Commission to pay</small><strong class="num">${money(owe)}</strong></div></div>
+  <h2>Buyers reached${ui.badge?` (${ui.badge} waiting)`:''}</h2><div style="display:grid;gap:12px">${L.length?L.map(l=>`<div class="item"><p><b>${esc(l.productName)}</b> via affiliate ${esc(l.affCode)}</p><p class="note num">${fmt(l.at)} &middot; commission ${money(l.commission)}</p>${sellerAct(l)}</div>`).join(''):'<div class="empty">When a buyer opens an affiliate link, it appears here. Tap Confirm sale once they buy.</div>'}</div>
+  ${active(me)?pform(ep):locked}<h2>My products</h2><div style="display:grid;gap:12px">${mine.length?mine.map(p=>`<div class="item"><div class="row bt"><div><h3><a href="#product/${p.id}">${esc(p.name)}</a></h3><p class="note num">${money(p.price)} &middot; ${p.rate}% &middot; ${money(perSale(p))} per sale</p></div><div class="row"><button class="btn g sm" data-act="edit" data-id="${p.id}">Edit</button><button class="btn g d sm" data-act="del" data-id="${p.id}">Delete</button></div></div></div>`).join(''):'<div class="empty">You have not published any product yet.</div>'}</div></div>`;
+}
+
+async function vAff(hd){
+  await loadP();ui.badge=0;
+  const [L,W]=await Promise.all([col('leads',where('affUid','==',me.uid)),col('withdrawals',where('affUid','==',me.uid))]);
+  L.sort((a,b)=>b.at-a.at);W.sort((a,b)=>b.at-a.at);
+  const b=bal(L,W),pk=(me.picks||[]).map(id=>P.find(p=>p.id===id)).filter(Boolean);
+  const st=(l,v)=>`<div class="item"><small class="note">${l}</small><strong class="num">${money(v)}</strong></div>`;
+  return `<div class="pg">${hd}<div class="stats">${st('Commission earned',b.earned)}${st('Available to withdraw',b.available)}${st('Waiting for sellers',b.pending)}${st('Paid out to you',b.paidOut)}</div>
+  <div class="row bt"><h2>Products I am marketing</h2><a class="btn sm" href="#market">Find products</a></div><div style="display:grid;gap:12px">${pk.length?pk.map(p=>`<div class="item"><div class="row bt"><h3><a href="#product/${p.id}">${esc(p.name)}</a></h3><button class="btn g d sm" data-act="unpromote" data-id="${p.id}">Stop promoting</button></div><p class="note num">${money(p.price)} &middot; you earn ${money(perSale(p))} per sale</p>${active(me)?linkRow(location.href.split('#')[0]+'#product/'+p.id+'/'+me.code):'<p class="note">Paused until you renew.</p>'}</div>`).join(''):'<div class="empty">You are not marketing any product yet.</div>'}</div>
+  ${T('Commission record',['Date','Product','Commission','Status'],L.map(l=>`<tr><td>${fmt(l.at)}</td><td>${esc(l.productName)}</td><td class="num">${counted(l)?money(l.commission):'-'}</td><td>${ALBL[l.status]}</td></tr>`).join(''),'When a buyer opens one of your links, it appears here.')}
+  <form class="panel" id="wd" novalidate><h3>Withdraw your commission</h3><p class="note">You can withdraw up to <b class="num">${money(b.available)}</b>. Only commission that sellers paid and admin confirmed is available.</p>
+  <label>Amount (GH₵)<input id="wa" type="number" min="0.01" step="0.01"></label><div class="two"><label>Network<select id="wnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option></select></label><label>MoMo number<input id="wnum" type="tel" value="${esc(me.phone)}"></label></div>
+  <label>MoMo account name<input id="wname" value="${esc(me.name)}"></label><label>Type your code (${esc(me.code)}) to confirm<input id="wcode" autocomplete="off"></label><p class="err" id="err" hidden></p><button class="btn"${b.available<=0?' disabled':''}>Request withdrawal</button></form>
+  ${T('My withdrawals',['Date','Amount','Paid to','Status'],W.map(w=>`<tr><td>${fmt(w.at)}</td><td class="num">${money(w.amount)}</td><td>${esc(w.network)} ${esc(w.number)}</td><td>${w.status==='done'?'Paid':'Waiting for payment'}</td></tr>`).join(''),'No withdrawals yet.')}</div>`;
+}
+
+async function vPay(){
+  if(!me)return note('Log in to pay','Log in or create an account first.','<a class="btn" href="#login">Log in</a>');
+  await refreshMe();
+  const H=(await col('payments',where('uid','==',me.uid))).sort((a,b)=>b.at-a.at),pend=H.some(p=>p.status==='pending');
+  const form=pend?'<div class="contact"><h3>Payment received for checking</h3><p class="note">Your account opens once the payment is confirmed. To speed things up, send your transaction ID on WhatsApp.</p><a class="btn" style="justify-self:start" href="https://wa.me/233257218681" target="_blank" rel="noopener">Message on WhatsApp</a></div>':
+  `<form class="panel" id="pay" novalidate><h3>After you have paid</h3><div class="two"><label>Network<select id="pnet">${NET}</select></label><label>Number you paid from<input id="pfrom" type="tel" value="${esc(me.phone)}"></label></div><label>Transaction ID<input id="ptx" autocomplete="off" placeholder="From your confirmation SMS"></label><p class="err" id="err" hidden></p><button class="btn">I have paid ${money(CFG.fee)}</button></form>`;
+  return `<div class="pg"><div class="panel narrow"><h2>Monthly membership</h2>${subCard(me)}${momoBox(CFG.momo,money(CFG.fee))}<p class="note">Send exactly ${money(CFG.fee)} from any network. Any network charge is paid by you on top.</p>${form}
+  ${H.length?T('Payment history',['Date','Transaction ID','Status'],H.map(p=>`<tr><td>${fmt(p.at)}</td><td>${esc(p.txn)}</td><td>${p.status}</td></tr>`).join('')):''}</div></div>`;
+}
+
+async function vAdmin(){
+  if(!isAdmin())return note('Admin','This page is for the site admin. Log in with the admin email.','<a class="btn" href="#login">Log in</a>');
+  const [U,PY,L,W]=await Promise.all([col('users'),col('payments',where('status','==','pending')),col('leads'),col('withdrawals')]);
+  const wr=W.filter(w=>w.status==='todo').sort((a,b)=>a.at-b.at).map(w=>{const k=bal(L.filter(l=>l.affCode===w.affCode),W.filter(x=>x.affCode===w.affCode));return `<tr><td>${esc(w.affCode)}</td><td class="num"><b>${money(w.amount)}</b></td><td>${esc(w.network)}</td><td>${esc(w.number)}</td><td>${esc(w.accName)}</td><td class="num">${money(k.available)}</td><td><button class="btn sm" data-act="wdone" data-id="${w.id}">Payment successful</button></td></tr>`}).join('');
+  const lr=L.filter(l=>l.status==='submitted').map(l=>`<tr><td>${esc(l.sellerCode)}</td><td>${esc(l.affCode)}</td><td>${esc(l.productName)}</td><td class="num"><b>${money(l.commission)}</b></td><td>${esc(l.payment.network)}</td><td>${esc(l.payment.txn)}</td><td>${esc(l.payment.from)}</td><td><button class="btn sm" data-act="lconfirm" data-id="${l.id}">Confirm</button> <button class="btn g d sm" data-act="lreject" data-id="${l.id}">Reject</button></td></tr>`).join('');
+  const pr=PY.map(p=>`<tr><td>${esc(p.code)}</td><td>${esc(p.name)}</td><td>${esc(p.network)}</td><td>${esc(p.txn)}</td><td>${esc(p.from)}</td><td>${fmt(p.at)}</td><td><button class="btn sm" data-act="approve" data-id="${p.id}">Approve</button> <button class="btn g d sm" data-act="reject" data-id="${p.id}">Reject</button></td></tr>`).join('');
+  const ur=U.map(u=>`<tr><td>${esc(u.code)}</td><td>${esc(u.name)}</td><td>${esc(u.phone)}</td><td>${esc(u.email)}</td><td>${active(u)?'Paid until '+fmt(u.paidUntil):'Not active'}</td></tr>`).join('');
+  return `<div class="pg"><h2>Admin</h2><p class="note">Check each payment against your mobile money statement before you confirm it.</p>
+  ${T(`Pay affiliates (${W.filter(w=>w.status==='todo').length})`,['Code','Amount','Network','Number','Account name','Balance left',''],wr,'No withdrawals waiting.')}
+  ${T('Seller commission payments',['Seller','Affiliate','Product','Amount','Network','Transaction ID','Paid from',''],lr,'Nothing waiting.')}
+  ${T('Membership payments',['Code','Name','Network','Transaction ID','Paid from','Date',''],pr,'Nothing waiting.')}
+  ${T(`Members (${U.length})`,['Code','Name','Phone','Email','Status'],ur,'No members yet.')}</div>`;
+}
+
+async function more(a,b,id){
+  const run=async(fn,m)=>{try{await fn();if(m)toast(m)}catch(x){toast(x.code==='permission-denied'?'Not allowed.':'Something went wrong.')}route(true);return true};
+  const up=(c,i,d)=>updateDoc(doc(db,c,i),d);
+  if(a==='copy'){try{await navigator.clipboard.writeText(b.dataset.t);toast('Copied')}catch(x){toast('Press and hold to copy')}return true}
+  if(a==='promote')return run(async()=>{await up('users',me.uid,{picks:arrayUnion(id)});me.picks=[...(me.picks||[]),id]},'Added to your dashboard');
+  if(a==='unpromote')return run(async()=>{await up('users',me.uid,{picks:arrayRemove(id)});me.picks=(me.picks||[]).filter(x=>x!==id)});
+  if(a==='sale')return run(()=>up('leads',id,{status:'owed',saleAt:Date.now()}),'Sale confirmed. Now pay the affiliate.');
+  if(a==='nosale')return run(()=>up('leads',id,{status:'declined'}));
+  if(a==='payl'){ui.pay=id;route(true);return true}
+  if(a==='approve')return run(async()=>{const p=(await getDoc(doc(db,'payments',id))).data(),us=(await getDoc(doc(db,'users',p.uid))).data(),pu=Math.max(Date.now(),us.paidUntil||0)+CFG.period,w=writeBatch(db);w.update(doc(db,'payments',id),{status:'approved'});w.update(doc(db,'users',p.uid),{paidUntil:pu});w.update(doc(db,'profiles',p.code),{paidUntil:pu});await w.commit()},'Approved');
+  if(a==='reject')return run(()=>deleteDoc(doc(db,'payments',id)),'Rejected. The member can submit again.');
+  if(a==='lconfirm')return run(()=>up('leads',id,{status:'paid',confirmedAt:Date.now()}),'Payment confirmed');
+  if(a==='lreject')return run(()=>up('leads',id,{status:'owed',rejected:true}),'Sent back to the seller');
+  if(a==='wdone')return run(()=>up('withdrawals',id,{status:'done',doneAt:Date.now()}),'Marked as paid');
+  return false;
+}
+
+async function doPay(){
+  const txn=val('ptx').toUpperCase(),from=cp(val('pfrom'));
+  if(txn.length<6)return err('Enter the transaction ID from your confirmation message.');
+  if(!PHONE.test(from))return err('Enter the number you paid from.');
+  try{await setDoc(doc(db,'payments','m'+txn),{uid:me.uid,code:me.code,name:me.name,txn,network:val('pnet'),from,at:Date.now(),status:'pending'})}
+  catch(x){return err(x.code==='permission-denied'?'This transaction ID has already been submitted.':x.message)}
+  toast('Payment sent for checking');route(true);
+}
+async function doLeadPay(id){
+  const txn=val('ltx').toUpperCase(),from=cp(val('lfrom'));
+  if(txn.length<6)return err('Enter the transaction ID from your confirmation message.');
+  if(!PHONE.test(from))return err('Enter the number you paid from.');
+  await updateDoc(doc(db,'leads',id),{status:'submitted',rejected:false,payment:{txn,network:val('lnet'),from,at:Date.now()}});
+  ui.pay=null;toast('Payment sent. Admin will confirm it.');route(true);
+}
+async function doWd(){
+  const [L,W]=await Promise.all([col('leads',where('affUid','==',me.uid)),col('withdrawals',where('affUid','==',me.uid))]);
+  const b=bal(L,W),amt=r2(parseFloat(val('wa'))),num=cp(val('wnum')),an=val('wname');
+  if(!(amt>0))return err('Enter the amount you want to withdraw.');
+  if(amt>b.available)return err(`You can withdraw up to ${money(b.available)}.`);
+  if(!PHONE.test(num))return err('Enter a valid mobile money number.');
+  if(an.length<3)return err('Enter the mobile money account name.');
+  if(val('wcode').toUpperCase()!==me.code)return err(`Type your affiliate code exactly as shown (${me.code}).`);
+  await addDoc(collection(db,'withdrawals'),{affUid:me.uid,affCode:me.code,amount:amt,network:val('wnet'),number:num,accName:an,at:Date.now(),status:'todo'});
+  toast('Withdrawal requested');route(true);
+}
+
+/* ---------- shell ---------- */
+function head(){
+  $('#nav').innerHTML=`<a href="#market">Marketplace</a>${me?`<a href="#dashboard">Dashboard${ui.badge?` <span class="badge">${ui.badge}</span>`:''}</a><a href="#pay">Membership</a>`:''}${isAdmin()?'<a href="#admin">Admin</a>':''}`;
+  $('#acct').innerHTML=me?`<span class="note">${esc(me.code)}</span><button class="btn g sm" data-act="logout">Log out</button>`:'<a class="btn g sm" href="#login">Log in</a><a class="btn sm" href="#register">Sign up</a>';
+}
+async function route(keep){
+  if(!ready)return;
+  const [r,a,c]=(location.hash||'#market').slice(1).split('/');
+  let h;
+  try{h=r==='product'?await vProduct(a,c):r==='register'?vReg(a):r==='login'?vLogin():r==='dashboard'?await vDash():r==='pay'?await vPay():r==='admin'?await vAdmin():await vMarket()}
+  catch(e){h=note('Something went wrong',e.code==='permission-denied'?'Permission denied. Check your Firestore rules.':e.message)}
+  $('#app').innerHTML=h;head();if(!keep)scrollTo(0,0);
+}
+addEventListener('hashchange',()=>{ui.edit=null;ui.pay=null;ui.imgs=[];route()});
+
+/* ---------- pictures ---------- */
+function readImages(files,done){
+  const arr=[...files].filter(f=>f.type.startsWith('image/')).slice(0,Math.max(0,CFG.maxPics-ui.imgs.length));
+  if(!arr.length)return done();
+  let left=arr.length;const fin=()=>{if(!--left)done()};
+  arr.forEach(f=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{
+    const sc=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');
+    c.width=Math.round(im.width*sc)||1;c.height=Math.round(im.height*sc)||1;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    ui.imgs.push(c.toDataURL('image/jpeg',0.65));fin()};im.onerror=fin;im.src=fr.result};fr.onerror=fin;fr.readAsDataURL(f)});
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,id=b.dataset.id;
+  if(await more(a,b,id))return;
+  if(a==='logout'){await signOut(auth);me=null;ui.badge=0;location.hash='#market';route()}
+  else if(a==='pic')$('#mainpic').src=b.src;
+  else if(a==='rmimg'){ui.imgs.splice(+b.dataset.i,1);$('#thumbs').innerHTML=thumbsHtml()}
+  else if(a==='edit'){ui.edit=id;ui.imgs=[...(P.find(p=>p.id===id)?.images||[])];route()}
+  else if(a==='cancel'){ui.edit=null;ui.pay=null;ui.imgs=[];route(true)}
+  else if(a==='del'&&confirm('Delete this product? This cannot be undone.')){
+    try{await deleteDoc(doc(db,'products',id));toast('Product deleted')}catch(x){toast('Could not delete.')}
+    route(true);
   }
-  /* A buyer (not signed in) opened the product from an affiliate link */
-  if(!ref)return;
-  var a=db.users[ref];
-  if(!a||a.role!=='affiliate'||!isActive(a))return;
-  if((db.picks[ref]||[]).indexOf(p.id)<0)return;
-  var key=vid()+'|'+p.id+'|'+ref;
-  if(db.leadKeys[key])return;
-  db.leadKeys[key]=Date.now();
-  var c=perSale(p);
-  var l={id:db.seq++,productId:p.id,productName:p.name,seller:p.seller,affiliate:ref,commission:c,at:Date.now(),status:'reached'};
-  db.leads.push(l);
-  notify(p.seller,'reach','The advertisement of affiliate '+ref+' for "'+p.name+'" has reached a buyer. When this buyer buys, tap Confirm sale. The affiliate then earns '+money(c)+'.',{leadId:l.id});
-  notify(ref,'earn','A buyer opened your link for "'+p.name+'". You earn '+money(c)+' once the seller confirms the sale.',{leadId:l.id});
-  save();
-}
-
-function contactBlock(p,m,ref){
-  var canSee=!m||m.code===p.seller||ui.admin;
-  if(!canSee)return '<div class="inline"><h3>Seller contact</h3><p class="note">Contact details are shown to buyers only.</p></div>';
-  if(!p.contact)return '<div class="inline"><p class="note">The seller has not added contact details yet.</p></div>';
-  var t=p.contactType||'whatsapp',wa=t!=='call',call=t!=='whatsapp';
-  var msg='Hello, I saw "'+p.name+'" on Marketspace and I am interested.'+(ref?' (Referred by '+ref+')':'');
-  return '<div class="contact"><h3>Contact the seller</h3><strong class="num">'+esc(p.contact)+'</strong><div class="row">'+
-    (wa?'<a class="btn" href="https://wa.me/'+toIntl(p.contact)+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener">Chat on WhatsApp</a>':'')+
-    (call?'<a class="btn'+(wa?' ghost':'')+'" href="tel:+'+toIntl(p.contact)+'">Call the seller</a>':'')+'</div></div>';
-}
-
-function vProduct(id,ref,visit){
-  var p=db.products[id];
-  if(!p)return notice('Product not found','This product was removed or the link is wrong.','<a class="btn" href="#market">Back to marketplace</a>');
-  var s=db.users[p.seller],m=me();
-  var owner=m&&m.code===p.seller;
-  if(!owner&&!ui.admin&&!(s&&isActive(s)))return notice('Product not available','The seller is not active right now.','<a class="btn" href="#market">Back to marketplace</a>');
-  if(visit)trackVisit(p,ref);
-  var act='';
-  if(m&&m.role==='affiliate'){
-    if(!isActive(m))act='<div class="inline"><p class="note">Your membership is not active, so you cannot promote products.</p><a class="btn" style="justify-self:start" href="#pay">Pay '+money(CONFIG.fee)+'</a></div>';
-    else if((db.picks[m.code]||[]).indexOf(p.id)>-1)act='<div class="inline"><p class="note">You are promoting this product. Share your personal link:</p><div class="linkrow"><code>'+esc(promoLink(p.id,m.code))+'</code>'+copyBtn(promoLink(p.id,m.code))+'</div></div>';
-    else act='<div class="inline"><button class="btn" style="justify-self:start" data-act="promote" data-id="'+p.id+'">Promote this product</button></div>';
-  }else if(!m&&!ui.admin&&!ref){
-    act='<div class="inline"><p class="note">Want to earn '+money(perSale(p))+' for every sale you bring? Join as an affiliate.</p><div class="row"><a class="btn" href="#register/affiliate">Join as affiliate</a><a class="btn ghost" href="#login">Log in</a></div></div>';
-  }else if(owner)act='<div class="inline"><a class="btn" style="justify-self:start" href="#dashboard">Manage in dashboard</a></div>';
-  var imgs=p.images||[];
-  var gal=imgs.length?'<div class="gal"><img class="main" id="mainpic" src="'+imgs[0]+'" alt="'+esc(p.name)+'">'+(imgs.length>1?'<div class="strip">'+imgs.map(function(x,i){return '<button type="button" data-act="pic" data-id="'+p.id+'" data-i="'+i+'" aria-label="Show picture '+(i+1)+'"><img src="'+x+'" alt=""></button>'}).join('')+'</div>':'')+'</div>':'';
-  return '<div class="pg"><a class="note" href="#market">&larr; All products</a><div class="panel" style="margin-top:12px">'+gal+
-    '<div class="row">'+chip(p.rate+'% commission','y')+'</div><h1 style="font-size:clamp(26px,5vw,38px)">'+esc(p.name)+'</h1>'+
-    '<div class="price num">'+money(p.price)+'</div>'+
-    '<p style="white-space:pre-wrap">'+esc(p.desc||'')+'</p>'+
-    '<p class="note">Sold by <a href="#u/'+esc(p.seller)+'"><b>'+esc(s?s.name:p.seller)+'</b> ('+esc(p.seller)+')</a></p>'+
-    contactBlock(p,m,ref)+
-    (p.link&&(!m||owner||ui.admin)?'<div class="row"><a class="btn ghost small" href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">Open seller\'s own page</a></div>':'')+
-    act+'</div></div>';
-}
-
-/* ============ REGISTER / LOGIN / PAY ============ */
-function roleModal(){
-  return '<div class="overlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="rt"><h2 id="rt">How will you use Marketspace?</h2>'+
-    '<p class="note">Choose one. You can only hold one type of account.</p>'+
-    '<a class="choice" href="#register/seller"><b>I am a seller</b><span>List my products and let affiliates promote them.</span></a>'+
-    '<a class="choice" href="#register/affiliate"><b>I am an affiliate marketer</b><span>Promote other people\'s products and earn commission.</span></a>'+
-    '<a class="note" href="#market" style="text-align:center">Cancel</a></div></div>';
-}
-function googleBlock(){return CONFIG.googleClientId?'<div id="gbtn"></div><p class="note">or fill in the form below</p>':''}
-
-function vRegister(role){
-  if(role!=='seller'&&role!=='affiliate')return vMarket()+roleModal();
-  var m=me();
-  if(m)return notice('You already have an account','You are signed in as '+esc(m.name)+' ('+esc(m.code)+').','<a class="btn" href="#dashboard">Go to dashboard</a>');
-  if(!ui.reg[role])ui.reg[role]=newCode(role);
-  var g=ui.google||{},seller=role==='seller';
-  var d=new Date();d.setFullYear(d.getFullYear()-CONFIG.minAge);
-  var maxDob=d.toISOString().slice(0,10);
-  var ex=['No experience yet','Less than 1 year','1 to 3 years','More than 3 years'].map(function(x){return '<option>'+x+'</option>'}).join('');
-  return '<div class="pg"><div class="panel narrow"><div class="row between"><h2>Create your '+(seller?'seller':'affiliate')+' account</h2><a class="note" href="#register">Switch</a></div>'+
-    '<p class="note">After signing up you pay '+money(CONFIG.fee)+' to activate your account. The fee is '+money(CONFIG.fee)+' every month.</p>'+googleBlock()+
-    (g.email?'<p class="chip y" style="justify-self:start">Signed in with Google: '+esc(g.email)+'</p>':'')+
-    '<form class="form" id="reg" data-role="'+role+'" novalidate>'+
-    '<div><small class="note">Your '+(seller?'seller':'affiliate')+' code (username)</small><div class="code"><strong>'+esc(ui.reg[role])+'</strong><span class="note">Created for you</span></div></div>'+
-    '<label for="rn">Full name<input id="rn" autocomplete="name" required value="'+esc(g.name||'')+'"></label>'+
-    '<div class="two"><label for="rd">Date of birth<input id="rd" type="date" max="'+maxDob+'" required></label>'+
-    '<label for="rp">Phone number<input id="rp" type="tel" inputmode="tel" autocomplete="tel" placeholder="0240000000" required></label></div>'+
-    '<label for="rnat">Nationality<input id="rnat" list="nats" placeholder="e.g. Ghanaian" required><datalist id="nats"><option>Ghanaian</option><option>Nigerian</option><option>Ivorian</option><option>Togolese</option><option>Burkinabe</option><option>Beninese</option></datalist></label>'+
-    '<label for="rexp">'+(seller?'Experience in selling':'Experience in affiliate marketing')+'<select id="rexp">'+ex+'</select></label>'+
-    '<label for="rab">'+(seller?'What do you sell? (optional)':'Which products or niches do you market? (optional)')+'<textarea id="rab" maxlength="300"></textarea></label>'+
-    (g.email?'':'<div class="two"><label for="rpw">Password<input id="rpw" type="password" autocomplete="new-password" minlength="6"></label><label for="rpw2">Confirm password<input id="rpw2" type="password" autocomplete="new-password"></label></div>')+
-    '<p class="err" id="err" hidden></p><button class="btn" type="submit">Create account</button></form></div></div>';
-}
-
-function vLogin(){
-  if(me())return notice('You are signed in','Signed in as '+esc(me().name)+'.','<a class="btn" href="#dashboard">Go to dashboard</a>');
-  return '<div class="pg"><div class="panel narrow"><h2>Log in</h2>'+googleBlock()+
-    '<form class="form" id="login" novalidate><label for="lc">Your code or phone number<input id="lc" autocomplete="username" placeholder="AF-XXXXXX or SEL-XXXXXX" required></label>'+
-    '<label for="lp">Password<input id="lp" type="password" autocomplete="current-password" required></label><p class="err" id="err" hidden></p>'+
-    '<button class="btn" type="submit">Log in</button></form><p class="note">New here? <a href="#register">Create an account</a></p></div></div>';
-}
-
-function vPay(){
-  var m=me();
-  if(!m)return notice('Log in to pay','Log in or create an account first.','<a class="btn" href="#login">Log in</a>');
-  var s=status(m),waText='Hello, I am '+m.name+' ('+m.code+'). I paid '+money(CONFIG.fee)+' to Marketspace.';
-  var hist=(m.payments||[]).slice().reverse().map(function(p){
-    return '<tr><td>'+fmt(p.at)+'</td><td>'+esc(p.network)+'</td><td>'+esc(p.txn)+'</td><td>'+chip(p.status,p.status==='approved'?'y':(p.status==='rejected'?'bad':''))+'</td></tr>';
-  }).join('');
-  var form=pending(m)?'<div class="inline"><h3>Payment received for checking</h3><p class="note">We will activate your account once the payment is confirmed. To speed things up, send your transaction ID on WhatsApp.</p><a class="btn" style="justify-self:start" href="https://wa.me/'+CONFIG.whatsappIntl+'?text='+encodeURIComponent(waText)+'" target="_blank" rel="noopener">Message on WhatsApp</a></div>':
-    '<form class="form inline" id="pay" novalidate><h3>After you have paid</h3><p class="note">Enter the details from your mobile money confirmation message.</p>'+
-    '<div class="two"><label for="pnet">Network you paid from<select id="pnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option><option>Other</option></select></label>'+
-    '<label for="pfrom">Number you paid from<input id="pfrom" type="tel" inputmode="tel" value="'+esc(m.phone)+'" required></label></div>'+
-    '<label for="ptx">Transaction ID<input id="ptx" autocomplete="off" required placeholder="From your confirmation SMS"></label><p class="err" id="err" hidden></p>'+
-    '<button class="btn" type="submit">I have paid '+money(CONFIG.fee)+'</button></form>';
-  return '<div class="pg"><div class="panel narrow"><h2>Monthly membership</h2>'+subCard(m)+
-    '<div class="locked" aria-label="Payment details, fixed"><div><small>Send to this mobile money number</small><strong class="big num">'+esc(CONFIG.momoNumber)+'</strong></div>'+
-    '<div><small>Account name</small><strong>'+esc(CONFIG.momoName)+'</strong></div><div><small>Amount</small><strong class="num">'+money(CONFIG.fee)+' / month</strong></div>'+
-    '<div>'+copyBtn(CONFIG.momoNumber,'Copy number')+'</div></div>'+
-    '<ol class="steps"><li>Open your mobile money menu on any network (MTN, Telecel or AirtelTigo).</li><li>Choose the option to send money to a mobile money user.</li>'+
-    '<li>Enter <b>'+esc(CONFIG.momoNumber)+'</b> and the amount <b>'+CONFIG.fee+'</b>. If the name shows, check it is <b>'+esc(CONFIG.momoName)+'</b>.</li>'+
-    '<li>Confirm with your PIN, then enter the transaction ID below.</li></ol>'+
-    '<p class="note">Send exactly '+money(CONFIG.fee)+'. Any network charge is paid by you on top of the fee.</p>'+form+
-    (hist?'<div class="inline"><h3>Payment history</h3><div class="tablewrap"><table><thead><tr><th>Date</th><th>Network</th><th>Transaction ID</th><th>Status</th></tr></thead><tbody>'+hist+'</tbody></table></div></div>':'')+
-    '</div></div>';
-}
-
-/* ============ NOTIFICATIONS ============ */
-function payForm(l){
-  var m=me();
-  return '<form class="inline form" id="leadpay" data-id="'+l.id+'" novalidate><h3>Pay affiliate '+esc(l.affiliate)+'</h3>'+
-    '<div class="locked"><div><small>Send to this mobile money number</small><strong class="big num">'+esc(CONFIG.commissionMomoNumber)+'</strong></div>'+
-    '<div><small>Account name</small><strong>'+esc(CONFIG.commissionMomoName)+'</strong></div><div><small>Amount</small><strong class="num">'+money(l.commission)+'</strong></div>'+
-    '<div>'+copyBtn(CONFIG.commissionMomoNumber,'Copy number')+'</div></div>'+
-    '<p class="note">Pay on any network, then enter the transaction ID from your confirmation message.</p>'+
-    '<div class="two"><label for="lnet">Network you paid from<select id="lnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option><option>Other</option></select></label>'+
-    '<label for="lfrom">Number you paid from<input id="lfrom" type="tel" inputmode="tel" value="'+esc(m?m.phone:'')+'" required></label></div>'+
-    '<label for="ltx">Transaction ID<input id="ltx" autocomplete="off" required></label><p class="err" id="err" hidden></p>'+
-    '<div class="row"><button class="btn small" type="submit">Submit payment</button><button class="btn ghost small" type="button" data-act="cancel">Cancel</button></div></form>';
-}
-function leadAction(l){
-  if(l.status==='reached')return '<div class="row"><button class="btn small" data-act="confirmsale" data-id="'+l.id+'">Confirm sale</button><button class="btn ghost small" data-act="nosale" data-id="'+l.id+'">No sale</button></div>';
-  if(l.status==='declined')return '<div class="row">'+chip('Marked as no sale')+'</div>';
-  if(l.status==='owed')return '<div class="row"><button class="btn small" data-act="paylead" data-id="'+l.id+'">Pay affiliate</button>'+(l.rejected?chip('Last payment was not confirmed. Check the transaction ID.','bad'):'')+'</div>'+(ui.payLead===l.id?payForm(l):'');
-  if(l.status==='submitted')return '<div class="row">'+chip('Payment sent. Waiting for admin to confirm')+'</div>';
-  return '<div class="row">'+chip('Payment successful','y')+'</div>';
-}
-function vNotes(who){
-  var list=db.notes.filter(function(n){return n.to===who}).sort(function(a,b){return b.at-a.at});
-  var html=list.map(function(n){
-    var extra='';
-    if(n.type==='reach'){var l=leadById(n.leadId);if(l)extra=leadAction(l)}
-    return '<div class="nitem'+(n.read?'':' unread')+'"><div class="head2"><p>'+esc(n.text)+'</p><span class="note">'+fmtT(n.at)+'</span></div>'+extra+'</div>';
-  }).join('');
-  var changed=false;
-  list.forEach(function(n){if(!n.read){n.read=true;changed=true}});
-  if(changed)save();
-  return '<div class="list">'+(html||'<div class="empty"><p>No notifications yet.</p></div>')+'</div>';
-}
-
-/* ============ DASHBOARDS ============ */
-function vDash(tab){
-  var m=me();
-  if(!m)return notice('Your dashboard','Log in to see your dashboard.','<a class="btn" href="#login">Log in</a>');
-  return m.role==='seller'?vSellerDash(m,tab):vAffDash(m,tab);
-}
-
-function contactFields(pre,p){
-  var t=p?p.contactType||'whatsapp':'whatsapp';
-  return '<div class="two"><label for="'+pre+'ct">How buyers reach you<select id="'+pre+'ct"><option value="whatsapp"'+(t==='whatsapp'?' selected':'')+'>WhatsApp</option><option value="call"'+(t==='call'?' selected':'')+'>Phone call</option><option value="both"'+(t==='both'?' selected':'')+'>WhatsApp and phone call</option></select></label>'+
-    '<label for="'+pre+'c">Your contact number<input id="'+pre+'c" type="tel" inputmode="tel" required placeholder="0240000000" value="'+esc(p?p.contact:'')+'"></label></div>'+
-    '<p class="note">Buyers see this number on your product page. Affiliates cannot see it.</p>';
-}
-function addForm(){
-  return '<form class="panel form" id="addp" novalidate><h3>Publish a new product</h3>'+
-    '<label for="an">Product name<input id="an" required maxlength="80"></label>'+
-    '<label for="ad">Description<textarea id="ad" maxlength="500"></textarea></label>'+
-    '<div class="two"><label for="ap">Price ('+CONFIG.currency+')<input id="ap" type="number" min="1" step="0.01" required></label>'+
-    '<label for="ar">Affiliate commission (%)<input id="ar" type="number" min="1" max="90" step="1" required></label></div>'+
-    contactFields('a',null)+
-    '<label for="aimg">Product pictures (at least '+CONFIG.minPictures+')<input id="aimg" type="file" accept="image/*" multiple></label><div id="thumbs-a">'+thumbsHtml(ui.imgs,'a')+'</div>'+
-    '<label for="al">Your own product page (optional)<input id="al" type="url" placeholder="https://"></label><p class="err" id="err" hidden></p>'+
-    '<button class="btn" type="submit">Publish product</button></form>';
-}
-function editForm(p){
-  return '<form class="inline form" id="editp" data-id="'+p.id+'" novalidate><label for="en">Product name<input id="en" required maxlength="80" value="'+esc(p.name)+'"></label>'+
-    '<label for="ed">Description<textarea id="ed" maxlength="500">'+esc(p.desc||'')+'</textarea></label>'+
-    '<div class="two"><label for="ep">Price<input id="ep" type="number" min="1" step="0.01" value="'+p.price+'"></label><label for="er">Commission (%)<input id="er" type="number" min="1" max="90" value="'+p.rate+'"></label></div>'+
-    contactFields('e',p)+
-    '<label for="eimg">Product pictures<input id="eimg" type="file" accept="image/*" multiple></label><div id="thumbs-e">'+thumbsHtml(ui.eimgs,'e')+'</div>'+
-    '<label for="el">Your own product page (optional)<input id="el" type="url" value="'+esc(p.link||'')+'"></label><p class="err" id="err" hidden></p>'+
-    '<div class="row"><button class="btn small" type="submit">Save changes</button><button class="btn ghost small" type="button" data-act="cancel">Cancel</button></div></form>';
-}
-function sellerItem(p){
-  var v=p.visitors||{},codes=Object.keys(v);
-  var reached=db.leads.filter(function(l){return l.productId===p.id}).length;
-  var aff=Object.keys(db.picks).filter(function(c){return db.picks[c].indexOf(p.id)>-1});
-  var extra='';
-  if(ui.edit===p.id)extra=editForm(p);
-  else if(ui.del===p.id)extra='<div class="inline"><p>Delete <b>'+esc(p.name)+'</b> from the site? This cannot be undone.</p><div class="row"><button class="btn small danger" data-act="delyes" data-id="'+p.id+'">Yes, delete</button><button class="btn ghost small" data-act="cancel">Keep it</button></div></div>';
-  var ct=p.contact?({whatsapp:'WhatsApp',call:'Phone call',both:'WhatsApp and call'}[p.contactType||'whatsapp'])+' '+p.contact:'No contact added';
-  return '<div class="item"><div class="itemtop">'+thumbHtml(p,'mini')+'<div><div class="head2"><div><h3><a href="#product/'+p.id+'">'+esc(p.name)+'</a></h3><p class="note num">'+money(p.price)+' &middot; '+p.rate+'% commission &middot; '+money(perSale(p))+' per sale</p><p class="note">Contact: '+esc(ct)+'</p></div>'+
-    '<div class="row"><button class="btn ghost small" data-act="edit" data-id="'+p.id+'">Edit</button><button class="btn ghost small danger" data-act="del" data-id="'+p.id+'">Delete</button></div></div></div></div>'+
-    '<p><b class="num">'+codes.length+'</b> affiliate'+(codes.length===1?'':'s')+' visited this product &middot; <b class="num">'+reached+'</b> buyer'+(reached===1?'':'s')+' reached &middot; '+plural(aff.length,'affiliate')+' promoting</p>'+
-    (codes.length?'<div class="chips">'+codes.map(function(c){return '<a class="chip" href="#u/'+esc(c)+'">'+esc(c)+' &middot; '+v[c]+' visit'+(v[c]===1?'':'s')+'</a>'}).join('')+'</div>':'')+extra+'</div>';
-}
-function vSellerDash(m,tab){
-  tab=tab==='notifications'?'notifications':'products';
-  var n=unread(m.code);
-  var head='<div class="head2"><div><h2>Seller dashboard</h2><p class="note">Welcome, '+esc(m.name)+'</p></div><div class="row">'+chip(m.code,'y')+'<a class="btn ghost small" href="#u/'+esc(m.code)+'">My public profile</a></div></div>'+
-    '<div style="margin-top:14px">'+subCard(m)+'</div>'+
-    tabsHtml([['products','Products'],['notifications','Notifications'+badge(n)]],tab,'dashboard');
-  if(tab==='notifications')return '<div class="pg">'+head+vNotes(m.code)+'</div>';
-  var mine=allProducts().filter(function(p){return p.seller===m.code}).sort(function(a,b){return b.createdAt-a.createdAt});
-  var uniq={};mine.forEach(function(p){Object.keys(p.visitors||{}).forEach(function(c){uniq[c]=1})});
-  var myLeads=db.leads.filter(function(l){return l.seller===m.code});
-  var owe=r2(myLeads.filter(function(l){return l.status==='owed'}).reduce(function(a,l){return a+l.commission},0));
-  return '<div class="pg">'+head+
-    '<div class="stats"><div class="stat y"><small>Products published</small><strong class="num">'+mine.length+'</strong></div><div class="stat"><small>Affiliates who visited</small><strong class="num">'+Object.keys(uniq).length+'</strong></div><div class="stat"><small>Buyers reached</small><strong class="num">'+myLeads.length+'</strong></div><div class="stat"><small>Commission to pay</small><strong class="num">'+money(owe)+'</strong></div></div>'+
-    (isActive(m)?addForm():'<div class="panel"><h3>Publishing is locked</h3><p class="note">Pay your '+money(CONFIG.fee)+' monthly fee to publish products. Your existing products stay hidden from the marketplace until then.</p><a class="btn" style="justify-self:start" href="#pay">Pay '+money(CONFIG.fee)+'</a></div>')+
-    '<div class="head" style="margin-top:28px"><h2>My products</h2></div><div class="list">'+
-    (mine.length?mine.map(sellerItem).join(''):'<div class="empty"><p>You have not published any product yet.</p></div>')+'</div></div>';
-}
-
-var LEAD_LABEL={reached:'Waiting for seller to confirm the sale',declined:'No sale',owed:'Waiting for seller to pay',submitted:'Seller payment being confirmed',paid:'Confirmed'};
-function vAffDash(m,tab){
-  tab=(tab==='notifications'||tab==='withdraw')?tab:'products';
-  var n=unread(m.code),b=bal(m.code),act=isActive(m);
-  var head='<div class="head2"><div><h2>Affiliate dashboard</h2><p class="note">Welcome, '+esc(m.name)+'</p></div><div class="row">'+chip(m.code,'y')+'<a class="btn ghost small" href="#u/'+esc(m.code)+'">My public profile</a></div></div>'+
-    '<div style="margin-top:14px">'+subCard(m)+'</div>'+
-    '<div class="stats"><div class="stat y"><small>Commission earned</small><strong class="num">'+money(b.earned)+'</strong></div><div class="stat"><small>Available to withdraw</small><strong class="num">'+money(b.available)+'</strong></div><div class="stat"><small>Waiting for sellers</small><strong class="num">'+money(b.pending)+'</strong></div><div class="stat"><small>Paid out to you</small><strong class="num">'+money(b.paidOut)+'</strong></div></div>'+
-    tabsHtml([['products','Products and earnings'],['withdraw','Withdraw'],['notifications','Notifications'+badge(n)]],tab,'dashboard');
-  if(tab==='notifications')return '<div class="pg">'+head+vNotes(m.code)+'</div>';
-  if(tab==='withdraw'){
-    var ws=db.withdrawals.filter(function(w){return w.affiliate===m.code}).sort(function(a,c){return c.at-a.at});
-    var rows=ws.map(function(w){return '<tr><td>'+fmt(w.at)+'</td><td class="num">'+money(w.amount)+'</td><td>'+esc(w.network)+' '+esc(w.number)+'</td><td>'+esc(w.accName)+'</td><td>'+chip(w.status==='done'?'Paid':'Waiting for payment',w.status==='done'?'y':'')+'</td></tr>'}).join('');
-    return '<div class="pg">'+head+'<form class="panel narrow form" id="wd" novalidate style="margin-inline:0"><h3>Withdraw your commission</h3><p class="note">You can withdraw up to <b class="num">'+money(b.available)+'</b>. Only commission the seller has paid and admin has confirmed is available.</p>'+
-      '<label for="wa">Amount to withdraw ('+CONFIG.currency+')<input id="wa" type="number" min="0.01" step="0.01" required></label>'+
-      '<div class="two"><label for="wnet">Mobile money network<select id="wnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option></select></label>'+
-      '<label for="wnum">Mobile money number<input id="wnum" type="tel" inputmode="tel" required value="'+esc(m.phone)+'"></label></div>'+
-      '<label for="wname">Mobile money account name<input id="wname" autocomplete="name" required value="'+esc(m.name)+'"></label>'+
-      '<label for="wcode">Confirm with your affiliate code<input id="wcode" autocomplete="off" placeholder="'+esc(m.code)+'" required></label><p class="err" id="err" hidden></p>'+
-      '<button class="btn" type="submit"'+(b.available<=0?' disabled':'')+'>Request withdrawal</button></form>'+
-      '<div class="head" style="margin-top:28px"><h2>My withdrawals</h2></div>'+(rows?'<div class="panel tablewrap"><table><thead><tr><th>Date</th><th>Amount</th><th>Paid to</th><th>Account name</th><th>Status</th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="empty"><p>No withdrawals yet.</p></div>')+'</div>';
-  }
-  var ids=(db.picks[m.code]||[]).filter(function(id){return db.products[id]});
-  var myLeads=db.leads.filter(function(l){return l.affiliate===m.code}).sort(function(a,c){return c.at-a.at});
-  var prodRows=ids.map(function(id){
-    var p=db.products[id],s=db.users[p.seller],ls=myLeads.filter(function(l){return l.productId===id});
-    return '<div class="item"><div class="itemtop">'+thumbHtml(p,'mini')+'<div><div class="head2"><div><h3><a href="#product/'+p.id+'">'+esc(p.name)+'</a></h3><p class="note num">by <a href="#u/'+esc(p.seller)+'">'+esc(s?s.name:p.seller)+'</a> &middot; '+money(p.price)+' &middot; you earn '+money(perSale(p))+' per sale</p></div>'+
-      '<button class="btn ghost small danger" data-act="unpromote" data-id="'+p.id+'">Stop promoting</button></div></div></div>'+
-      (act?'<div class="linkrow"><code>'+esc(promoLink(p.id,m.code))+'</code>'+copyBtn(promoLink(p.id,m.code))+'</div>':'<p class="note">Paused until you renew your membership.</p>')+
-      '<p class="note num">'+plural(ls.length,'buyer')+' reached &middot; '+plural(ls.filter(counted).length,'confirmed sale')+' &middot; '+money(ls.filter(counted).reduce(function(a,l){return a+l.commission},0))+' earned</p></div>';
-  }).join('');
-  var recRows=myLeads.map(function(l){return '<tr><td>'+fmtT(l.at)+'</td><td>'+esc(l.productName)+'</td><td class="num">'+(counted(l)?money(l.commission):'-')+'</td><td>'+chip(LEAD_LABEL[l.status],l.status==='paid'?'y':'')+'</td></tr>'}).join('');
-  return '<div class="pg">'+head+'<div class="head"><h2>Products I am marketing</h2><a class="btn small" href="#market">Find products</a></div><div class="list">'+
-    (prodRows||'<div class="empty"><p>You are not marketing any product yet.</p><a class="btn" href="#market">Browse the marketplace</a></div>')+'</div>'+
-    '<div class="head" style="margin-top:28px"><h2>Commission record</h2></div>'+(recRows?'<div class="panel tablewrap"><table><thead><tr><th>Date</th><th>Product</th><th>Commission</th><th>Status</th></tr></thead><tbody>'+recRows+'</tbody></table></div>':'<div class="empty"><p>When a buyer opens one of your links, it appears here. Commission is added once the seller confirms the sale.</p></div>')+'</div>';
-}
-
-/* ============ PROFILES ============ */
-function vProfile(code){
-  var u=db.users[code];
-  if(!u)return notice('Profile not found','No member has this code.','<a class="btn" href="#market">Back to marketplace</a>');
-  var s=status(u),seller=u.role==='seller',head;
-  head='<div class="head2"><div><p class="eyebrow">'+(seller?'Seller profile':'Affiliate profile')+'</p><h1 style="font-size:clamp(26px,5vw,38px)">'+esc(u.name)+'</h1></div><div class="row">'+chip(u.code,'y')+chip(s==='active'?'Active member':'Membership lapsed',s==='active'?'':'bad')+'</div></div>';
-  var body;
-  if(seller){
-    var ps=allProducts().filter(function(p){return p.seller===u.code}).sort(function(a,b){return b.createdAt-a.createdAt});
-    var shown=s==='active'||(me()&&me().code===u.code)?ps:[];
-    body='<div class="stats"><div class="stat y"><small>Products listed</small><strong class="num">'+shown.length+'</strong></div><div class="stat"><small>Time on Marketspace</small><strong style="font-size:17px">'+since(u.createdAt)+'</strong></div><div class="stat"><small>Selling experience</small><strong style="font-size:17px">'+esc(u.experience)+'</strong></div></div>'+
-      (u.about?'<p class="note">'+esc(u.about)+'</p>':'')+'<div class="head" style="margin-top:20px"><h2>Products by '+esc(u.name.split(' ')[0])+'</h2></div><div class="grid">'+
-      (shown.length?shown.map(card).join(''):'<div class="empty"><p>No products listed right now.</p></div>')+'</div>';
-  }else{
-    var ls=db.leads.filter(function(x){return x.affiliate===u.code}),dist={};
-    ls.filter(counted).forEach(function(x){dist[x.productId]=1});
-    var picks=(db.picks[u.code]||[]).filter(function(id){return db.products[id]});
-    body='<div class="stats"><div class="stat y"><small>Products marketed successfully</small><strong class="num">'+Object.keys(dist).length+'</strong></div><div class="stat"><small>Confirmed sales</small><strong class="num">'+ls.filter(counted).length+'</strong></div>'+
-      '<div class="stat"><small>Time on Marketspace</small><strong style="font-size:17px">'+since(u.createdAt)+'</strong></div><div class="stat"><small>Marketing experience</small><strong style="font-size:17px">'+esc(u.experience)+'</strong></div></div>'+
-      (u.about?'<p class="note">'+esc(u.about)+'</p>':'')+'<div class="head" style="margin-top:20px"><h2>Currently marketing</h2></div><div class="chips">'+
-      (picks.length?picks.map(function(id){return '<a class="chip" href="#product/'+id+'">'+esc(db.products[id].name)+'</a>'}).join(''):'<span class="note">Nothing right now.</span>')+'</div>';
-  }
-  return '<div class="pg">'+head+'<p class="note" style="margin-top:6px">Member since '+fmt(u.createdAt)+'</p>'+body+'</div>';
-}
-
-/* ============ ADMIN ============ */
-function vAdmin(tab){
-  if(!ui.admin)return '<div class="pg"><form class="panel narrow form" id="adminpin"><h2>Admin</h2><label for="pin">Admin PIN<input id="pin" type="password" autocomplete="off" required></label><p class="err" id="err" hidden></p><button class="btn" type="submit">Open admin</button></form></div>';
-  tab=tab==='notifications'?'notifications':'todo';
-  var n=unread('ADMIN');
-  var tabs=tabsHtml([['todo','To do'],['notifications','Notifications'+badge(n)]],tab,'admin');
-  if(tab==='notifications')return '<div class="pg"><h2>Admin</h2>'+tabs+vNotes('ADMIN')+'</div>';
-  var users=usersArr(),pend=[];
-  users.forEach(function(u){(u.payments||[]).forEach(function(p){if(p.status==='pending')pend.push({u:u,p:p})})});
-  var wds=db.withdrawals.filter(function(w){return w.status==='todo'}).sort(function(a,b){return a.at-b.at});
-  var lps=db.leads.filter(function(l){return l.status==='submitted'}).sort(function(a,b){return a.payment.at-b.payment.at});
-  var wrows=wds.map(function(w){
-    var u=db.users[w.affiliate];
-    return '<tr><td>'+esc(w.affiliate)+'</td><td>'+esc(u?u.name:'')+'</td><td class="num"><b>'+money(w.amount)+'</b></td><td>'+esc(w.network)+'</td><td>'+esc(w.number)+'</td><td>'+esc(w.accName)+'</td><td>'+fmtT(w.at)+'</td><td><button class="btn small" data-act="wdone" data-id="'+w.id+'">Payment successful</button></td></tr>';
-  }).join('');
-  var lrows=lps.map(function(l){
-    var s=db.users[l.seller];
-    return '<tr><td>'+esc(l.seller)+'</td><td>'+esc(s?s.name:'')+'</td><td>'+esc(l.affiliate)+'</td><td>'+esc(l.productName)+'</td><td class="num"><b>'+money(l.commission)+'</b></td><td>'+esc(l.payment.network)+'</td><td>'+esc(l.payment.txn)+'</td><td>'+esc(l.payment.from)+'</td><td>'+fmtT(l.payment.at)+'</td><td><button class="btn small" data-act="lconfirm" data-id="'+l.id+'">Confirm</button> <button class="btn ghost small danger" data-act="lreject" data-id="'+l.id+'">Reject</button></td></tr>';
-  }).join('');
-  var prow=pend.map(function(x){
-    return '<tr><td>'+esc(x.u.code)+'</td><td>'+esc(x.u.name)+'</td><td>'+esc(x.p.network)+'</td><td>'+esc(x.p.txn)+'</td><td>'+esc(x.p.from)+'</td><td>'+fmt(x.p.at)+'</td><td><button class="btn small" data-act="approve" data-u="'+esc(x.u.code)+'" data-p="'+x.p.id+'">Approve</button> <button class="btn ghost small danger" data-act="reject" data-u="'+esc(x.u.code)+'" data-p="'+x.p.id+'">Reject</button></td></tr>';
-  }).join('');
-  var urow=users.map(function(u){return '<tr><td><a href="#u/'+esc(u.code)+'">'+esc(u.code)+'</a></td><td>'+esc(u.name)+'</td><td>'+esc(u.phone)+'</td><td>'+esc(u.nationality)+'</td><td>'+status(u)+'</td><td>'+(u.paidUntil?fmt(u.paidUntil):'-')+'</td></tr>'}).join('');
-  var crow=allProducts().map(function(p){return '<tr><td><a href="#product/'+p.id+'">'+esc(p.name)+'</a></td><td>'+esc(p.seller)+'</td><td>'+esc(p.contactType||'whatsapp')+'</td><td>'+esc(p.contact||'-')+'</td></tr>'}).join('');
-  var T=function(title,count,cols,rows,empty){
-    return '<div class="head" style="margin-top:22px"><h3>'+title+' ('+count+')</h3></div><div class="panel tablewrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr></thead><tbody>'+(rows||'<tr><td colspan="'+cols.length+'" class="note">'+empty+'</td></tr>')+'</tbody></table></div>';
-  };
-  return '<div class="pg"><h2>Admin</h2><p class="note">Check each payment against your mobile money statement before you confirm it.</p>'+tabs+
-    T('Pay affiliates (withdrawals)',wds.length,['Code','Name','Amount','Network','MoMo number','Account name','Requested',''],wrows,'No withdrawals waiting.')+
-    T('Commission payments from sellers',lps.length,['Seller code','Seller','Affiliate','Product','Amount','Network','Transaction ID','Paid from','Date',''],lrows,'Nothing waiting.')+
-    T('Membership payments',pend.length,['Code','Name','Network','Transaction ID','Paid from','Date',''],prow,'Nothing waiting.')+
-    T('Members',users.length,['Code','Name','Phone','Nationality','Status','Paid until'],urow,'No members yet.')+
-    T('Products and seller contacts',allProducts().length,['Product','Seller','Contact type','Contact'],crow,'No products yet.')+
-    '<div class="row" style="margin-top:20px"><button class="btn ghost small" data-act="demo">Load demo data</button>'+(ui.confirmReset?'<button class="btn small danger" data-act="resetyes">Yes, erase all data in this browser</button><button class="btn ghost small" data-act="cancel">Cancel</button>':'<button class="btn ghost small danger" data-act="reset">Erase all data</button>')+'<button class="btn ghost small" data-act="adminout">Close admin</button></div></div>';
-}
-
-/* ============ SHELL ============ */
-function parts(){
-  var h=(location.hash||'#market').slice(1);
-  return h.split('/').map(function(x){try{return decodeURIComponent(x)}catch(e){return x}});
-}
-function renderHead(){
-  var p=parts(),r=p[0]||'market',m=me();
-  var items=[['market','Marketplace','#market',false]];
-  if(m){
-    items.push(['dashboard','Dashboard','#dashboard',r==='dashboard'&&p[1]!=='notifications']);
-    items.push(['notes','Notifications'+badge(unread(m.code)),'#dashboard/notifications',r==='dashboard'&&p[1]==='notifications']);
-    items.push(['pay','Membership','#pay',r==='pay']);
-  }
-  if(ui.admin){
-    items.push(['admin','Admin','#admin',r==='admin'&&p[1]!=='notifications']);
-    items.push(['anotes','Admin notifications'+badge(unread('ADMIN')),'#admin/notifications',r==='admin'&&p[1]==='notifications']);
-  }
-  items[0][3]=(r==='market');
-  $('#nav').innerHTML=items.map(function(i){return '<a href="'+i[2]+'"'+(i[3]?' aria-current="page"':'')+'>'+i[1]+'</a>'}).join('');
-  $('#acct').innerHTML=m?'<span class="note">'+esc(m.code)+'</span><button class="btn ghost small" data-act="logout">Log out</button>':'<a class="btn ghost small" href="#login">Log in</a><a class="btn small" href="#register">Sign up</a>';
-}
-function renderFoot(){
-  $('#foot').innerHTML='<p>Questions about selling, promoting or payment? WhatsApp <a class="wa" href="https://wa.me/'+CONFIG.whatsappIntl+'" target="_blank" rel="noopener">'+esc(CONFIG.whatsappDisplay)+'</a></p><p class="note">&copy; '+new Date().getFullYear()+' '+esc(CONFIG.siteName)+' &middot; <a href="#admin">Admin</a></p>';
-}
-function draw(visit){
-  var p=parts(),r=p[0]||'market',h;
-  if(r==='market')h=vMarket();
-  else if(r==='product')h=vProduct(Number(p[1]),p[2],visit);
-  else if(r==='register')h=vRegister(p[1]);
-  else if(r==='login')h=vLogin();
-  else if(r==='pay')h=vPay();
-  else if(r==='dashboard')h=vDash(p[1]);
-  else if(r==='u')h=vProfile(p[1]);
-  else if(r==='admin')h=vAdmin(p[1]);
-  else h=vMarket();
-  $('#app').innerHTML=h;
-  renderHead();
-  setupGoogle();
-}
-function go(){ui.edit=ui.del=ui.payLead=null;ui.imgs=[];ui.eimgs=[];draw(true);window.scrollTo(0,0)}
-function refresh(){draw(false)}
-
-/* ============ GOOGLE SIGN-IN ============ */
-var gLoaded=false;
-function setupGoogle(){
-  if(!CONFIG.googleClientId||!$('#gbtn'))return;
-  var init=function(){
-    try{
-      window.google.accounts.id.initialize({client_id:CONFIG.googleClientId,callback:onGoogle});
-      window.google.accounts.id.renderButton($('#gbtn'),{theme:'filled_black',size:'large',text:'continue_with',shape:'rectangular'});
-    }catch(e){}
-  };
-  if(window.google&&window.google.accounts){init();return}
-  if(gLoaded)return;
-  gLoaded=true;
-  var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=init;document.head.appendChild(s);
-}
-function onGoogle(resp){
-  var pl;
-  try{
-    var b=resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-    pl=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(b),function(c){return c.charCodeAt(0)})));
-  }catch(e){toast('Google sign-in failed. Try again.');return}
-  var r=parts()[0];
-  if(r==='login'){
-    var u=usersArr().filter(function(x){return x.email&&x.email===pl.email})[0];
-    if(!u){toast('No account uses this Google email. Sign up first.');return}
-    setMe(u.code);location.hash='#dashboard';refresh();
-  }else{ui.google={email:pl.email,name:pl.name||''};refresh()}
-}
-
-/* ============ ACTIONS ============ */
-document.addEventListener('click',function(e){
-  var b=e.target.closest('[data-act]');if(!b)return;
-  var a=b.getAttribute('data-act'),id=Number(b.getAttribute('data-id')),m=me();
-  if(a==='copy'){
-    var t=b.getAttribute('data-t');
-    try{navigator.clipboard.writeText(t).then(function(){toast('Copied')},function(){toast('Press and hold to copy')})}catch(err){toast('Press and hold to copy')}
-  }
-  else if(a==='logout'){var adm=ui.admin;setMe(null);ui=ui0();ui.admin=adm;location.hash='#market';refresh()}
-  else if(a==='promote'){
-    if(!m||m.role!=='affiliate'||!isActive(m)){toast('Activate your membership first');return}
-    db.picks[m.code]=db.picks[m.code]||[];
-    if(db.picks[m.code].indexOf(id)<0)db.picks[m.code].push(id);
-    save();toast('Added to your dashboard');refresh();
-  }
-  else if(a==='unpromote'){db.picks[m.code]=(db.picks[m.code]||[]).filter(function(x){return x!==id});save();refresh()}
-  else if(a==='pic'){var pp=db.products[id],i=Number(b.getAttribute('data-i')),im=$('#mainpic');if(pp&&im&&pp.images[i])im.src=pp.images[i]}
-  else if(a==='rmimg'){var k=b.getAttribute('data-k');(k==='a'?ui.imgs:ui.eimgs).splice(Number(b.getAttribute('data-i')),1);drawThumbs(k)}
-  else if(a==='edit'){var ep=db.products[id];if(!ep||!m||ep.seller!==m.code)return;ui.edit=id;ui.del=null;ui.eimgs=(ep.images||[]).slice();refresh()}
-  else if(a==='del'){ui.del=id;ui.edit=null;refresh()}
-  else if(a==='paylead'){ui.payLead=id;refresh()}
-  else if(a==='confirmsale'||a==='nosale'){
-    var sl=leadById(id);
-    if(!sl||!m||sl.seller!==m.code||sl.status!=='reached')return;
-    if(a==='confirmsale'){
-      sl.status='owed';sl.saleAt=Date.now();
-      notify(sl.affiliate,'earn','The seller confirmed a sale of "'+sl.productName+'". '+money(sl.commission)+' was added to your commission record. It becomes available to withdraw after the seller pays and admin confirms.',{leadId:sl.id});
-      toast('Sale confirmed. Now pay the affiliate.');
-    }else{
-      sl.status='declined';
-      notify(sl.affiliate,'earn','The seller marked the buyer from "'+sl.productName+'" as no sale, so no commission was added.',{leadId:sl.id});
-    }
-    save();refresh();
-  }
-  else if(a==='cancel'){ui.edit=ui.del=ui.payLead=null;ui.confirmReset=false;refresh()}
-  else if(a==='delyes'){
-    var p=db.products[id];
-    if(p&&m&&p.seller===m.code){delete db.products[id];Object.keys(db.picks).forEach(function(c){db.picks[c]=db.picks[c].filter(function(x){return x!==id})});save();ui.del=null;toast('Product deleted');refresh()}
-  }
-  else if(!ui.admin&&(a==='approve'||a==='reject'||a==='lconfirm'||a==='lreject'||a==='wdone'||a==='demo'||a==='reset'||a==='resetyes'))return;
-  else if(a==='approve'||a==='reject'){
-    var u=db.users[b.getAttribute('data-u')],pid=Number(b.getAttribute('data-p'));
-    var pay=u&&(u.payments||[]).filter(function(x){return x.id===pid})[0];
-    if(!pay)return;
-    if(a==='approve'){
-      pay.status='approved';u.paidUntil=Math.max(Date.now(),u.paidUntil||0)+CONFIG.periodDays*DAY;
-      notify(u.code,'info','Your membership payment of '+money(CONFIG.fee)+' is confirmed. Your account is active until '+fmt(u.paidUntil)+'.');
-    }else{
-      pay.status='rejected';
-      notify(u.code,'info','Your membership payment (ID '+pay.txn+') could not be confirmed. Check the details and submit it again, or message us on WhatsApp.');
-    }
-    save();refresh();
-  }
-  else if(a==='lconfirm'){
-    var l=leadById(id);if(!l||l.status!=='submitted')return;
-    l.status='paid';l.confirmedAt=Date.now();
-    notify(l.seller,'info','Payment successful. Your payment of '+money(l.commission)+' for affiliate '+l.affiliate+' on "'+l.productName+'" is confirmed.');
-    notify(l.affiliate,'earn',money(l.commission)+' from "'+l.productName+'" is confirmed. It is now available to withdraw.');
-    save();toast('Payment confirmed');refresh();
-  }
-  else if(a==='lreject'){
-    var l2=leadById(id);if(!l2||l2.status!=='submitted')return;
-    var tx=l2.payment&&l2.payment.txn;
-    l2.status='owed';l2.rejected=true;delete l2.payment;
-    notify(l2.seller,'info','Your payment (ID '+tx+') for affiliate '+l2.affiliate+' could not be confirmed. Open the notification for that buyer and submit the payment again.');
-    save();refresh();
-  }
-  else if(a==='wdone'){
-    var w=db.withdrawals.filter(function(x){return x.id===id})[0];if(!w||w.status!=='todo')return;
-    w.status='done';w.doneAt=Date.now();
-    notify(w.affiliate,'info','Payment done. '+money(w.amount)+' was sent to '+w.network+' '+w.number+' ('+w.accName+').');
-    save();toast('Marked as paid');refresh();
-  }
-  else if(a==='demo'){loadDemo();refresh();toast('Demo data added')}
-  else if(a==='reset'){ui.confirmReset=true;refresh()}
-  else if(a==='resetyes'){db=blank();save();setMe(null);ui=ui0();ui.admin=true;refresh();toast('All data erased')}
-  else if(a==='adminout'){ui.admin=false;location.hash='#market';refresh()}
 });
+document.addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;$('#grid').innerHTML=gridHtml()}});
+document.addEventListener('change',e=>{if(e.target.id==='pimg'){const i=e.target;readImages(i.files,()=>{i.value='';$('#thumbs').innerHTML=thumbsHtml()})}});
 
-document.addEventListener('input',function(e){
-  if(e.target.id==='q'){ui.q=e.target.value;$('#grid').innerHTML=gridHtml(ui.q)}
-});
-document.addEventListener('change',function(e){
-  var id=e.target.id;
-  if(id!=='aimg'&&id!=='eimg')return;
-  var k=id==='aimg'?'a':'e',list=k==='a'?ui.imgs:ui.eimgs,input=e.target;
-  readImages(input.files,list,function(){input.value='';drawThumbs(k)});
-});
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'&&$('.overlay'))location.hash='#market';
-});
-
-function showErr(msg){var el=$('#err');if(el){el.textContent=msg;el.hidden=false}}
-function val(id){var el=$('#'+id);return el?el.value.trim():''}
-function cleanPhone(s){return String(s).replace(/[\s-]/g,'')}
-var PHONE=/^\+?\d{9,15}$/;
-
-document.addEventListener('submit',function(e){
+document.addEventListener('submit',async e=>{
   e.preventDefault();
-  var f=e.target,id=f.id,m=me();
-  if(id==='reg'){
-    var role=f.getAttribute('data-role'),g=ui.google||{};
-    var name=val('rn'),dob=val('rd'),phone=cleanPhone(val('rp')),nat=val('rnat'),pw=val('rpw'),pw2=val('rpw2');
-    if(name.length<3)return showErr('Enter your full name.');
-    if(!dob)return showErr('Enter your date of birth.');
-    var max=new Date();max.setFullYear(max.getFullYear()-CONFIG.minAge);
-    if(new Date(dob)>max)return showErr('You must be at least '+CONFIG.minAge+' years old to join.');
-    if(!PHONE.test(phone))return showErr('Enter a valid phone number.');
-    if(!nat)return showErr('Enter your nationality.');
-    if(!g.email){if(pw.length<6)return showErr('Choose a password of at least 6 characters.');if(pw!==pw2)return showErr('The two passwords do not match.')}
-    if(usersArr().some(function(u){return u.phone===phone}))return showErr('This phone number is already registered. Log in instead.');
-    if(g.email&&usersArr().some(function(u){return u.email===g.email}))return showErr('This Google account is already registered. Log in instead.');
-    var code=ui.reg[role];if(db.users[code])code=newCode(role);
-    db.users[code]={code:code,role:role,name:name,dob:dob,phone:phone,nationality:nat,experience:val('rexp'),about:val('rab'),email:g.email||'',pass:g.email?'':hash(pw),createdAt:Date.now(),paidUntil:0,payments:[]};
-    if(role==='affiliate')db.picks[code]=[];
-    save();setMe(code);delete ui.reg[role];ui.google=null;toast('Account created. Pay '+money(CONFIG.fee)+' to activate it.');location.hash='#pay';
-  }
-  else if(id==='login'){
-    var c=val('lc').toUpperCase(),pass=$('#lp').value,u=db.users[c]||usersArr().filter(function(x){return x.phone===cleanPhone(val('lc'))})[0];
-    if(!u||!u.pass||u.pass!==hash(pass))return showErr('Code, phone number or password is wrong.');
-    setMe(u.code);location.hash='#dashboard';refresh();
-  }
-  else if(id==='pay'){
-    var tx=val('ptx').toUpperCase(),from=cleanPhone(val('pfrom'));
-    if(tx.length<6)return showErr('Enter the transaction ID from your confirmation message.');
-    if(!PHONE.test(from))return showErr('Enter the number you paid from.');
-    if(txnUsed(tx))return showErr('This transaction ID has already been submitted.');
-    m.payments=m.payments||[];m.payments.push({id:db.seq++,txn:tx,network:val('pnet'),from:from,at:Date.now(),status:'pending'});
-    notify('ADMIN','info',m.name+' ('+m.code+') paid the '+money(CONFIG.fee)+' membership fee. Transaction ID '+tx+'. Confirm it in the To do tab.');
-    save();toast('Payment sent for checking');refresh();
-  }
-  else if(id==='addp'||id==='editp'){
-    var pre=id==='addp'?'a':'e',nm=val(pre+'n'),ds=val(pre+'d'),pr=parseFloat(val(pre+'p')),rt=parseFloat(val(pre+'r')),lk=val(pre+'l');
-    var ct=val(pre+'ct'),cn=cleanPhone(val(pre+'c')),imgs=id==='addp'?ui.imgs:ui.eimgs;
-    if(!m||m.role!=='seller')return;
-    if(id==='addp'&&!isActive(m))return showErr('Pay your monthly fee before publishing.');
-    if(nm.length<3)return showErr('Enter a product name.');
-    if(!(pr>0))return showErr('Enter a price above zero.');
-    if(!(rt>=1&&rt<=90))return showErr('Commission must be between 1% and 90%.');
-    if(!PHONE.test(cn))return showErr('Enter the contact number buyers should use.');
-    if(imgs.length<CONFIG.minPictures)return showErr('Add at least '+CONFIG.minPictures+' pictures of the product.');
-    if(lk&&!/^https?:\/\/\S+\.\S+/.test(lk))return showErr('Enter the full link, starting with https://');
-    if(id==='addp'){
-      var nid=db.seq++;
-      db.products[nid]={id:nid,seller:m.code,name:nm,desc:ds,price:pr,rate:rt,link:lk,contactType:ct,contact:cn,images:imgs.slice(),createdAt:Date.now(),visitors:{}};
-      if(!save()){delete db.products[nid];return}
-      ui.imgs=[];toast('Product published');refresh();
-    }else{
-      var p=db.products[Number(f.getAttribute('data-id'))];if(!p||p.seller!==m.code)return;
-      var old={name:p.name,desc:p.desc,price:p.price,rate:p.rate,link:p.link,contactType:p.contactType,contact:p.contact,images:p.images};
-      p.name=nm;p.desc=ds;p.price=pr;p.rate=rt;p.link=lk;p.contactType=ct;p.contact=cn;p.images=imgs.slice();
-      if(!save()){Object.assign(p,old);return}
-      ui.edit=null;ui.eimgs=[];toast('Changes saved');refresh();
-    }
-  }
-  else if(id==='leadpay'){
-    var l=leadById(Number(f.getAttribute('data-id')));
-    if(!l||!m||l.seller!==m.code||l.status!=='owed')return;
-    var ltx=val('ltx').toUpperCase(),lfrom=cleanPhone(val('lfrom'));
-    if(ltx.length<6)return showErr('Enter the transaction ID from your confirmation message.');
-    if(!PHONE.test(lfrom))return showErr('Enter the number you paid from.');
-    if(txnUsed(ltx))return showErr('This transaction ID has already been submitted.');
-    l.status='submitted';l.rejected=false;l.payment={txn:ltx,network:val('lnet'),from:lfrom,at:Date.now()};
-    notify('ADMIN','info',m.name+' ('+m.code+') paid '+money(l.commission)+' commission for affiliate '+l.affiliate+' on "'+l.productName+'". Transaction ID '+ltx+'. Confirm it in the To do tab.');
-    ui.payLead=null;save();toast('Payment sent. Admin will confirm it.');refresh();
-  }
-  else if(id==='wd'){
-    if(!m||m.role!=='affiliate')return;
-    var b=bal(m.code),amt=r2(parseFloat(val('wa'))),num=cleanPhone(val('wnum')),an=val('wname'),cc=val('wcode').toUpperCase();
-    if(!(amt>0))return showErr('Enter the amount you want to withdraw.');
-    if(amt>b.available)return showErr('You can withdraw up to '+money(b.available)+'.');
-    if(!PHONE.test(num))return showErr('Enter a valid mobile money number.');
-    if(an.length<3)return showErr('Enter the mobile money account name.');
-    if(cc!==m.code)return showErr('Type your affiliate code exactly as shown ('+m.code+') to confirm.');
-    var w={id:db.seq++,affiliate:m.code,amount:amt,network:val('wnet'),number:num,accName:an,at:Date.now(),status:'todo'};
-    db.withdrawals.push(w);
-    notify('ADMIN','info','Withdrawal request: pay '+money(amt)+' to '+w.network+' '+num+' ('+an+') for affiliate '+m.code+'.');
-    notify(m.code,'info','Your withdrawal request of '+money(amt)+' was received. You will be notified when it is paid.');
-    save();toast('Withdrawal requested');refresh();
-  }
-  else if(id==='adminpin'){
-    if($('#pin').value===CONFIG.adminPin){ui.admin=true;refresh()}else showErr('Wrong PIN.');
-  }
+  const f=e.target,btn=f.querySelector('button:not([type=button])');
+  if(btn)btn.disabled=true;
+  try{
+    if(f.id==='reg')await doReg(f.dataset.role);
+    else if(f.id==='login')await doLogin();
+    else if(f.id==='pf')await doProduct(f.dataset.id);
+    else if(f.id==='pay')await doPay();
+    else if(f.id==='lpay')await doLeadPay(f.dataset.id);
+    else if(f.id==='wd')await doWd();
+  }catch(x){err(x.code==='permission-denied'?'Permission denied. Check your Firestore rules.':x.message)}
+  if(btn)btn.disabled=false;
 });
 
-/* ============ DEMO DATA (admin only) ============ */
-function loadDemo(){
-  var now=Date.now();
-  function user(code,role,name,days,exp,phone){
-    if(db.users[code])return;
-    db.users[code]={code:code,role:role,name:name,dob:'1994-05-12',phone:phone,nationality:'Ghanaian',experience:exp,about:'',email:'',pass:hash('demo123'),createdAt:now-days*DAY,paidUntil:now+25*DAY,payments:[]};
-    if(role==='affiliate')db.picks[code]=[];
-  }
-  user('SEL-DEMO01','seller','Kwame Boateng',410,'More than 3 years','0240000001');
-  user('SEL-DEMO02','seller','Ama Serwaa',95,'1 to 3 years','0240000002');
-  user('AF-DEMO01','affiliate','Yaw Mensah',230,'1 to 3 years','0240000003');
-  user('AF-DEMO02','affiliate','Efua Quaye',40,'Less than 1 year','0240000004');
-  var list=[['SEL-DEMO01','Cocoa Farming Starter Guide','Step by step guide to starting a small cocoa farm.',80,40,'0240000001','whatsapp'],['SEL-DEMO01','Mobile Money Agent Toolkit','Everything to set up and run a MoMo agent business.',45,50,'0240000001','both'],
-    ['SEL-DEMO02','Excel for Small Business Owners','Video lessons on bookkeeping and stock tracking in Excel.',150,30,'0240000002','call'],['SEL-DEMO02','WASSCE Core Maths Revision','Past questions with worked solutions.',60,35,'0240000002','whatsapp']];
-  var ids=[];
-  list.forEach(function(x){var i=db.seq++;ids.push(i);db.products[i]={id:i,seller:x[0],name:x[1],desc:x[2],price:x[3],rate:x[4],link:'',contactType:x[6],contact:x[5],images:[],createdAt:now-i*DAY,visitors:{}}});
-  db.picks['AF-DEMO01']=[ids[0],ids[2]];db.picks['AF-DEMO02']=[ids[0]];
-  db.products[ids[0]].visitors={'AF-DEMO01':12,'AF-DEMO02':3};db.products[ids[2]].visitors={'AF-DEMO01':7};
-  db.leads.push({id:db.seq++,productId:ids[0],productName:list[0][1],seller:'SEL-DEMO01',affiliate:'AF-DEMO01',commission:32,at:now-9*DAY,status:'paid'});
-  db.leads.push({id:db.seq++,productId:ids[2],productName:list[2][1],seller:'SEL-DEMO02',affiliate:'AF-DEMO01',commission:45,at:now-3*DAY,status:'owed'});
-  db.leads.push({id:db.seq++,productId:ids[0],productName:list[0][1],seller:'SEL-DEMO01',affiliate:'AF-DEMO02',commission:32,at:now-1*DAY,status:'reached'});
-  save();
+async function doReg(role){
+  const name=val('rn'),dob=val('rd'),phone=cp(val('rp')),email=val('re').toLowerCase(),nat=val('rnat'),pw=$('#rpw').value,pw2=$('#rpw2').value,code=ui.codes[role];
+  const max=new Date();max.setFullYear(max.getFullYear()-CFG.minAge);
+  if(name.length<3)return err('Enter your full name.');
+  if(!dob)return err('Enter your date of birth.');
+  if(new Date(dob)>max)return err(`You must be at least ${CFG.minAge} years old to join.`);
+  if(!PHONE.test(phone))return err('Enter a valid phone number.');
+  if(!/^\S+@\S+\.\S+$/.test(email))return err('Enter a valid email.');
+  if(!nat)return err('Enter your nationality.');
+  if(pw.length<6)return err('Choose a password of at least 6 characters.');
+  if(pw!==pw2)return err('The two passwords do not match.');
+  const pid='p'+phone.replace(/\D/g,'');
+  if((await getDoc(doc(db,'codes',pid))).exists())return err('This phone number is already registered. Log in instead.');
+  busy=true;
+  try{
+    const cr=await createUserWithEmailAndPassword(auth,email,pw),uid=cr.user.uid;
+    const u={code,role,name,dob,phone,email,nationality:nat,experience:val('rexp'),createdAt:Date.now(),paidUntil:0};
+    const w=writeBatch(db);
+    w.set(doc(db,'users',uid),u);
+    w.set(doc(db,'profiles',code),{uid,code,role,name,experience:u.experience,createdAt:u.createdAt,paidUntil:0});
+    w.set(doc(db,'codes',code),{email});
+    w.set(doc(db,'codes',pid),{email});
+    try{await w.commit()}catch(x){await cr.user.delete().catch(()=>{});throw x}
+    me={...u,uid};delete ui.codes[role];
+    toast('Account created. Pay your first month to activate it.');location.hash='#pay';
+  }catch(x){
+    if(x.code==='auth/email-already-in-use')return err('This email is already registered. Log in instead.');
+    throw x;
+  }finally{busy=false}
+  route();
 }
 
-window.addEventListener('hashchange',go);
-renderFoot();
-go();
-})();
+async function doLogin(){
+  const raw=val('lc'),pw=$('#lp').value;let email;
+  if(!raw||!pw)return err('Enter your code, phone number or email and your password.');
+  if(raw.includes('@'))email=raw.toLowerCase();
+  else{
+    const key=/^[A-Za-z]+-/.test(raw)?raw.toUpperCase():'p'+cp(raw).replace(/\D/g,'');
+    const s=await getDoc(doc(db,'codes',key));
+    if(!s.exists())return err('Code, phone number or password is wrong.');
+    email=s.data().email;
+  }
+  try{await signInWithEmailAndPassword(auth,email,pw)}catch(x){return err('Code, phone number or password is wrong.')}
+  location.hash='#dashboard';
+}
+
+async function doProduct(id){
+  const name=val('pn'),price=parseFloat(val('pp')),rate=parseFloat(val('pr')),contact=cp(val('pc'));
+  if(!me||me.role!=='seller')return;
+  if(!id&&!active(me))return err('Pay your monthly fee before publishing.');
+  if(name.length<3)return err('Enter a product name.');
+  if(!(price>0))return err('Enter a price above zero.');
+  if(!(rate>=1&&rate<=90))return err('Commission must be between 1% and 90%.');
+  if(!PHONE.test(contact))return err('Enter the contact number buyers should use.');
+  if(ui.imgs.length<CFG.minPics)return err(`Add at least ${CFG.minPics} pictures of the product.`);
+  const d={name,desc:val('pd'),price,rate,contactType:val('pt'),contact,images:[...ui.imgs]};
+  if(id){await updateDoc(doc(db,'products',id),d);toast('Changes saved')}
+  else{await addDoc(collection(db,'products'),{...d,sellerUid:me.uid,sellerCode:me.code,sellerName:me.name,createdAt:Date.now()});toast('Product published')}
+  ui.edit=null;ui.imgs=[];route(true);
+}
 </script>
 </body>
 </html>
