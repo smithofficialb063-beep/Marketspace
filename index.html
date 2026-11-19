@@ -6,7 +6,6 @@
 <meta name="description" content="Marketspace is Ghana's trusted affiliate marketplace. Sellers publish products, affiliate marketers promote them and earn commission on every sale. Secure, fast and built for Ghana.">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Marketspace</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
 :root{--bg:#0A0A0A;--s:#141414;--s2:#1E1E1E;--line:#2E2E2E;--fg:#F5F5F0;--mu:#A9A9A0;--y:#FFD400;--on:#0A0A0A;--bad:#FF7A70;--fd:'Space Grotesk',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif}
@@ -42,6 +41,7 @@ textarea{min-height:84px}label{display:grid;gap:6px;font-weight:500;font-size:14
 .item{display:grid;gap:10px;background:var(--s);border:1px solid var(--line);border-radius:12px;padding:14px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0));background:var(--y);color:var(--on);font-weight:600;padding:10px 16px;border-radius:8px;z-index:30}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.badge{background:var(--y);color:var(--on);border-radius:99px;padding:0 6px;font-size:12px;font-weight:700}.lk{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mu);font-weight:500;font-size:12px}
+.tabs{display:flex;gap:8px}.tabs .btn{flex:1}
 [hidden]{display:none!important}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;text-align:center}
 </style>
 </head>
@@ -76,7 +76,7 @@ const toast=m=>{const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(
 const note=(t,b,btn='')=>`<div class="pg"><div class="panel narrow"><h2>${esc(t)}</h2><p class="note">${esc(b)}</p>${btn}</div></div>`;
 
 let me=null,P=[],ready=false,busy=false;
-const ui={imgs:[],edit:null,q:'',codes:{},pay:null,badge:0};
+const ui={imgs:[],edit:null,q:'',codes:{},pay:null,badge:0,tab:'home',cur:null};
 const r2=n=>Math.round(n*100)/100;
 const fmt=t=>new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 const active=u=>!!u&&u.paidUntil>Date.now();
@@ -95,6 +95,34 @@ const linkRow=t=>`<div class="row"><code class="lk">${esc(t)}</code><button clas
 const momoBox=(m,amt)=>`<div class="contact"><p class="note">Send ${amt} to this mobile money number</p><strong class="num" style="font-size:26px;color:var(--y)">${m[0]}</strong><p>Account name: <b>${esc(m[1])}</b></p><div><button type="button" class="btn sm" data-act="copy" data-t="${m[0]}">Copy number</button></div></div>`;
 const T=(t,cols,rows,empty)=>`<h3 style="margin-top:12px">${t}</h3><div class="panel tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${cols.length}" class="note">${empty}</td></tr>`}</tbody></table></div>`;
 function subCard(u){const on=active(u),d=Math.ceil((u.paidUntil-Date.now())/864e5);return `<div class="item row bt"><div><div class="row"><h3>Membership</h3><span class="chip ${on?'y':''}">${on?'Active':'Not active'}</span></div><p class="note">${on?`${d} day${d===1?'':'s'} left. Paid until ${fmt(u.paidUntil)}.`:`Pay ${money(CFG.fee)} to ${u.role==='seller'?'list':'promote'} products.`}</p></div><a class="btn sm" href="#pay">${on?'Renew early':'Pay '+money(CFG.fee)}</a></div>`}
+
+/* ---------- downloads + notifications ---------- */
+const dl=(s,n)=>{const a=document.createElement('a');a.href=s;a.download=n;document.body.appendChild(a);a.click();a.remove()};
+const imgsOf=id=>ui.cur?.id===id?ui.cur.images:(P.find(p=>p.id===id)?.images||[]);
+const dlBox=(id,im)=>im.length?`<div class="contact"><h3>Ad pictures</h3><p class="note">Save these pictures and use them in your adverts.</p><div class="pics">${im.map((x,i)=>`<div style="display:grid;gap:6px"><img src="${x}" alt="" style="width:84px;height:84px;object-fit:cover;border-radius:8px"><button class="btn sm" data-act="dlpic" data-id="${id}" data-i="${i}">Save</button></div>`).join('')}</div><div><button class="btn sm" data-act="dlall" data-id="${id}">Download all</button></div></div>`:'';
+const seenKey=()=>'ms_seen_'+me.uid;
+const getSeen=()=>{try{return +localStorage.getItem(seenKey())||0}catch(e){return 0}};
+const tabsBar=n=>`<div class="tabs"><button class="btn${ui.tab==='notes'?' g':''}" data-act="tab" data-id="home">Overview</button><button class="btn${ui.tab==='notes'?'':' g'}" data-act="tab" data-id="notes">Notifications${n?` <span class="badge" style="margin-left:6px">${n}</span>`:''}</button></div>`;
+async function getNotes(){
+  const sel=me.role==='seller',N=[],add=(at,t)=>{if(at)N.push({at,t})};
+  (await col('leads',where(sel?'sellerUid':'affUid','==',me.uid))).forEach(l=>{const n=`"${l.productName}"`;
+    if(sel){
+      add(l.at,`A buyer opened ${n} through affiliate ${l.affCode}.`);
+      add(l.buyerConfirmedAt,`A buyer says they bought ${n}. Confirm the sale now.`);
+      add(l.saleAt,`You confirmed a sale of ${n}. Pay affiliate ${l.affCode} ${money(l.commission)}.`);
+      add(l.confirmedAt,`Your ${money(l.commission)} payment for ${n} was confirmed.`);
+    }else{
+      add(l.at,`A buyer opened ${n} through your link.`);
+      add(l.buyerConfirmedAt,`A buyer says they bought ${n}. Waiting for the seller to confirm.`);
+      add(l.saleAt,`The seller confirmed your sale of ${n}. You earn ${money(l.commission)}.`);
+      add(l.confirmedAt,`${money(l.commission)} for ${n} is confirmed and ready to withdraw.`);
+    }});
+  if(!sel)(await col('withdrawals',where('affUid','==',me.uid))).forEach(w=>{add(w.at,`You requested a withdrawal of ${money(w.amount)}.`);add(w.doneAt,`Your withdrawal of ${money(w.amount)} was paid to ${w.number}.`)});
+  if(me.paidUntil){const d=Math.ceil((me.paidUntil-Date.now())/864e5);
+    if(d<=0)add(me.paidUntil,'Your membership has expired. Renew to continue.');
+    else if(d<=5)add(me.paidUntil-5*864e5,`Your membership ends in ${d} day${d===1?'':'s'}.`)}
+  return N.sort((a,b)=>b.at-a.at);
+}
 
 onAuthStateChanged(auth,async u=>{
   if(busy)return;
@@ -138,6 +166,7 @@ async function vProduct(id,ref){
       }
     }catch(e){}
   }
+  ui.cur={id,images:im};const dlb=me?.role==='affiliate'&&active(me)?dlBox(id,im):'';
   const msg=`Hello, I saw "${p.name}" on Marketspace and I am interested.${ref?` (Referred by ${ref})`:''}`;
   const see=!me||own||isAdmin();
   const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact the seller</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
@@ -154,7 +183,7 @@ async function vProduct(id,ref){
   return `<div class="pg"><a class="note" href="#market">&larr; All products</a><div class="panel">
   ${im.length?`<img class="main" id="mainpic" src="${im[0]}" alt="${esc(p.name)}">${im.length>1?`<div class="strip">${im.map(x=>`<img src="${x}" data-act="pic" alt="">`).join('')}</div>`:''}`:''}
   <div><span class="chip y">${p.rate}% commission</span></div><h1>${esc(p.name)}</h1><div class="price num">${money(p.price)}</div>
-  <p style="white-space:pre-wrap">${esc(p.desc||'')}</p><p class="note">Sold by <b>${esc(p.sellerName)}</b> (${esc(p.sellerCode)})</p>${contact}${buyerConfirm}${act}</div></div>`;
+  <p style="white-space:pre-wrap">${esc(p.desc||'')}</p><p class="note">Sold by <b>${esc(p.sellerName)}</b> (${esc(p.sellerCode)})</p>${contact}${buyerConfirm}${act}${dlb}</div></div>`;
 }
 
 const roleChoice=()=>`<div class="pg"><div class="panel narrow"><h2>How will you use Marketspace?</h2><p class="note">Choose one. You can only hold one type of account.</p>
@@ -197,7 +226,12 @@ async function vDash(){
   if(!me)return note('Your dashboard','Log in to see your dashboard.','<a class="btn" href="#login">Log in</a>');
   await refreshMe();
   const hd=`<div class="row bt"><div><h2>${me.role==='seller'?'Seller':'Affiliate'} dashboard</h2><p class="note">Welcome, ${esc(me.name)}</p></div><span class="chip y">${esc(me.code)}</span></div>${subCard(me)}`;
-  return me.role==='seller'?vSeller(hd):vAff(hd);
+  const N=await getNotes(),seen=getSeen(),nw=N.filter(x=>x.at>seen).length,bar=tabsBar(ui.tab==='notes'?0:nw);
+  if(ui.tab==='notes'){
+    try{localStorage.setItem(seenKey(),String(Date.now()))}catch(e){}
+    return `<div class="pg">${hd}${bar}<h2>Notifications</h2><div style="display:grid;gap:12px">${N.length?N.map(x=>`<div class="item" ${x.at>seen?'style="border-color:var(--y)"':''}><p>${esc(x.t)}</p><p class="note num">${fmt(x.at)}${x.at>seen?' · New':''}</p></div>`).join(''):'<div class="empty">No notifications yet.</div>'}</div></div>`;
+  }
+  return me.role==='seller'?vSeller(hd+bar):vAff(hd+bar);
 }
 const payForm=l=>`<form class="panel" id="lpay" data-id="${l.id}" novalidate><h3>Pay affiliate ${esc(l.affCode)}</h3>${momoBox(CFG.cmomo,money(l.commission))}<div class="two"><label>Network<select id="lnet">${NET}</select></label><label>Number you paid from<input id="lfrom" type="tel" value="${esc(me.phone)}"></label></div><label>Transaction ID<input id="ltx" autocomplete="off"></label><p class="err" id="err" hidden></p><div class="row"><button class="btn sm">Submit payment</button><button type="button" class="btn g sm" data-act="cancel">Cancel</button></div></form>`;
 const sellerAct=l=>l.status==='reached'||l.status==='buyer-confirmed'?`<div class="row"><button class="btn sm" data-act="sale" data-id="${l.id}">Confirm sale</button><button class="btn g sm" data-act="nosale" data-id="${l.id}">No sale</button></div>`:l.status==='owed'?`<div class="row"><button class="btn sm" data-act="payl" data-id="${l.id}">Pay affiliate</button>${l.rejected?'<span class="chip">Last payment not confirmed. Check the transaction ID.</span>':''}</div>${ui.pay===l.id?payForm(l):''}`:`<span class="chip ${l.status==='paid'?'y':''}">${LBL[l.status]}</span>`;
@@ -221,7 +255,7 @@ async function vAff(hd){
   const b=bal(L,W),pk=(me.picks||[]).map(id=>P.find(p=>p.id===id)).filter(Boolean);
   const st=(l,v)=>`<div class="item"><small class="note">${l}</small><strong class="num">${money(v)}</strong></div>`;
   return `<div class="pg">${hd}<div class="stats">${st('Commission earned',b.earned)}${st('Available to withdraw',b.available)}${st('Waiting for sellers',b.pending)}${st('Paid out to you',b.paidOut)}</div>
-  <div class="row bt"><h2>Products I am marketing</h2><a class="btn sm" href="#market">Find products</a></div><div style="display:grid;gap:12px">${pk.length?pk.map(p=>`<div class="item"><div class="row bt"><h3><a href="#product/${p.id}">${esc(p.name)}</a></h3><button class="btn g d sm" data-act="unpromote" data-id="${p.id}">Stop promoting</button></div><p class="note num">${money(p.price)} &middot; you earn ${money(perSale(p))} per sale</p>${active(me)?linkRow(location.href.split('#')[0]+'#product/'+p.id+'/'+me.code):'<p class="note">Paused until you renew.</p>'}</div>`).join(''):'<div class="empty">You are not marketing any product yet.</div>'}</div>
+  <div class="row bt"><h2>Products I am marketing</h2><a class="btn sm" href="#market">Find products</a></div><div style="display:grid;gap:12px">${pk.length?pk.map(p=>`<div class="item"><div class="row bt"><h3><a href="#product/${p.id}">${esc(p.name)}</a></h3><div class="row">${active(me)&&p.images?.length?`<button class="btn g sm" data-act="dlall" data-id="${p.id}">Download pictures</button>`:''}<button class="btn g d sm" data-act="unpromote" data-id="${p.id}">Stop promoting</button></div></div><p class="note num">${money(p.price)} &middot; you earn ${money(perSale(p))} per sale</p>${active(me)?linkRow(location.href.split('#')[0]+'#product/'+p.id+'/'+me.code):'<p class="note">Paused until you renew.</p>'}</div>`).join(''):'<div class="empty">You are not marketing any product yet.</div>'}</div>
   ${T('Commission record',['Date','Product','Commission','Status'],L.map(l=>`<tr><td>${fmt(l.at)}</td><td>${esc(l.productName)}</td><td class="num">${counted(l)?money(l.commission):'-'}</td><td>${ALBL[l.status]}</td></tr>`).join(''),'When a buyer opens one of your links, it appears here.')}
   <form class="panel" id="wd" novalidate><h3>Withdraw your commission</h3><p class="note">You can withdraw up to <b class="num">${money(b.available)}</b>. Only commission that sellers paid and admin confirmed is available.</p>
   <label>Amount (GH₵)<input id="wa" type="number" min="0.01" step="0.01"></label><div class="two"><label>Network<select id="wnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option></select></label><label>MoMo number<input id="wnum" type="tel" value="${esc(me.phone)}"></label></div>
@@ -256,6 +290,9 @@ async function vAdmin(){
 async function more(a,b,id){
   const run=async(fn,m)=>{try{await fn();if(m)toast(m)}catch(x){toast(x.code==='permission-denied'?'Not allowed.':'Something went wrong.')}route(true);return true};
   const up=(c,i,d)=>updateDoc(doc(db,c,i),d);
+  if(a==='tab'){ui.tab=id;route(true);return true}
+  if(a==='dlpic'){dl(imgsOf(id)[+b.dataset.i],`marketspace-${id.slice(0,6)}-${+b.dataset.i+1}.jpg`);return true}
+  if(a==='dlall'){imgsOf(id).forEach((s,i)=>setTimeout(()=>dl(s,`marketspace-${id.slice(0,6)}-${i+1}.jpg`),i*400));toast('Downloading pictures');return true}
   if(a==='copy'){try{await navigator.clipboard.writeText(b.dataset.t);toast('Copied')}catch(x){toast('Press and hold to copy')}return true}
   if(a==='promote')return run(async()=>{await up('users',me.uid,{picks:arrayUnion(id)});me.picks=[...(me.picks||[]),id]},'Added to your dashboard');
   if(a==='unpromote')return run(async()=>{await up('users',me.uid,{picks:arrayRemove(id)});me.picks=(me.picks||[]).filter(x=>x!==id)});
@@ -337,7 +374,7 @@ document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
   const a=b.dataset.act,id=b.dataset.id;
   if(await more(a,b,id))return;
-  if(a==='logout'){await signOut(auth);me=null;ui.badge=0;location.hash='#market';route()}
+  if(a==='logout'){await signOut(auth);me=null;ui.badge=0;ui.tab='home';location.hash='#market';route()}
   else if(a==='pic')$('#mainpic').src=b.src;
   else if(a==='rmimg'){ui.imgs.splice(+b.dataset.i,1);$('#thumbs').innerHTML=thumbsHtml()}
   else if(a==='edit'){ui.edit=id;ui.imgs=[...(P.find(p=>p.id===id)?.images||[])];route()}
@@ -428,3 +465,10 @@ async function doProduct(id){
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
