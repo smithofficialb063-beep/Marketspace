@@ -169,7 +169,7 @@ async function vProduct(id,ref){
   ui.cur={id,images:im};const dlb=me?.role==='affiliate'&&active(me)?dlBox(id,im):'';
   const msg=`Hello, I saw "${p.name}" on Marketspace and I am interested.${ref?` (Referred by ${ref})`:''}`;
   const see=!me||own||isAdmin();
-  const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact the seller</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
+  const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact seller to buy product</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
   let buyerConfirm='';
   if(ref && !own){
     buyerConfirm=`<div class="contact" style="border-color:var(--y)"><h3>Did you buy this product?</h3><p class="note">Tap below AFTER you pay the seller on WhatsApp. The seller will then confirm it in their dashboard.</p><button class="btn" data-act="buyer-bought" data-id="${id}" data-ref="${esc(ref)}">✅ Yes, I Bought It</button></div>`;
@@ -465,10 +465,3 @@ async function doProduct(id){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
