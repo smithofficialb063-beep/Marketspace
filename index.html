@@ -1,430 +1,289 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="google-site-verification" content="sTdOeBfKvtyZt2BptpFwzaaQ14alagjLi51SnzDFUE4" />
-<title>Marketspace - Ghana's #1 Affiliate Marketplace for Sellers & Marketers</title>
-<meta name="description" content="Marketspace is Ghana's trusted affiliate marketplace. Sellers publish products, affiliate marketers promote them and earn commission on every sale. Secure, fast and built for Ghana.">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Marketspace</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarketSpace - Buy, Sell & Earn</title>
 <style>
-:root{--bg:#0A0A0A;--s:#141414;--s2:#1E1E1E;--line:#2E2E2E;--fg:#F5F5F0;--mu:#A9A9A0;--y:#FFD400;--on:#0A0A0A;--bad:#FF7A70;--fd:'Space Grotesk',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif}
-*{box-sizing:border-box}html{color-scheme:dark}
-body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--fb);padding:env(safe-area-inset-top,0) max(16px,env(safe-area-inset-right,0)) calc(32px + env(safe-area-inset-bottom,0)) max(16px,env(safe-area-inset-left,0))}
-h1,h2,h3{font-family:var(--fd);line-height:1.15;margin:0}h1{font-size:clamp(28px,7vw,46px)}h2{font-size:22px}h3{font-size:17px}p{margin:0}a{color:inherit}
-.wrap{max-width:960px;margin:0 auto}.note{font-size:13px;color:var(--mu)}.num{font-variant-numeric:tabular-nums}
-:focus-visible{outline:3px solid var(--y);outline-offset:2px}
-header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-block:16px;border-bottom:1px solid var(--line)}
-.brand{font:700 22px var(--fd);text-decoration:none}nav{display:flex;gap:4px;flex:1;flex-wrap:wrap}
-nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--mu);font-weight:500}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--y);background:var(--y);color:var(--on);font:600 14px var(--fb);padding:10px 16px;border-radius:8px;cursor:pointer;text-decoration:none;min-height:40px}
-.btn.g{background:none;color:var(--fg);border-color:var(--line)}.btn.d{color:var(--bad)}.btn.sm{padding:6px 12px;min-height:34px;font-size:13px}.btn[disabled]{opacity:.5}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.bt{justify-content:space-between}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f6f7f9;color:#111}
+header{position:sticky;top:0;z-index:10;background:#111;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+header a{color:#fff;text-decoration:none;font-weight:800;font-size:20px}
+header a span{color:#facc15}
+nav{display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:52px;z-index:9}
+nav a,nav button{padding:8px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:14px;text-decoration:none;color:#111}
+nav .active{background:#111;color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:14px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(min-width:700px){ .grid{grid-template-columns:repeat(4,1fr)} }
-.card,.panel{background:var(--s);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
-.panel{display:grid;gap:14px}
-.card{background:#0a0a0a;border:1.5px solid #FFD400;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
-.card .btn{margin-top:auto;align-self:stretch;background:#fff;color:#000;border-color:#fff;font-weight:800}
-.price{font:700 22px var(--fd)}.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--mu)}.chip.y{background:var(--y);color:var(--on);border-color:var(--y)}
-.empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--mu)}
-.thumb{width:100%;height:140px;object-fit:cover;border-radius:8px;background:#111;display:grid;place-items:center;color:var(--y);font:44px var(--fd)}
-.main{width:100%;aspect-ratio:4/3;object-fit:contain;background:var(--bg);border:1px solid var(--line);border-radius:10px}
-.strip,.pics{display:flex;flex-wrap:wrap;gap:8px}.strip img{width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--line)}
-.pic{position:relative;width:84px;height:84px}.pic img{width:100%;height:100%;object-fit:cover;border-radius:8px}
-.pic button{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;border:0;background:var(--y);font-weight:700;cursor:pointer}
-input,select,textarea{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:42px;width:100%}
-textarea{min-height:84px}label{display:grid;gap:6px;font-weight:500;font-size:14px}form{display:grid;gap:14px}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.err{color:var(--bad);font-size:14px}
-.code{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:700 20px var(--fd);color:var(--y)}
-.pg{padding-block:26px;display:grid;gap:16px}.contact{border:1px solid var(--y);border-radius:12px;padding:14px;background:var(--s2);display:grid;gap:10px}
-.item{display:grid;gap:10px;background:var(--s);border:1px solid var(--line);border-radius:12px;padding:14px}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0));background:var(--y);color:var(--on);font-weight:600;padding:10px 16px;border-radius:8px;z-index:30}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.badge{background:var(--y);color:var(--on);border-radius:99px;padding:0 6px;font-size:12px;font-weight:700}.lk{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mu);font-weight:500;font-size:12px}
-[hidden]{display:none!important}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;text-align:center}
+@media(min-width:700px){.grid{grid-template-columns:1fr 1fr 1fr 1fr}}
+.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #eee;display:flex;flex-direction:column}
+.card img{width:100%;height:180px;object-fit:cover;background:#eee}
+.card .b{padding:10px;display:flex;flex-direction:column;gap:6px;flex:1}
+.price{font-weight:900;font-size:17px}
+.old{text-decoration:line-through;color:#999;font-size:13px;font-weight:400}
+.btn{background:#111;color:#fff;border:0;padding:11px 14px;border-radius:10px;cursor:pointer;font-weight:700;width:100%}
+.btn.y{background:#facc15;color:#111}
+.btn.g{background:#16a34a;color:#fff}
+.btn.sm{padding:8px 10px;font-size:13px;width:auto}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.panel{background:#fff;border-radius:14px;padding:14px;border:1px solid #eee}
+.main{width:100%;max-height:420px;object-fit:cover;border-radius:12px;background:#eee}
+.strip{display:flex;gap:8px;margin-top:8px;overflow:auto}
+.strip img{width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
+.strip img.sel{border-color:#111}
+input,textarea,select{width:100%;padding:11px;border:1px solid #ddd;border-radius:10px;margin:6px 0;font-size:15px}
+.note{font-size:13px;color:#666}
+.badge{display:inline-block;background:#fef3c7;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
+.linkbox{background:#f8fafc;border:1px dashed #cbd5e1;padding:10px;border-radius:10px;word-break:break-all;font-size:13px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;display:none;z-index:99;font-size:14px}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header><a class="brand" href="#market">Marketspace</a><nav id="nav"></nav><div class="row" id="acct"></div></header>
-<main id="app"><p class="note" style="padding:30px">Loading…</p></main>
-<footer class="note">&copy; Marketspace &middot; Questions? WhatsApp <a href="https://wa.me/233257218681">0257218681</a></footer>
-</div>
-<div id="toast" class="toast" hidden role="status"></div>
+<header><a href="#market">Market<span>Space</span></a><div id="authArea"></div></header>
+<nav id="nav"></nav>
+<div class="wrap" id="app">Loading...</div>
+<div id="toast"></div>
 
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,doc,getDoc,setDoc,addDoc,updateDoc,deleteDoc,collection,getDocs,query,orderBy,writeBatch,where,arrayUnion,arrayRemove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ===== KEEP YOUR OWN FIREBASE CONFIG HERE =====
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+// ===============================================
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const ADMIN_EMAIL = 'smithofficialb063@gmail.com';
+const $ = s => document.querySelector(s);
+const esc = s => String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m){ const t=$('#toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
+function money(n){ return 'GH₵'+Number(n||0).toFixed(2); }
+function downloadPic(url, name){
+  try{
+    const a=document.createElement('a');
+    a.href=url; a.download=name||'marketspace-product.jpg'; a.target='_blank';
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('Picture saved / opened - hold to save if it opens in a new tab');
+  }catch(e){ window.open(url,'_blank'); }
+}
 
-const app=initializeApp({apiKey:"AIzaSyBKUWZP1-LgvmlDVJRhK1FWMZP94I02mt0",authDomain:"marketspace-24299.firebaseapp.com",projectId:"marketspace-24299",storageBucket:"marketspace-24299.firebasestorage.app",messagingSenderId:"420321552467",appId:"1:420321552467:web:cb87aa9c91c4c5822cfea6"});
-const auth=getAuth(app),db=getFirestore(app);
-const CFG={fee:5,minAge:18,minPics:2,maxPics:5,period:30*864e5,momo:['0257218681','Eric Annor Gyau'],cmomo:['0257411489','Eric Annor Gyau'],admin:'smithofficialb063@gmail.com'};
+let user=null, profile=null, products=[], myPromos=new Set();
 
-const $=s=>document.querySelector(s);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money=n=>'GH₵ '+Number(n).toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2});
-const AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-const rnd=n=>[...crypto.getRandomValues(new Uint32Array(n))].map(x=>AL[x%AL.length]).join('');
-const cp=s=>String(s).replace(/[\s-]/g,'');
-const PHONE=/^\+?\d{9,15}$/;
-const intl=n=>{const d=String(n).replace(/\D/g,'');return d[0]==='0'?'233'+d.slice(1):d};
-const val=id=>($('#'+id)?.value||'').trim();
-const err=m=>{const e=$('#err');if(e){e.textContent=m;e.hidden=false}};
-const toast=m=>{const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,3200)};
-const note=(t,b,btn='')=>`<div class="pg"><div class="panel narrow"><h2>${esc(t)}</h2><p class="note">${esc(b)}</p>${btn}</div></div>`;
-
-let me=null,P=[],ready=false,busy=false;
-const ui={imgs:[],edit:null,q:'',codes:{},pay:null,badge:0};
-const r2=n=>Math.round(n*100)/100;
-const fmt=t=>new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-const active=u=>!!u&&u.paidUntil>Date.now();
-const isAdmin=()=>auth.currentUser?.email===CFG.admin;
-const vid=()=>{try{let v=localStorage.getItem('ms_vid');if(!v){v=rnd(14);localStorage.setItem('ms_vid',v)}return v}catch(e){return rnd(14)}};
-const col=(n,...c)=>getDocs(query(collection(db,n),...c)).then(s=>s.docs.map(d=>({id:d.id,...d.data()})));
-async function refreshMe(){const u=auth.currentUser;if(!u)return;const s=await getDoc(doc(db,'users',u.uid));if(s.exists())me={...s.data(),uid:u.uid}}
-let PR={};
-const live=p=>PR[p.sellerCode]?.paidUntil>Date.now();
-const NET=['MTN MoMo','Telecel Cash','AirtelTigo Money','Other'].map(x=>`<option>${x}</option>`).join('');
-const LBL={reached:'Link opened - waiting for buyer', 'buyer-confirmed':'BUYER SAYS THEY BOUGHT - Confirm now!', declined:'No sale',owed:'Waiting for you to pay',submitted:'Payment being confirmed',paid:'Paid and confirmed'};
-const ALBL={reached:'Waiting for buyer to buy', 'buyer-confirmed':'Buyer confirmed - waiting for seller', declined:'No sale',owed:'Waiting for seller to pay',submitted:'Seller payment being confirmed',paid:'Confirmed'};
-const counted=l=>['owed','submitted','paid'].includes(l.status);
-const bal=(L,W)=>{let e=0,pe=0,cf=0,o=0,dn=0;L.forEach(l=>{if(counted(l)){e+=l.commission;l.status==='paid'?cf+=l.commission:pe+=l.commission}});W.forEach(w=>{o+=w.amount;if(w.status==='done')dn+=w.amount});return{earned:r2(e),pending:r2(pe),available:r2(cf-o),paidOut:r2(dn)}};
-const linkRow=t=>`<div class="row"><code class="lk">${esc(t)}</code><button class="btn sm" data-act="copy" data-t="${esc(t)}">Copy</button></div>`;
-const momoBox=(m,amt)=>`<div class="contact"><p class="note">Send ${amt} to this mobile money number</p><strong class="num" style="font-size:26px;color:var(--y)">${m[0]}</strong><p>Account name: <b>${esc(m[1])}</b></p><div><button type="button" class="btn sm" data-act="copy" data-t="${m[0]}">Copy number</button></div></div>`;
-const T=(t,cols,rows,empty)=>`<h3 style="margin-top:12px">${t}</h3><div class="panel tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td colspan="${cols.length}" class="note">${empty}</td></tr>`}</tbody></table></div>`;
-function subCard(u){const on=active(u),d=Math.ceil((u.paidUntil-Date.now())/864e5);return `<div class="item row bt"><div><div class="row"><h3>Membership</h3><span class="chip ${on?'y':''}">${on?'Active':'Not active'}</span></div><p class="note">${on?`${d} day${d===1?'':'s'} left. Paid until ${fmt(u.paidUntil)}.`:`Pay ${money(CFG.fee)} to ${u.role==='seller'?'list':'promote'} products.`}</p></div><a class="btn sm" href="#pay">${on?'Renew early':'Pay '+money(CFG.fee)}</a></div>`}
-
-onAuthStateChanged(auth,async u=>{
-  if(busy)return;
-  me=null;
-  if(u){try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists())me={...s.data(),uid:u.uid}}catch(e){}}
-  ready=true;route();
+auth.onAuthStateChanged(async u=>{
+  user=u;
+  if(u){
+    try{ const d=await db.collection('users').doc(u.uid).get(); profile=d.exists?d.data():null; }catch(e){ profile=null; }
+  } else profile=null;
+  renderNav(); router();
 });
 
-async function loadP(){
-  P=await col('products',orderBy('createdAt','desc'));PR={};
-  (await col('profiles')).forEach(x=>PR[x.code]=x);
+function renderNav(){
+  const isAdmin = user && user.email===ADMIN_EMAIL;
+  $('#authArea').innerHTML = user ? `<span style="font-size:13px">${esc(user.email)}</span> <button onclick="logout()" style="margin-left:6px;padding:6px 10px;border-radius:999px;border:0;background:#facc15;font-weight:700;cursor:pointer">Logout</button>` : `<a href="#login" style="font-size:14px">Login</a>`;
+  $('#nav').innerHTML = `
+    <a href="#market" data-nav>Marketplace</a>
+    <a href="#dashboard" data-nav>Dashboard</a>
+    <a href="#sell" data-nav>Sell Product</a>
+    ${isAdmin?`<a href="#admin" data-nav>Admin</a>`:''}
+    ${user?`<span class="badge">Code: ${esc(profile?.code||'—')}</span>`:''}
+  `;
 }
-const perSale=p=>Math.round(p.price*p.rate)/100;
-const thumb=p=>p.images?.[0]?`<img class="thumb" src="${p.images[0]}" alt="${esc(p.name)}">`:`<div class="thumb">${esc((p.name||'?')[0].toUpperCase())}</div>`;
-const card=p=>`<article class="card"><a href="#product/${p.id}">${thumb(p)}</a><div style="display:flex;align-items:flex-end;justify-content:space-between;gap:6px"><div><h3 style="font-size:13px;line-height:1.2;text-transform:lowercase">${esc(p.name)}</h3><div class="price num" style="font-size:15px;margin-top:2px">${money(p.price)}</div></div><span style="background:#FFD400;color:#000;font-size:11px;font-weight:900;padding:7px 8px;border-radius:7px;white-space:nowrap">Earn ${money(perSale(p))}</span></div><a class="btn sm" href="#product/${p.id}">View product</a></article>`;
-const gridHtml=()=>{const q=ui.q.toLowerCase().trim(),l=P.filter(p=>live(p)&&(!q||(p.name+' '+(p.desc||'')).toLowerCase().includes(q)));return l.length?l.map(card).join(''):`<div class="empty">${q?'No products match your search.':'No products yet.'}</div>`};
+async function logout(){ await auth.signOut(); location.hash='#market'; }
 
-/* ---------- views ---------- */
+async function loadProducts(){
+  const snap = await db.collection('products').orderBy('createdAt','desc').limit(100).get();
+  products = snap.docs.map(d=>({id:d.id, ...d.data()}));
+  if(user){
+    const ps = await db.collection('codes').where('uid','==',user.uid).get().catch(()=>null);
+    // promos are tracked via profiles/codes - keep simple: check localStorage
+    try{ myPromos = new Set(JSON.parse(localStorage.getItem('myPromos_'+user.uid)||'[]')); }catch(e){ myPromos=new Set(); }
+  }
+}
+
+function cardHTML(p){
+  const im = Array.isArray(p.images)?p.images:(p.image?[p.image]:[]);
+  const first = im[0]||'https://via.placeholder.com/400x300?text=No+Image';
+  const isPromoting = myPromos.has(p.id);
+  const comm = p.commission ? `<span class="badge">Earn ${p.commission}%</span>` : '';
+  return `<div class="card">
+    <img src="${first}" onclick="location.hash='#product/${p.id}'" style="cursor:pointer">
+    <div class="b">
+      <div style="font-weight:700;line-height:1.2">${esc(p.name)}</div>
+      <div class="note" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.description||'')}</div>
+      <div><span class="price">${money(p.price)}</span> ${p.oldPrice?`<span class="old">${money(p.oldPrice)}</span>`:''} ${comm}</div>
+      <button class="btn" onclick="location.hash='#product/${p.id}'">View product</button>
+      ${user?`<button class="btn y" onclick="quickPromote('${p.id}')">⚡ ${isPromoting?'Copy My Link':'Promote'}</button>
+      <button class="btn g sm" onclick="quickSave('${p.id}')">⬇ Save Pictures</button>`:''}
+    </div>
+  </div>`;
+}
+
+async function quickSave(pid){
+  const p = products.find(x=>x.id===pid); if(!p) return;
+  const im = Array.isArray(p.images)?p.images:(p.image?[p.image]:[]);
+  if(!im.length) return toast('No pictures for this product');
+  im.forEach((u,i)=>setTimeout(()=>downloadPic(u,'marketspace-'+(i+1)+'.jpg'), i*600));
+}
+async function quickPromote(pid){
+  if(!user) return location.hash='#login';
+  const p = products.find(x=>x.id===pid); if(!p) return;
+  const code = profile?.code || 'AF-'+user.uid.slice(0,6).toUpperCase();
+  const link = location.origin + location.pathname + '#product/' + pid + '/' + code;
+  myPromos.add(pid);
+  try{ localStorage.setItem('myPromos_'+user.uid, JSON.stringify([...myPromos])); }catch(e){}
+  try{ await navigator.clipboard.writeText(link); toast('Link copied! Now save pictures & share'); }
+  catch(e){ prompt('Copy your affiliate link:', link); }
+  router();
+}
+
+async function router(){
+  const h = location.hash.replace('#','')||'market';
+  const app = $('#app');
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+h.split('/')[0]));
+  if(h.startsWith('product/')) return vProduct(h.split('/')[1], h.split('/')[2]);
+  if(h==='market') return vMarket();
+  if(h==='dashboard') return vDashboard();
+  if(h==='sell') return vSell();
+  if(h==='admin') return vAdmin();
+  if(h==='login') return vLogin();
+  return vMarket();
+}
+
 async function vMarket(){
-  await loadP();
-  return `<section class="pg" style="text-align:center"><h1 style="font-size:32px"><span style="color:#FFD400">No Product? No Problem.</span><br>Promote & Earn.</h1><p class="note" style="max-width:56ch;margin:10px auto 0">Pick a product, share your link, earn commission on every sale.</p>
-  <div class="row">${me?'<a class="btn" href="#dashboard">Open my dashboard</a>':'<a class="btn" href="#register">Sign up</a><a class="btn g" href="#login">Log in</a>'}</div></section>
-  <div class="row bt" style="margin-bottom:14px"><h2>Products to promote</h2><input id="q" type="search" style="max-width:280px" placeholder="Search products" value="${esc(ui.q)}"></div><div class="grid" id="grid">${gridHtml()}</div>`;
+  const app=$('#app');
+  app.innerHTML='<p>Loading products...</p>';
+  await loadProducts();
+  app.innerHTML = `<h2 style="margin:4px 0 12px">Marketplace</h2>
+  <div class="grid">${products.map(cardHTML).join('')||'<p>No products yet. Be the first to sell!</p>'}</div>`;
 }
 
-async function vProduct(id,ref){
-  const s=await getDoc(doc(db,'products',id));
-  if(!s.exists())return note('Product not found','This product was removed or the link is wrong.','<a class="btn" href="#market">Back to marketplace</a>');
-  const p={id,...s.data()},im=p.images||[],t=p.contactType||'whatsapp',own=me?.uid===p.sellerUid;
-  const sp=(await getDoc(doc(db,'profiles',p.sellerCode))).data();
-  if(!own&&!isAdmin()&&!(sp?.paidUntil>Date.now()))return note('Product not available','The seller is not active right now.','<a class="btn" href="#market">Back to marketplace</a>');
-  if(ref && ref !== me?.code){
-    try{
-      const ap=(await getDoc(doc(db,'profiles',ref))).data();
-      if(ap?.role==='affiliate' && ap.paidUntil>Date.now()){
-        const leadId = `${vid()}_${id}_${ref}`;
-        const exists = await getDoc(doc(db,'leads',leadId));
-        if(!exists.exists()){
-          await setDoc(doc(db,'leads',leadId),{productId:id,productName:p.name,sellerUid:p.sellerUid,sellerCode:p.sellerCode,affUid:ap.uid,affCode:ref,commission:perSale(p),at:Date.now(),status:'reached',buyerName: me?.name || 'Guest buyer', buyerPhone: me?.phone || ''});
-        }
-      }
-    }catch(e){}
+async function vProduct(id, affCode){
+  const app=$('#app'); app.innerHTML='<p>Loading...</p>';
+  if(!products.length) await loadProducts();
+  let p = products.find(x=>x.id===id);
+  if(!p){ try{ const d=await db.collection('products').doc(id).get(); if(d.exists) p={id:d.id,...d.data()}; }catch(e){} }
+  if(!p){ app.innerHTML='<p>Product not found. <a href="#market">Back</a></p>'; return; }
+  const im = Array.isArray(p.images)?p.images:(p.image?[p.image]:[]);
+  // track click / lead if affiliate code present
+  if(affCode && affCode!=='undefined'){
+    db.collection('leads').add({productId:id, affCode, createdAt:firebase.firestore.FieldValue.serverTimestamp(), ua:navigator.userAgent}).catch(()=>{});
   }
-  const msg=`Hello, I saw "${p.name}" on Marketspace and I am interested.${ref?` (Referred by ${ref})`:''}`;
-  const see=!me||own||isAdmin();
-  const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact the seller</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
-  let buyerConfirm='';
-  if(ref && !own){
-    buyerConfirm=`<div class="contact" style="border-color:var(--y)"><h3>Did you buy this product?</h3><p class="note">Tap below AFTER you pay the seller on WhatsApp. The seller will then confirm it in their dashboard.</p><button class="btn" data-act="buyer-bought" data-id="${id}" data-ref="${esc(ref)}">✅ Yes, I Bought It</button></div>`;
-  }
-  let act='';
-  if(me?.role==='affiliate'){
-    const lk=location.href.split('#')[0]+'#product/'+id+'/'+me.code;
-    act=!active(me)?`<p class="note">Your membership is not active, so you cannot promote products.</p><a class="btn" style="justify-self:start" href="#pay">Pay ${money(CFG.fee)}</a>`:(me.picks||[]).includes(id)?`<p class="note">You are promoting this product. Your personal link:</p>${linkRow(lk)}`:`<button class="btn" style="justify-self:start" data-act="promote" data-id="${id}">Promote this product</button>`;
-  }else if(!me&&!ref)act=`<p class="note">Want to earn ${money(perSale(p))} for every sale you bring?</p><a class="btn" style="justify-self:start" href="#register/affiliate">Join as affiliate</a>`;
-  else if(own)act='<a class="btn" style="justify-self:start" href="#dashboard">Manage in dashboard</a>';
-  return `<div class="pg"><a class="note" href="#market">&larr; All products</a><div class="panel">
-  ${im.length?`<img class="main" id="mainpic" src="${im[0]}" alt="${esc(p.name)}">${im.length>1?`<div class="strip">${im.map(x=>`<img src="${x}" data-act="pic" alt="">`).join('')}</div>`:''}`:''}
-  <div><span class="chip y">${p.rate}% commission</span></div><h1>${esc(p.name)}</h1><div class="price num">${money(p.price)}</div>
-  <p style="white-space:pre-wrap">${esc(p.desc||'')}</p><p class="note">Sold by <b>${esc(p.sellerName)}</b> (${esc(p.sellerCode)})</p>${contact}${buyerConfirm}${act}</div></div>`;
+  const isPromoting = myPromos.has(id);
+  const code = profile?.code || (user?'AF-'+user.uid.slice(0,6).toUpperCase():null);
+  const myLink = code ? location.origin + location.pathname + '#product/' + id + '/' + code : '';
+  const commissionAmt = p.commission ? (Number(p.price)*Number(p.commission)/100).toFixed(2) : '0.00';
+
+  app.innerHTML = `<div><a class="note" href="#market">&larr; All products</a><div class="panel" style="margin-top:8px">
+  ${im.length?`<img class="main" id="mainpic" src="${im[0]}" alt="${esc(p.name)}">
+  <div class="row" style="margin:10px 0">
+    <button class="btn sm" data-act="saveall">⬇ Save All Pictures (${im.length})</button>
+    <button class="btn g sm" data-act="saveone">⬇ Save This Picture</button>
+  </div>
+  <p class="note">Tip for affiliates: Tap Save, then use the pictures for your WhatsApp Status / TikTok promotion. On iPhone, if it opens in a new tab, hold the picture &gt; Save to Photos.</p>
+  ${im.length>1?`<div class="strip">${im.map((x,i)=>`<img src="${x}" data-act="pic" class="${i===0?'sel':''}" alt="">`).join('')}</div>`:''}`:''}
+  <h2 style="margin:12px 0 4px">${esc(p.name)}</h2>
+  <div><span class="price" style="font-size:22px">${money(p.price)}</span> ${p.oldPrice?`<span class="old">${money(p.oldPrice)}</span>`:''}</div>
+  ${p.commission?`<div style="margin:8px 0"><span class="badge">Affiliate Earns ${p.commission}% = GH₵${commissionAmt} per sale</span></div>`:''}
+  <p>${esc(p.description||'')}</p>
+  ${affCode?`<p class="note">You came via affiliate code: <b>${esc(affCode)}</b></p>`:''}
+  <div class="panel" style="background:#fffbeb;border-color:#fde68a;margin-top:12px">
+    <b>For Affiliates — Promote This Product</b>
+    ${!user?`<p class="note">Login to get your personal affiliate link.</p><button class="btn y" onclick="location.hash='#login'">Login to Promote</button>`
+    : isPromoting ? `<p class="note">You are promoting this product. Your personal link:</p><div class="linkbox">${myLink}</div><div class="row" style="margin-top:8px"><button class="btn" data-t="${myLink}" data-act="copy">Copy My Link</button><button class="btn g" onclick="window.open('https://wa.me/?text='+encodeURIComponent('Check this out! '+myLink),'_blank')">Share on WhatsApp</button></div>`
+    : `<p class="note">Tap Promote to get your personal link. You earn ${p.commission||0}% on every sale from your link.</p><button class="btn y" data-act="promote" data-id="${p.id}">Promote This Product</button>`}
+  </div>
+  <div style="margin-top:14px"><button class="btn" onclick="location.hash='#market'">Back to Marketplace</button></div>
+  </div></div>`;
+  // store current product for save handlers
+  window._curProduct = p;
 }
 
-const roleChoice=()=>`<div class="pg"><div class="panel narrow"><h2>How will you use Marketspace?</h2><p class="note">Choose one. You can only hold one type of account.</p>
-<a class="btn" href="#register/seller">I am a seller</a><a class="btn g" href="#register/affiliate">I am an affiliate marketer</a></div></div>`;
-
-function vReg(role){
-  if(role!=='seller'&&role!=='affiliate')return roleChoice();
-  if(me)return note('You already have an account',`Signed in as ${me.name} (${me.code}).`,'<a class="btn" href="#dashboard">Go to dashboard</a>');
-  const seller=role==='seller';
-  ui.codes[role]=ui.codes[role]||(seller?'SEL-':'AF-')+rnd(6);
-  const d=new Date();d.setFullYear(d.getFullYear()-CFG.minAge);
-  return `<div class="pg"><div class="panel narrow"><div class="row bt"><h2>Create your ${role} account</h2><a class="note" href="#register">Switch</a></div>
-  <p class="note">After signing up you pay ${money(CFG.fee)} a month to activate your account.</p>
-  <form id="reg" data-role="${role}" novalidate><div><small class="note">Your ${role} code (username)</small><div class="code">${ui.codes[role]}</div></div>
-  <label>Full name<input id="rn" autocomplete="name"></label>
-  <div class="two"><label>Date of birth<input id="rd" type="date" max="${d.toISOString().slice(0,10)}"></label><label>Phone number<input id="rp" type="tel" placeholder="0240000000"></label></div>
-  <label>Email<input id="re" type="email" autocomplete="email"></label>
-  <div class="two"><label>Nationality<input id="rnat" placeholder="e.g. Ghanaian"></label><label>Experience<select id="rexp"><option>No experience yet</option><option>Less than 1 year</option><option>1 to 3 years</option><option>More than 3 years</option></select></label></div>
-  <div class="two"><label>Password<input id="rpw" type="password" autocomplete="new-password"></label><label>Confirm password<input id="rpw2" type="password" autocomplete="new-password"></label></div>
-  <p class="err" id="err" hidden></p><button class="btn">Create account</button></form></div></div>`;
+async function vDashboard(){
+  if(!user) return location.hash='#login';
+  const app=$('#app');
+  app.innerHTML=`<h2>Dashboard</h2><div class="panel"><p><b>${esc(user.email)}</b></p><p>Your Code: <b>${esc(profile?.code||'—')}</b></p><p>Membership: <b>${esc(profile?.membership||'Free')}</b> | Paid Until: ${esc(profile?.paidUntil||'—')}</p><p class="note">Products you are promoting: ${myPromos.size}</p></div><div style="margin-top:12px"><h3>Products I am marketing</h3><div class="grid">${products.filter(p=>myPromos.has(p.id)).map(cardHTML).join('')||'<p>You have not promoted any product yet. Go to Marketplace &gt; Promote.</p>'}</div></div>`;
+  if(!products.length) await loadProducts();
+  router(); // re-render after load if needed
 }
 
-const vLogin=()=>me?note('You are signed in',`Signed in as ${me.name}.`,'<a class="btn" href="#dashboard">Go to dashboard</a>'):
-`<div class="pg"><div class="panel narrow"><h2>Log in</h2><form id="login" novalidate><label>Your code, phone number or email<input id="lc" autocomplete="username" placeholder="AF-XXXXXX or SEL-XXXXXX"></label>
-<label>Password<input id="lp" type="password" autocomplete="current-password"></label><p class="err" id="err" hidden></p><button class="btn">Log in</button></form><p class="note">New here? <a href="#register">Create an account</a></p></div></div>`;
-
-const thumbsHtml=()=>`<div class="pics">${ui.imgs.map((s,i)=>`<div class="pic"><img src="${s}" alt="Picture ${i+1}"><button type="button" data-act="rmimg" data-i="${i}" aria-label="Remove picture ${i+1}">&times;</button></div>`).join('')}</div><p class="note">${ui.imgs.length} of ${CFG.maxPics} pictures. At least ${CFG.minPics} needed.</p>`;
-
-function pform(p){
-  const t=p?.contactType||'whatsapp';
-  return `<form class="panel" id="pf" data-id="${p?.id||''}" novalidate><h3>${p?'Edit product':'Publish a new product'}</h3>
-  <label>Product name<input id="pn" maxlength="80" value="${esc(p?.name)}"></label><label>Description<textarea id="pd" maxlength="500">${esc(p?.desc)}</textarea></label>
-  <div class="two"><label>Price (GH₵)<input id="pp" type="number" min="1" step="0.01" value="${p?.price??''}"></label><label>Affiliate commission (%)<input id="pr" type="number" min="1" max="90" value="${p?.rate??''}"></label></div>
-  <div class="two"><label>How buyers reach you<select id="pt"><option value="whatsapp"${t==='whatsapp'?' selected':''}>WhatsApp</option><option value="call"${t==='call'?' selected':''}>Phone call</option><option value="both"${t==='both'?' selected':''}>WhatsApp and phone call</option></select></label><label>Contact number<input id="pc" type="tel" value="${esc(p?.contact)}"></label></div>
-  <label>Product pictures<input id="pimg" type="file" accept="image/*" multiple></label><div id="thumbs">${thumbsHtml()}</div>
-  <p class="err" id="err" hidden></p><div class="row"><button class="btn">${p?'Save changes':'Publish product'}</button>${p?'<button type="button" class="btn g" data-act="cancel">Cancel</button>':''}</div></form>`;
+async function vSell(){
+  if(!user) return location.hash='#login';
+  $('#app').innerHTML=`<h2>Sell a Product</h2><div class="panel"><input id="pName" placeholder="Product name"><textarea id="pDesc" placeholder="Description"></textarea><input id="pPrice" type="number" placeholder="Price GH₵"><input id="pOld" type="number" placeholder="Old price (optional)"><input id="pComm" type="number" placeholder="Affiliate commission % e.g. 10"><input id="pPics" type="file" accept="image/*" multiple><p class="note">You can upload multiple pictures. They will be saved for affiliates to download.</p><button class="btn" onclick="doSell()">Publish Product</button></div>`;
+}
+async function doSell(){
+  const name=$('#pName').value.trim(), desc=$('#pDesc').value.trim(), price=Number($('#pPrice').value), oldPrice=Number($('#pOld').value)||null, commission=Number($('#pComm').value)||0;
+  if(!name||!price) return toast('Add name and price');
+  const files=[...$('#pPics').files];
+  const images=[];
+  for(const f of files){ images.push(await new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(f); })); }
+  await db.collection('products').add({name, description:desc, price, oldPrice, commission, images, sellerUid:user.uid, sellerEmail:user.email, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  toast('Product published!'); location.hash='#market';
 }
 
-async function vDash(){
-  if(!me)return note('Your dashboard','Log in to see your dashboard.','<a class="btn" href="#login">Log in</a>');
-  await refreshMe();
-  const hd=`<div class="row bt"><div><h2>${me.role==='seller'?'Seller':'Affiliate'} dashboard</h2><p class="note">Welcome, ${esc(me.name)}</p></div><span class="chip y">${esc(me.code)}</span></div>${subCard(me)}`;
-  return me.role==='seller'?vSeller(hd):vAff(hd);
+async function vLogin(){
+  $('#app').innerHTML=`<h2>Login / Sign Up</h2><div class="panel"><input id="em" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button class="btn" onclick="doLogin()">Login / Create Account</button><p class="note">If you don't have an account, we will create one for you.</p></div>`;
 }
-const payForm=l=>`<form class="panel" id="lpay" data-id="${l.id}" novalidate><h3>Pay affiliate ${esc(l.affCode)}</h3>${momoBox(CFG.cmomo,money(l.commission))}<div class="two"><label>Network<select id="lnet">${NET}</select></label><label>Number you paid from<input id="lfrom" type="tel" value="${esc(me.phone)}"></label></div><label>Transaction ID<input id="ltx" autocomplete="off"></label><p class="err" id="err" hidden></p><div class="row"><button class="btn sm">Submit payment</button><button type="button" class="btn g sm" data-act="cancel">Cancel</button></div></form>`;
-const sellerAct=l=>l.status==='reached'||l.status==='buyer-confirmed'?`<div class="row"><button class="btn sm" data-act="sale" data-id="${l.id}">Confirm sale</button><button class="btn g sm" data-act="nosale" data-id="${l.id}">No sale</button></div>`:l.status==='owed'?`<div class="row"><button class="btn sm" data-act="payl" data-id="${l.id}">Pay affiliate</button>${l.rejected?'<span class="chip">Last payment not confirmed. Check the transaction ID.</span>':''}</div>${ui.pay===l.id?payForm(l):''}`:`<span class="chip ${l.status==='paid'?'y':''}">${LBL[l.status]}</span>`;
-
-async function vSeller(hd){
-  await loadP();
-  const L=(await col('leads',where('sellerUid','==',me.uid))).sort((a,b)=>b.at-a.at);
-  ui.badge=L.filter(l=>l.status==='reached'||l.status==='buyer-confirmed').length;
-  const mine=P.filter(p=>p.sellerUid===me.uid),ep=mine.find(p=>p.id===ui.edit);
-  const owe=r2(L.filter(l=>l.status==='owed').reduce((a,l)=>a+l.commission,0));
-  const locked=`<div class="panel"><h3>Publishing is locked</h3><p class="note">Pay your ${money(CFG.fee)} monthly fee to publish products. Your products stay hidden until then.</p><a class="btn" style="justify-self:start" href="#pay">Pay ${money(CFG.fee)}</a></div>`;
-  return `<div class="pg">${hd}<div class="stats"><div class="item"><small class="note">Products</small><strong class="num">${mine.length}</strong></div><div class="item"><small class="note">Buyers reached</small><strong class="num">${L.length}</strong></div><div class="item"><small class="note">Commission to pay</small><strong class="num">${money(owe)}</strong></div></div>
-  <h2>Buyers reached${ui.badge?` (${ui.badge} waiting)`:''}</h2><div style="display:grid;gap:12px">${L.length?L.map(l=>`<div class="item"><p><b>${esc(l.productName)}</b> via affiliate ${esc(l.affCode)}</p><p class="note num">${fmt(l.at)} &middot; commission ${money(l.commission)}</p>${sellerAct(l)}</div>`).join(''):'<div class="empty">When a buyer opens an affiliate link, it appears here. Tap Confirm sale once they buy.</div>'}</div>
-  ${active(me)?pform(ep):locked}<h2>My products</h2><div style="display:grid;gap:12px">${mine.length?mine.map(p=>`<div class="item"><div class="row bt"><div><h3><a href="#product/${p.id}">${esc(p.name)}</a></h3><p class="note num">${money(p.price)} &middot; ${p.rate}% &middot; ${money(perSale(p))} per sale</p></div><div class="row"><button class="btn g sm" data-act="edit" data-id="${p.id}">Edit</button><button class="btn g d sm" data-act="del" data-id="${p.id}">Delete</button></div></div></div>`).join(''):'<div class="empty">You have not published any product yet.</div>'}</div></div>`;
-}
-
-async function vAff(hd){
-  await loadP();ui.badge=0;
-  const [L,W]=await Promise.all([col('leads',where('affUid','==',me.uid)),col('withdrawals',where('affUid','==',me.uid))]);
-  L.sort((a,b)=>b.at-a.at);W.sort((a,b)=>a.at-b.at);
-  const b=bal(L,W),pk=(me.picks||[]).map(id=>P.find(p=>p.id===id)).filter(Boolean);
-  const st=(l,v)=>`<div class="item"><small class="note">${l}</small><strong class="num">${money(v)}</strong></div>`;
-  return `<div class="pg">${hd}<div class="stats">${st('Commission earned',b.earned)}${st('Available to withdraw',b.available)}${st('Waiting for sellers',b.pending)}${st('Paid out to you',b.paidOut)}</div>
-  <div class="row bt"><h2>Products I am marketing</h2><a class="btn sm" href="#market">Find products</a></div><div style="display:grid;gap:12px">${pk.length?pk.map(p=>`<div class="item"><div class="row bt"><h3><a href="#product/${p.id}">${esc(p.name)}</a></h3><button class="btn g d sm" data-act="unpromote" data-id="${p.id}">Stop promoting</button></div><p class="note num">${money(p.price)} &middot; you earn ${money(perSale(p))} per sale</p>${active(me)?linkRow(location.href.split('#')[0]+'#product/'+p.id+'/'+me.code):'<p class="note">Paused until you renew.</p>'}</div>`).join(''):'<div class="empty">You are not marketing any product yet.</div>'}</div>
-  ${T('Commission record',['Date','Product','Commission','Status'],L.map(l=>`<tr><td>${fmt(l.at)}</td><td>${esc(l.productName)}</td><td class="num">${counted(l)?money(l.commission):'-'}</td><td>${ALBL[l.status]}</td></tr>`).join(''),'When a buyer opens one of your links, it appears here.')}
-  <form class="panel" id="wd" novalidate><h3>Withdraw your commission</h3><p class="note">You can withdraw up to <b class="num">${money(b.available)}</b>. Only commission that sellers paid and admin confirmed is available.</p>
-  <label>Amount (GH₵)<input id="wa" type="number" min="0.01" step="0.01"></label><div class="two"><label>Network<select id="wnet"><option>MTN MoMo</option><option>Telecel Cash</option><option>AirtelTigo Money</option></select></label><label>MoMo number<input id="wnum" type="tel" value="${esc(me.phone)}"></label></div>
-  <label>MoMo account name<input id="wname" value="${esc(me.name)}"></label><label>Type your code (${esc(me.code)}) to confirm<input id="wcode" autocomplete="off"></label><p class="err" id="err" hidden></p><button class="btn"${b.available<=0?' disabled':''}>Request withdrawal</button></form>
-  ${T('My withdrawals',['Date','Amount','Paid to','Status'],W.map(w=>`<tr><td>${fmt(w.at)}</td><td class="num">${money(w.amount)}</td><td>${esc(w.network)} ${esc(w.number)}</td><td>${w.status==='done'?'Paid':'Waiting for payment'}</td></tr>`).join(''),'No withdrawals yet.')}</div>`;
-}
-
-async function vPay(){
-  if(!me)return note('Log in to pay','Log in or create an account first.','<a class="btn" href="#login">Log in</a>');
-  await refreshMe();
-  const H=(await col('payments',where('uid','==',me.uid))).sort((a,b)=>b.at-a.at),pend=H.some(p=>p.status==='pending');
-  const form=pend?'<div class="contact"><h3>Payment received for checking</h3><p class="note">Your account opens once the payment is confirmed. To speed things up, send your transaction ID on WhatsApp.</p><a class="btn" style="justify-self:start" href="https://wa.me/233257218681" target="_blank" rel="noopener">Message on WhatsApp</a></div>':
-  `<form class="panel" id="pay" novalidate><h3>After you have paid</h3><div class="two"><label>Network<select id="pnet">${NET}</select></label><label>Number you paid from<input id="pfrom" type="tel" value="${esc(me.phone)}"></label></div><label>Transaction ID<input id="ptx" autocomplete="off" placeholder="From your confirmation SMS"></label><p class="err" id="err" hidden></p><button class="btn">I have paid ${money(CFG.fee)}</button></form>`;
-  return `<div class="pg"><div class="panel narrow"><h2>Monthly membership</h2>${subCard(me)}${momoBox(CFG.momo,money(CFG.fee))}<p class="note">Send exactly ${money(CFG.fee)} from any network. Any network charge is paid by you on top.</p>${form}
-  ${H.length?T('Payment history',['Date','Transaction ID','Status'],H.map(p=>`<tr><td>${fmt(p.at)}</td><td>${esc(p.txn)}</td><td>${p.status}</td></tr>`).join('')):''}</div></div>`;
+async function doLogin(){
+  const em=$('#em').value.trim(), pw=$('#pw').value;
+  try{ await auth.signInWithEmailAndPassword(em,pw); }
+  catch(e){ try{ const cr=await auth.createUserWithEmailAndPassword(em,pw); const code='AF-'+cr.user.uid.slice(0,6).toUpperCase(); await db.collection('users').doc(cr.user.uid).set({email:em, code, membership:'Free', createdAt:firebase.firestore.FieldValue.serverTimestamp()}); await db.collection('profiles').doc(code).set({email:em, uid:cr.user.uid, code, membership:'Free', createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }catch(e2){ toast(e2.message); return; } }
+  location.hash='#market';
 }
 
 async function vAdmin(){
-  if(!isAdmin())return note('Admin','This page is for the site admin. Log in with the admin email.','<a class="btn" href="#login">Log in</a>');
-  const [U,PY,L,W]=await Promise.all([col('users'),col('payments',where('status','==','pending')),col('leads'),col('withdrawals')]);
-  const wr=W.filter(w=>w.status==='todo').sort((a,b)=>a.at-b.at).map(w=>{const k=bal(L.filter(l=>l.affCode===w.affCode),W.filter(x=>x.affCode===w.affCode));return `<tr><td>${esc(w.affCode)}</td><td class="num"><b>${money(w.amount)}</b></td><td>${esc(w.network)}</td><td>${esc(w.number)}</td><td>${esc(w.accName)}</td><td class="num">${money(k.available)}</td><td><button class="btn sm" data-act="wdone" data-id="${w.id}">Payment successful</button></td></tr>`}).join('');
-  const lr=L.filter(l=>l.status==='submitted').map(l=>`<tr><td>${esc(l.sellerCode)}</td><td>${esc(l.affCode)}</td><td>${esc(l.productName)}</td><td class="num"><b>${money(l.commission)}</b></td><td>${esc(l.payment.network)}</td><td>${esc(l.payment.txn)}</td><td>${esc(l.payment.from)}</td><td><button class="btn sm" data-act="lconfirm" data-id="${l.id}">Confirm</button> <button class="btn g d sm" data-act="lreject" data-id="${l.id}">Reject</button></td></tr>`).join('');
-  const pr=PY.map(p=>`<tr><td>${esc(p.code)}</td><td>${esc(p.name)}</td><td>${esc(p.network)}</td><td>${esc(p.txn)}</td><td>${esc(p.from)}</td><td>${fmt(p.at)}</td><td><button class="btn sm" data-act="approve" data-id="${p.id}">Approve</button> <button class="btn g d sm" data-act="reject" data-id="${p.id}">Reject</button></td></tr>`).join('');
-  const ur=U.map(u=>`<tr><td>${esc(u.code)}</td><td>${esc(u.name)}</td><td>${esc(u.phone)}</td><td>${esc(u.email)}</td><td>${active(u)?'Paid until '+fmt(u.paidUntil):'Not active'}</td></tr>`).join('');
-  return `<div class="pg"><h2>Admin</h2><p class="note">Check each payment against your mobile money statement before you confirm it.</p>
-  ${T(`Pay affiliates (${W.filter(w=>w.status==='todo').length})`,['Code','Amount','Network','Number','Account name','Balance left',''],wr,'No withdrawals waiting.')}
-  ${T('Seller commission payments',['Seller','Affiliate','Product','Amount','Network','Transaction ID','Paid from',''],lr,'Nothing waiting.')}
-  ${T('Membership payments',['Code','Name','Network','Transaction ID','Paid from','Date',''],pr,'Nothing waiting.')}
-  ${T(`Members (${U.length})`,['Code','Name','Phone','Email','Status'],ur,'No members yet.')}</div>`;
+  if(!user || user.email!==ADMIN_EMAIL) return $('#app').innerHTML='<p>Admin only.</p>';
+  const app=$('#app'); app.innerHTML='<p>Loading admin...</p>';
+  const snap=await db.collection('payments').orderBy('createdAt','desc').limit(50).get().catch(()=>null);
+  const pays=snap?snap.docs.map(d=>({id:d.id,...d.data()})):[];
+  app.innerHTML=`<h2>Admin - Membership Payments</h2>${pays.map(p=>`<div class="panel" style="margin-bottom:8px"><b>${esc(p.email||p.uid||'')}</b> - ${esc(p.plan||'')} - GH₵${esc(p.amount||'')} - <b>${esc(p.status||'pending')}</b><div class="row" style="margin-top:8px"><button class="btn g sm" data-act="approve" data-id="${p.id}">Approve</button><button class="btn sm" data-act="reject" data-id="${p.id}">Reject</button></div></div>`).join('')||'<p>No payments yet.</p>'}`;
 }
+
+document.addEventListener('click', async e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const a=b.dataset.act;
+  if(a==='pic'){ const m=$('#mainpic'); if(m){ m.src=b.src; document.querySelectorAll('.strip img').forEach(i=>i.classList.remove('sel')); b.classList.add('sel'); } return; }
+  if(a==='copy'){ try{ await navigator.clipboard.writeText(b.dataset.t); toast('Copied'); }catch(x){ toast('Press and hold to copy'); } return; }
+  if(a==='saveone'){ const src=$('#mainpic')?.src; if(src) downloadPic(src,'marketspace-product.jpg'); return; }
+  if(a==='saveall'){ const pics=[...document.querySelectorAll('.strip img')].map(i=>i.src); const main=$('#mainpic')?.src; const all=main?[main,...pics]:pics; if(!all.length) return; all.forEach((u,i)=>setTimeout(()=>downloadPic(u,'marketspace-'+(i+1)+'.jpg'), i*600)); return; }
+  if(a==='promote'){ if(!user) return location.hash='#login'; const pid=b.dataset.id; const code=profile?.code||'AF-'+user.uid.slice(0,6).toUpperCase(); myPromos.add(pid); try{ localStorage.setItem('myPromos_'+user.uid, JSON.stringify([...myPromos])); }catch(e){} toast('You are now promoting this product!'); vProduct(pid); return; }
+  if(a==='approve'||a==='reject'){ return more(a,b,b.dataset.id); }
+});
 
 async function more(a,b,id){
-  const run=async(fn,m)=>{try{await fn();if(m)toast(m)}catch(x){toast(x.code==='permission-denied'?'Not allowed.':'Something went wrong.')}route(true);return true};
-  const up=(c,i,d)=>updateDoc(doc(db,c,i),d);
-  if(a==='copy'){try{await navigator.clipboard.writeText(b.dataset.t);toast('Copied')}catch(x){toast('Press and hold to copy')}return true}
-  if(a==='promote')return run(async()=>{await up('users',me.uid,{picks:arrayUnion(id)});me.picks=[...(me.picks||[]),id]},'Added to your dashboard');
-  if(a==='unpromote')return run(async()=>{await up('users',me.uid,{picks:arrayRemove(id)});me.picks=(me.picks||[]).filter(x=>x!==id)});
-  if(a==='buyer-bought')return run(async()=>{
-    const leads = await col('leads', where('productId','==',id), where('affCode','==',b.dataset.ref));
-    const target = leads.filter(l=>l.status==='reached').sort((x,y)=>y.at-x.at)[0];
-    if(!target) throw new Error('No lead found');
-    await up('leads', target.id, {status:'buyer-confirmed', buyerConfirmedAt: Date.now()});
-    const pDoc = await getDoc(doc(db,'products',id));
-    const p = pDoc.exists() ? pDoc.data() : null;
-    if(p?.contact) window.open(`https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(`Hi, I bought "${p.name}" via Marketspace (Affiliate ${b.dataset.ref}). Please confirm my sale in your dashboard.`)}`, '_blank');
-  }, 'Thanks! Seller has been notified on WhatsApp. They must now tap Confirm Sale.');
-  if(a==='sale')return run(()=>up('leads',id,{status:'owed',saleAt:Date.now()}),'Sale confirmed. Now pay the affiliate.');
-  if(a==='nosale')return run(()=>up('leads',id,{status:'declined'}));
-  if(a==='payl'){ui.pay=id;route(true);return true}
-  if(a==='approve')return run(async()=>{const p=(await getDoc(doc(db,'payments',id))).data(),us=(await getDoc(doc(db,'users',p.uid))).data(),pu=Math.max(Date.now(),us.paidUntil||0)+CFG.period,w=writeBatch(db);w.update(doc(db,'payments',id),{status:'approved'});w.update(doc(db,'users',p.uid),{paidUntil:pu});w.update(doc(db,'profiles',p.code),{paidUntil:pu});await w.commit()},'Approved');
-  if(a==='reject')return run(()=>deleteDoc(doc(db,'payments',id)),'Rejected. The member can submit again.');
-  if(a==='lconfirm')return run(()=>up('leads',id,{status:'paid',confirmedAt:Date.now()}),'Payment confirmed');
-  if(a==='lreject')return run(()=>up('leads',id,{status:'owed',rejected:true}),'Sent back to the seller');
-  if(a==='wdone')return run(()=>up('withdrawals',id,{status:'done',doneAt:Date.now()}),'Marked as paid');
-  return false;
-}
-
-async function doPay(){
-  const txn=val('ptx').toUpperCase(),from=cp(val('pfrom'));
-  if(txn.length<6)return err('Enter the transaction ID from your confirmation message.');
-  if(!PHONE.test(from))return err('Enter the number you paid from.');
-  try{await setDoc(doc(db,'payments','m'+txn),{uid:me.uid,code:me.code,name:me.name,txn,network:val('pnet'),from,at:Date.now(),status:'pending'})}
-  catch(x){return err(x.code==='permission-denied'?'This transaction ID has already been submitted.':x.message)}
-  toast('Payment sent for checking');route(true);
-}
-async function doLeadPay(id){
-  const txn=val('ltx').toUpperCase(),from=cp(val('lfrom'));
-  if(txn.length<6)return err('Enter the transaction ID from your confirmation message.');
-  if(!PHONE.test(from))return err('Enter the number you paid from.');
-  await updateDoc(doc(db,'leads',id),{status:'submitted',rejected:false,payment:{txn,network:val('lnet'),from,at:Date.now()}});
-  ui.pay=null;toast('Payment sent. Admin will confirm it.');route(true);
-}
-async function doWd(){
-  const [L,W]=await Promise.all([col('leads',where('affUid','==',me.uid)),col('withdrawals',where('affUid','==',me.uid))]);
-  const b=bal(L,W),amt=r2(parseFloat(val('wa'))),num=cp(val('wnum')),an=val('wname');
-  if(!(amt>0))return err('Enter the amount you want to withdraw.');
-  if(amt>b.available)return err(`You can withdraw up to ${money(b.available)}.`);
-  if(!PHONE.test(num))return err('Enter a valid mobile money number.');
-  if(an.length<3)return err('Enter the mobile money account name.');
-  if(val('wcode').toUpperCase()!==me.code)return err(`Type your affiliate code exactly as shown (${me.code}).`);
-  await addDoc(collection(db,'withdrawals'),{affUid:me.uid,affCode:me.code,amount:amt,network:val('wnet'),number:num,accName:an,at:Date.now(),status:'todo'});
-  toast('Withdrawal requested');route(true);
-}
-
-/* ---------- shell ---------- */
-function head(){
-  $('#nav').innerHTML=`<a href="#market">Marketplace</a>${me?`<a href="#dashboard">Dashboard${ui.badge?` <span class="badge">${ui.badge}</span>`:''}</a><a href="#pay">Membership</a>`:''}${isAdmin()?'<a href="#admin">Admin</a>':''}`;
-  $('#acct').innerHTML=me?`<span class="note">${esc(me.code)}</span><button class="btn g sm" data-act="logout">Log out</button>`:'<a class="btn g sm" href="#login">Log in</a><a class="btn sm" href="#register">Sign up</a>';
-}
-async function route(keep){
-  if(!ready)return;
-  const [r,a,c]=(location.hash||'#market').slice(1).split('/');
-  let h;
-  try{h=r==='product'?await vProduct(a,c):r==='register'?vReg(a):r==='login'?vLogin():r==='dashboard'?await vDash():r==='pay'?await vPay():r==='admin'?await vAdmin():await vMarket()}
-  catch(e){h=note('Something went wrong',e.code==='permission-denied'?'Permission denied. Check your Firestore rules.':e.message)}
-  $('#app').innerHTML=h;head();if(!keep)scrollTo(0,0);
-}
-addEventListener('hashchange',()=>{ui.edit=null;ui.pay=null;ui.imgs=[];route()});
-
-/* ---------- pictures ---------- */
-function readImages(files,done){
-  const arr=[...files].filter(f=>f.type.startsWith('image/')).slice(0,Math.max(0,CFG.maxPics-ui.imgs.length));
-  if(!arr.length)return done();
-  let left=arr.length;const fin=()=>{if(!--left)done()};
-  arr.forEach(f=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{
-    const sc=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');
-    c.width=Math.round(im.width*sc)||1;c.height=Math.round(im.height*sc)||1;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-    ui.imgs.push(c.toDataURL('image/jpeg',0.65));fin()};im.onerror=fin;im.src=fr.result};fr.onerror=fin;fr.readAsDataURL(f)});
-}
-
-/* ---------- events ---------- */
-document.addEventListener('click',async e=>{
-  const b=e.target.closest('[data-act]');if(!b)return;
-  const a=b.dataset.act,id=b.dataset.id;
-  if(await more(a,b,id))return;
-  if(a==='logout'){await signOut(auth);me=null;ui.badge=0;location.hash='#market';route()}
-  else if(a==='pic')$('#mainpic').src=b.src;
-  else if(a==='rmimg'){ui.imgs.splice(+b.dataset.i,1);$('#thumbs').innerHTML=thumbsHtml()}
-  else if(a==='edit'){ui.edit=id;ui.imgs=[...(P.find(p=>p.id===id)?.images||[])];route()}
-  else if(a==='cancel'){ui.edit=null;ui.pay=null;ui.imgs=[];route(true)}
-  else if(a==='del'&&confirm('Delete this product? This cannot be undone.')){
-    try{await deleteDoc(doc(db,'products',id));toast('Product deleted')}catch(x){toast('Could not delete.')}
-    route(true);
+  // Admin approve / reject membership payment
+  if(a==='approve' || a==='reject'){
+    try{
+      const doc=await db.collection('payments').doc(id).get();
+      if(!doc.exists) return toast('Payment not found');
+      const pay=doc.data();
+      const status = a==='approve'?'approved':'rejected';
+      const batch=db.batch();
+      batch.update(db.collection('payments').doc(id),{status, approvedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      if(a==='approve' && pay.uid){
+        const paidUntil = new Date(); paidUntil.setDate(paidUntil.getDate()+30);
+        const paidStr = paidUntil.toISOString().slice(0,10);
+        batch.set(db.collection('users').doc(pay.uid),{membership:pay.plan||'Pro', paidUntil:paidStr},{merge:true});
+        if(pay.code) batch.set(db.collection('profiles').doc(pay.code),{membership:pay.plan||'Pro', paidUntil:paidStr},{merge:true});
+      }
+      await batch.commit();
+      toast(a==='approve'?'Approved':'Rejected');
+      vAdmin();
+    }catch(err){
+      console.error(err);
+      if(err.code==='permission-denied') toast('Not allowed. Check Firestore Rules & login as admin.');
+      else toast(err.message||'Failed');
+    }
+    return true;
   }
-});
-document.addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;$('#grid').innerHTML=gridHtml()}});
-document.addEventListener('change',e=>{if(e.target.id==='pimg'){const i=e.target;readImages(i.files,()=>{i.value='';$('#thumbs').innerHTML=thumbsHtml()})}});
-
-document.addEventListener('submit',async e=>{
-  e.preventDefault();
-  const f=e.target,btn=f.querySelector('button:not([type=button])');
-  if(btn)btn.disabled=true;
-  try{
-    if(f.id==='reg')await doReg(f.dataset.role);
-    else if(f.id==='login')await doLogin();
-    else if(f.id==='pf')await doProduct(f.dataset.id);
-    else if(f.id==='pay')await doPay();
-    else if(f.id==='lpay')await doLeadPay(f.dataset.id);
-    else if(f.id==='wd')await doWd();
-  }catch(x){err(x.code==='permission-denied'?'Permission denied. Check your Firestore rules.':x.message)}
-  if(btn)btn.disabled=false;
-});
-
-async function doReg(role){
-  const name=val('rn'),dob=val('rd'),phone=cp(val('rp')),email=val('re').toLowerCase(),nat=val('rnat'),pw=$('#rpw').value,pw2=$('#rpw2').value,code=ui.codes[role];
-  const max=new Date();max.setFullYear(max.getFullYear()-CFG.minAge);
-  if(name.length<3)return err('Enter your full name.');
-  if(!dob)return err('Enter your date of birth.');
-  if(new Date(dob)>max)return err(`You must be at least ${CFG.minAge} years old to join.`);
-  if(!PHONE.test(phone))return err('Enter a valid phone number.');
-  if(!/^\S+@\S+\.\S+$/.test(email))return err('Enter a valid email.');
-  if(!nat)return err('Enter your nationality.');
-  if(pw.length<6)return err('Choose a password of at least 6 characters.');
-  if(pw!==pw2)return err('The two passwords do not match.');
-  const pid='p'+phone.replace(/\D/g,'');
-  if((await getDoc(doc(db,'codes',pid))).exists())return err('This phone number is already registered. Log in instead.');
-  busy=true;
-  try{
-    const cr=await createUserWithEmailAndPassword(auth,email,pw),uid=cr.user.uid;
-    const u={code,role,name,dob,phone,email,nationality:nat,experience:val('rexp'),createdAt:Date.now(),paidUntil:0};
-    const w=writeBatch(db);
-    w.set(doc(db,'users',uid),u);
-    w.set(doc(db,'profiles',code),{uid,code,role,name,experience:u.experience,createdAt:u.createdAt,paidUntil:0});
-    w.set(doc(db,'codes',code),{email});
-    w.set(doc(db,'codes',pid),{email});
-    try{await w.commit()}catch(x){await cr.user.delete().catch(()=>{});throw x}
-    me={...u,uid};delete ui.codes[role];
-    toast('Account created. Pay your first month to activate it.');location.hash='#pay';
-  }catch(x){
-    if(x.code==='auth/email-already-in-use')return err('This email is already registered. Log in instead.');
-    throw x;
-  }finally{busy=false}
-  route();
 }
-
-async function doLogin(){
-  const raw=val('lc'),pw=$('#lp').value;let email;
-  if(!raw||!pw)return err('Enter your code, phone number or email and your password.');
-  if(raw.includes('@'))email=raw.toLowerCase();
-  else{
-    const key=/^[A-Za-z]+-/.test(raw)?raw.toUpperCase():'p'+cp(raw).replace(/\D/g,'');
-    const s=await getDoc(doc(db,'codes',key));
-    if(!s.exists())return err('Code, phone number or password is wrong.');
-    email=s.data().email;
-  }
-  try{await signInWithEmailAndPassword(auth,email,pw)}catch(x){return err('Code, phone number or password is wrong.')}
-  location.hash='#dashboard';
-}
-
-async function doProduct(id){
-  const name=val('pn'),price=parseFloat(val('pp')),rate=parseFloat(val('pr')),contact=cp(val('pc'));
-  if(!me||me.role!=='seller')return;
-  if(!id&&!active(me))return err('Pay your monthly fee before publishing.');
-  if(name.length<3)return err('Enter a product name.');
-  if(!(price>0))return err('Enter a price above zero.');
-  if(!(rate>=1&&rate<=90))return err('Commission must be between 1% and 90%.');
-  if(!PHONE.test(contact))return err('Enter the contact number buyers should use.');
-  if(ui.imgs.length<CFG.minPics)return err(`Add at least ${CFG.minPics} pictures of the product.`);
-  const d={name,desc:val('pd'),price,rate,contactType:val('pt'),contact,images:[...ui.imgs]};
-  if(id){await updateDoc(doc(db,'products',id),d);toast('Changes saved')}
-  else{await addDoc(collection(db,'products'),{...d,sellerUid:me.uid,sellerCode:me.code,sellerName:me.name,createdAt:Date.now()});toast('Product published')}
-  ui.edit=null;ui.imgs=[];route(true);
-}
+window.addEventListener('hashchange', router);
 </script>
 </body>
 </html>
