@@ -21,13 +21,15 @@ nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--mu);fo
 .btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--y);background:var(--y);color:var(--on);font:600 14px var(--fb);padding:10px 16px;border-radius:8px;cursor:pointer;text-decoration:none;min-height:40px}
 .btn.g{background:none;color:var(--fg);border-color:var(--line)}.btn.d{color:var(--bad)}.btn.sm{padding:6px 12px;min-height:34px;font-size:13px}.btn[disabled]{opacity:.5}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.bt{justify-content:space-between}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:700px){ .grid{grid-template-columns:repeat(4,1fr)} }
 .card,.panel{background:var(--s);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
-.card{display:flex;flex-direction:column;gap:10px}.card .btn{margin-top:auto;align-self:flex-start}
-.panel{display:grid;gap:14px}.narrow{max-width:600px;margin-inline:auto}
+.panel{display:grid;gap:14px}
+.card{background:#0a0a0a;border:1.5px solid #FFD400;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.card .btn{margin-top:auto;align-self:stretch;background:#fff;color:#000;border-color:#fff;font-weight:800}
 .price{font:700 22px var(--fd)}.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line);color:var(--mu)}.chip.y{background:var(--y);color:var(--on);border-color:var(--y)}
 .empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--mu)}
-.thumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--s2);display:grid;place-items:center;color:var(--y);font:44px var(--fd)}
+.thumb{width:100%;height:140px;object-fit:cover;border-radius:8px;background:#111;display:grid;place-items:center;color:var(--y);font:44px var(--fd)}
 .main{width:100%;aspect-ratio:4/3;object-fit:contain;background:var(--bg);border:1px solid var(--line);border-radius:10px}
 .strip,.pics{display:flex;flex-wrap:wrap;gap:8px}.strip img{width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--line)}
 .pic{position:relative;width:84px;height:84px}.pic img{width:100%;height:100%;object-fit:cover;border-radius:8px}
@@ -107,13 +109,13 @@ async function loadP(){
 }
 const perSale=p=>Math.round(p.price*p.rate)/100;
 const thumb=p=>p.images?.[0]?`<img class="thumb" src="${p.images[0]}" alt="${esc(p.name)}">`:`<div class="thumb">${esc((p.name||'?')[0].toUpperCase())}</div>`;
-const card=p=>`<article class="card"><a href="#product/${p.id}">${thumb(p)}</a><div><span class="chip y">${p.rate}% commission</span></div><h3>${esc(p.name)}</h3><p class="note">by ${esc(p.sellerName)}</p><div class="price num">${money(p.price)}</div><p class="note">Affiliates earn <b class="num">${money(perSale(p))}</b> per sale</p><a class="btn sm" href="#product/${p.id}">View product</a></article>`;
+const card=p=>`<article class="card"><a href="#product/${p.id}">${thumb(p)}</a><div style="display:flex;align-items:flex-end;justify-content:space-between;gap:6px"><div><h3 style="font-size:13px;line-height:1.2;text-transform:lowercase">${esc(p.name)}</h3><div class="price num" style="font-size:15px;margin-top:2px">${money(p.price)}</div></div><span style="background:#FFD400;color:#000;font-size:11px;font-weight:900;padding:7px 8px;border-radius:7px;white-space:nowrap">Earn ${money(perSale(p))}</span></div><a class="btn sm" href="#product/${p.id}">View product</a></article>`;
 const gridHtml=()=>{const q=ui.q.toLowerCase().trim(),l=P.filter(p=>live(p)&&(!q||(p.name+' '+(p.desc||'')).toLowerCase().includes(q)));return l.length?l.map(card).join(''):`<div class="empty">${q?'No products match your search.':'No products yet.'}</div>`};
 
 /* ---------- views ---------- */
 async function vMarket(){
   await loadP();
-  return `<section class="pg"><h1>Sell it. Promote it. Get paid.</h1><p class="note" style="max-width:56ch">Sellers list products and set the commission. Affiliates share their own link and earn on every sale they bring.</p>
+  return `<section class="pg" style="text-align:center"><h1 style="font-size:32px"><span style="color:#FFD400">No Product? No Problem.</span><br>Promote & Earn.</h1><p class="note" style="max-width:56ch;margin:10px auto 0">Pick a product, share your link, earn commission on every sale.</p>
   <div class="row">${me?'<a class="btn" href="#dashboard">Open my dashboard</a>':'<a class="btn" href="#register">Sign up</a><a class="btn g" href="#login">Log in</a>'}</div></section>
   <div class="row bt" style="margin-bottom:14px"><h2>Products to promote</h2><input id="q" type="search" style="max-width:280px" placeholder="Search products" value="${esc(ui.q)}"></div><div class="grid" id="grid">${gridHtml()}</div>`;
 }
@@ -124,7 +126,6 @@ async function vProduct(id,ref){
   const p={id,...s.data()},im=p.images||[],t=p.contactType||'whatsapp',own=me?.uid===p.sellerUid;
   const sp=(await getDoc(doc(db,'profiles',p.sellerCode))).data();
   if(!own&&!isAdmin()&&!(sp?.paidUntil>Date.now()))return note('Product not available','The seller is not active right now.','<a class="btn" href="#market">Back to marketplace</a>');
-  // FIXED: Create lead even if buyer is logged in, and don't duplicate
   if(ref && ref !== me?.code){
     try{
       const ap=(await getDoc(doc(db,'profiles',ref))).data();
@@ -140,7 +141,6 @@ async function vProduct(id,ref){
   const msg=`Hello, I saw "${p.name}" on Marketspace and I am interested.${ref?` (Referred by ${ref})`:''}`;
   const see=!me||own||isAdmin();
   const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact the seller</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
-  // FIXED: Buyer confirmation button - this notifies seller on WhatsApp
   let buyerConfirm='';
   if(ref && !own){
     buyerConfirm=`<div class="contact" style="border-color:var(--y)"><h3>Did you buy this product?</h3><p class="note">Tap below AFTER you pay the seller on WhatsApp. The seller will then confirm it in their dashboard.</p><button class="btn" data-act="buyer-bought" data-id="${id}" data-ref="${esc(ref)}">✅ Yes, I Bought It</button></div>`;
@@ -217,7 +217,7 @@ async function vSeller(hd){
 async function vAff(hd){
   await loadP();ui.badge=0;
   const [L,W]=await Promise.all([col('leads',where('affUid','==',me.uid)),col('withdrawals',where('affUid','==',me.uid))]);
-  L.sort((a,b)=>b.at-a.at);W.sort((a,b)=>b.at-a.at);
+  L.sort((a,b)=>b.at-a.at);W.sort((a,b)=>a.at-b.at);
   const b=bal(L,W),pk=(me.picks||[]).map(id=>P.find(p=>p.id===id)).filter(Boolean);
   const st=(l,v)=>`<div class="item"><small class="note">${l}</small><strong class="num">${money(v)}</strong></div>`;
   return `<div class="pg">${hd}<div class="stats">${st('Commission earned',b.earned)}${st('Available to withdraw',b.available)}${st('Waiting for sellers',b.pending)}${st('Paid out to you',b.paidOut)}</div>
