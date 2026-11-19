@@ -85,8 +85,8 @@ async function refreshMe(){const u=auth.currentUser;if(!u)return;const s=await g
 let PR={};
 const live=p=>PR[p.sellerCode]?.paidUntil>Date.now();
 const NET=['MTN MoMo','Telecel Cash','AirtelTigo Money','Other'].map(x=>`<option>${x}</option>`).join('');
-const LBL={reached:'Waiting for your confirmation',declined:'No sale',owed:'Waiting for you to pay',submitted:'Payment being confirmed',paid:'Paid and confirmed'};
-const ALBL={reached:'Waiting for seller to confirm',declined:'No sale',owed:'Waiting for seller to pay',submitted:'Seller payment being confirmed',paid:'Confirmed'};
+const LBL={reached:'Link opened - waiting for buyer', 'buyer-confirmed':'BUYER SAYS THEY BOUGHT - Confirm now!', declined:'No sale',owed:'Waiting for you to pay',submitted:'Payment being confirmed',paid:'Paid and confirmed'};
+const ALBL={reached:'Waiting for buyer to buy', 'buyer-confirmed':'Buyer confirmed - waiting for seller', declined:'No sale',owed:'Waiting for seller to pay',submitted:'Seller payment being confirmed',paid:'Confirmed'};
 const counted=l=>['owed','submitted','paid'].includes(l.status);
 const bal=(L,W)=>{let e=0,pe=0,cf=0,o=0,dn=0;L.forEach(l=>{if(counted(l)){e+=l.commission;l.status==='paid'?cf+=l.commission:pe+=l.commission}});W.forEach(w=>{o+=w.amount;if(w.status==='done')dn+=w.amount});return{earned:r2(e),pending:r2(pe),available:r2(cf-o),paidOut:r2(dn)}};
 const linkRow=t=>`<div class="row"><code class="lk">${esc(t)}</code><button class="btn sm" data-act="copy" data-t="${esc(t)}">Copy</button></div>`;
@@ -124,10 +124,27 @@ async function vProduct(id,ref){
   const p={id,...s.data()},im=p.images||[],t=p.contactType||'whatsapp',own=me?.uid===p.sellerUid;
   const sp=(await getDoc(doc(db,'profiles',p.sellerCode))).data();
   if(!own&&!isAdmin()&&!(sp?.paidUntil>Date.now()))return note('Product not available','The seller is not active right now.','<a class="btn" href="#market">Back to marketplace</a>');
-  if(!me&&ref){try{const ap=(await getDoc(doc(db,'profiles',ref))).data();if(ap?.role==='affiliate'&&ap.paidUntil>Date.now())await setDoc(doc(db,'leads',`${vid()}_${id}_${ref}`),{productId:id,productName:p.name,sellerUid:p.sellerUid,sellerCode:p.sellerCode,affUid:ap.uid,affCode:ref,commission:perSale(p),at:Date.now(),status:'reached'})}catch(e){}}
+  // FIXED: Create lead even if buyer is logged in, and don't duplicate
+  if(ref && ref !== me?.code){
+    try{
+      const ap=(await getDoc(doc(db,'profiles',ref))).data();
+      if(ap?.role==='affiliate' && ap.paidUntil>Date.now()){
+        const leadId = `${vid()}_${id}_${ref}`;
+        const exists = await getDoc(doc(db,'leads',leadId));
+        if(!exists.exists()){
+          await setDoc(doc(db,'leads',leadId),{productId:id,productName:p.name,sellerUid:p.sellerUid,sellerCode:p.sellerCode,affUid:ap.uid,affCode:ref,commission:perSale(p),at:Date.now(),status:'reached',buyerName: me?.name || 'Guest buyer', buyerPhone: me?.phone || ''});
+        }
+      }
+    }catch(e){}
+  }
   const msg=`Hello, I saw "${p.name}" on Marketspace and I am interested.${ref?` (Referred by ${ref})`:''}`;
   const see=!me||own||isAdmin();
   const contact=!see?'<p class="note">Contact details are shown to buyers only.</p>':p.contact?`<div class="contact"><h3>Contact the seller</h3><strong class="num">${esc(p.contact)}</strong><div class="row">${t!=='call'?`<a class="btn" href="https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Chat on WhatsApp</a>`:''}${t!=='whatsapp'?`<a class="btn g" href="tel:+${intl(p.contact)}">Call the seller</a>`:''}</div></div>`:'';
+  // FIXED: Buyer confirmation button - this notifies seller on WhatsApp
+  let buyerConfirm='';
+  if(ref && !own){
+    buyerConfirm=`<div class="contact" style="border-color:var(--y)"><h3>Did you buy this product?</h3><p class="note">Tap below AFTER you pay the seller on WhatsApp. The seller will then confirm it in their dashboard.</p><button class="btn" data-act="buyer-bought" data-id="${id}" data-ref="${esc(ref)}">✅ Yes, I Bought It</button></div>`;
+  }
   let act='';
   if(me?.role==='affiliate'){
     const lk=location.href.split('#')[0]+'#product/'+id+'/'+me.code;
@@ -137,7 +154,7 @@ async function vProduct(id,ref){
   return `<div class="pg"><a class="note" href="#market">&larr; All products</a><div class="panel">
   ${im.length?`<img class="main" id="mainpic" src="${im[0]}" alt="${esc(p.name)}">${im.length>1?`<div class="strip">${im.map(x=>`<img src="${x}" data-act="pic" alt="">`).join('')}</div>`:''}`:''}
   <div><span class="chip y">${p.rate}% commission</span></div><h1>${esc(p.name)}</h1><div class="price num">${money(p.price)}</div>
-  <p style="white-space:pre-wrap">${esc(p.desc||'')}</p><p class="note">Sold by <b>${esc(p.sellerName)}</b> (${esc(p.sellerCode)})</p>${contact}${act}</div></div>`;
+  <p style="white-space:pre-wrap">${esc(p.desc||'')}</p><p class="note">Sold by <b>${esc(p.sellerName)}</b> (${esc(p.sellerCode)})</p>${contact}${buyerConfirm}${act}</div></div>`;
 }
 
 const roleChoice=()=>`<div class="pg"><div class="panel narrow"><h2>How will you use Marketspace?</h2><p class="note">Choose one. You can only hold one type of account.</p>
@@ -183,12 +200,12 @@ async function vDash(){
   return me.role==='seller'?vSeller(hd):vAff(hd);
 }
 const payForm=l=>`<form class="panel" id="lpay" data-id="${l.id}" novalidate><h3>Pay affiliate ${esc(l.affCode)}</h3>${momoBox(CFG.cmomo,money(l.commission))}<div class="two"><label>Network<select id="lnet">${NET}</select></label><label>Number you paid from<input id="lfrom" type="tel" value="${esc(me.phone)}"></label></div><label>Transaction ID<input id="ltx" autocomplete="off"></label><p class="err" id="err" hidden></p><div class="row"><button class="btn sm">Submit payment</button><button type="button" class="btn g sm" data-act="cancel">Cancel</button></div></form>`;
-const sellerAct=l=>l.status==='reached'?`<div class="row"><button class="btn sm" data-act="sale" data-id="${l.id}">Confirm sale</button><button class="btn g sm" data-act="nosale" data-id="${l.id}">No sale</button></div>`:l.status==='owed'?`<div class="row"><button class="btn sm" data-act="payl" data-id="${l.id}">Pay affiliate</button>${l.rejected?'<span class="chip">Last payment not confirmed. Check the transaction ID.</span>':''}</div>${ui.pay===l.id?payForm(l):''}`:`<span class="chip ${l.status==='paid'?'y':''}">${LBL[l.status]}</span>`;
+const sellerAct=l=>l.status==='reached'||l.status==='buyer-confirmed'?`<div class="row"><button class="btn sm" data-act="sale" data-id="${l.id}">Confirm sale</button><button class="btn g sm" data-act="nosale" data-id="${l.id}">No sale</button></div>`:l.status==='owed'?`<div class="row"><button class="btn sm" data-act="payl" data-id="${l.id}">Pay affiliate</button>${l.rejected?'<span class="chip">Last payment not confirmed. Check the transaction ID.</span>':''}</div>${ui.pay===l.id?payForm(l):''}`:`<span class="chip ${l.status==='paid'?'y':''}">${LBL[l.status]}</span>`;
 
 async function vSeller(hd){
   await loadP();
   const L=(await col('leads',where('sellerUid','==',me.uid))).sort((a,b)=>b.at-a.at);
-  ui.badge=L.filter(l=>l.status==='reached').length;
+  ui.badge=L.filter(l=>l.status==='reached'||l.status==='buyer-confirmed').length;
   const mine=P.filter(p=>p.sellerUid===me.uid),ep=mine.find(p=>p.id===ui.edit);
   const owe=r2(L.filter(l=>l.status==='owed').reduce((a,l)=>a+l.commission,0));
   const locked=`<div class="panel"><h3>Publishing is locked</h3><p class="note">Pay your ${money(CFG.fee)} monthly fee to publish products. Your products stay hidden until then.</p><a class="btn" style="justify-self:start" href="#pay">Pay ${money(CFG.fee)}</a></div>`;
@@ -242,6 +259,15 @@ async function more(a,b,id){
   if(a==='copy'){try{await navigator.clipboard.writeText(b.dataset.t);toast('Copied')}catch(x){toast('Press and hold to copy')}return true}
   if(a==='promote')return run(async()=>{await up('users',me.uid,{picks:arrayUnion(id)});me.picks=[...(me.picks||[]),id]},'Added to your dashboard');
   if(a==='unpromote')return run(async()=>{await up('users',me.uid,{picks:arrayRemove(id)});me.picks=(me.picks||[]).filter(x=>x!==id)});
+  if(a==='buyer-bought')return run(async()=>{
+    const leads = await col('leads', where('productId','==',id), where('affCode','==',b.dataset.ref));
+    const target = leads.filter(l=>l.status==='reached').sort((x,y)=>y.at-x.at)[0];
+    if(!target) throw new Error('No lead found');
+    await up('leads', target.id, {status:'buyer-confirmed', buyerConfirmedAt: Date.now()});
+    const pDoc = await getDoc(doc(db,'products',id));
+    const p = pDoc.exists() ? pDoc.data() : null;
+    if(p?.contact) window.open(`https://wa.me/${intl(p.contact)}?text=${encodeURIComponent(`Hi, I bought "${p.name}" via Marketspace (Affiliate ${b.dataset.ref}). Please confirm my sale in your dashboard.`)}`, '_blank');
+  }, 'Thanks! Seller has been notified on WhatsApp. They must now tap Confirm Sale.');
   if(a==='sale')return run(()=>up('leads',id,{status:'owed',saleAt:Date.now()}),'Sale confirmed. Now pay the affiliate.');
   if(a==='nosale')return run(()=>up('leads',id,{status:'declined'}));
   if(a==='payl'){ui.pay=id;route(true);return true}
